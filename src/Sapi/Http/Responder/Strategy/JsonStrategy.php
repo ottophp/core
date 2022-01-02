@@ -14,11 +14,11 @@ class JsonStrategy extends Strategy
             "{$this->directory}/resources/responder/json/view",
             "action:{$this->directory}/resources/responder/json/action",
             "layout:{$this->directory}/resources/responder/json/layout",
-            "layout:{$this->directory}/vendor/otto/core/resources/responder/json/layout",
+            "layout:{$this->directory}/vendor/ottophp/core/resources/responder/json/layout",
             "status:{$this->directory}/resources/responder/json/status",
-            "status:{$this->directory}/vendor/otto/core/resources/responder/json/status",
+            "status:{$this->directory}/vendor/ottophp/core/resources/responder/json/status",
             "front:{$this->directory}/resources/responder/json/front",
-            "front:{$this->directory}/vendor/otto/core/resources/responder/json/front",
+            "front:{$this->directory}/vendor/ottophp/core/resources/responder/json/front",
         ];
     }
 

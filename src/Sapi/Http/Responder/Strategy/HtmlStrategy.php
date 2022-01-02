@@ -16,11 +16,11 @@ class HtmlStrategy extends Strategy
             "{$this->directory}/resources/responder/html/view",
             "action:{$this->directory}/resources/responder/html/action",
             "layout:{$this->directory}/resources/responder/html/layout",
-            "layout:{$this->directory}/vendor/otto/core/resources/responder/html/layout",
+            "layout:{$this->directory}/vendor/ottophp/core/resources/responder/html/layout",
             "status:{$this->directory}/resources/responder/html/status",
-            "status:{$this->directory}/vendor/otto/core/resources/responder/html/status",
+            "status:{$this->directory}/vendor/ottophp/core/resources/responder/html/status",
             "front:{$this->directory}/resources/responder/html/front",
-            "front:{$this->directory}/vendor/otto/core/resources/responder/html/front",
+            "front:{$this->directory}/vendor/ottophp/core/resources/responder/html/front",
         ];
     }
 
