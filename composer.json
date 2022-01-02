@@ -1,5 +1,5 @@
 {
-    "name": "otto/core",
+    "name": "ottophp/core",
     "autoload": {
         "psr-4": {
             "Otto\\": "src/"
