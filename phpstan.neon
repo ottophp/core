@@ -1,0 +1,9 @@
+parameters:
+    level: max
+    paths:
+        - src
+    ignoreErrors:
+        - "#Cannot call method .* on Capsule\\\\Di\\\\Definition\\|null#"
+        - "#expects Throwable, Throwable\\|null given#"
+    checkGenericClassInNonGenericObjectType: false
+    checkMissingIterableValueType: false
