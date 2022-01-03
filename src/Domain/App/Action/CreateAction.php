@@ -3,6 +3,7 @@ namespace Otto\Domain\App\Action;
 
 use AutoRoute\Creator;
 use Capsule\Di\Container;
+use Otto\Domain\Payload;
 
 class CreateAction
 {
