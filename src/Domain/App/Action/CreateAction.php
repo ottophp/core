@@ -67,8 +67,8 @@ class CreateAction
         $template = $this->directory . '/resources/action.tpl';
 
         [$file, $code] = $this->creator->create(
-            $verb,
-            $path,
+            $this->verb,
+            $this->path,
             file_get_contents($template)
         );
 
