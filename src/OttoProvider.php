@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Otto;
 
-use AutoRoute;
 use Capsule\Di\Definitions;
 use Capsule\Di\Provider;
 use Otto\Sapi\Http\Responder;
@@ -25,9 +24,5 @@ class OttoProvider implements Provider
     {
         $def->{'otto.directory'} = $this->directory;
         $def->{'otto.namespace'} = $this->namespace;
-
-        $def->{CreateAction::CLASS}
-            ->argument('directory', $this->directory)
-            ->argument('namespace', $this->namespace);
     }
 }
