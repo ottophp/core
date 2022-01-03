@@ -28,7 +28,7 @@ class CreateAction
         $this->domain = $domain;
 
         return $this->validate()
-            ?? $this-createAction()
+            ?? $this->createAction()
             ?? $this->createTemplate()
             ?? $this->created();
     }
