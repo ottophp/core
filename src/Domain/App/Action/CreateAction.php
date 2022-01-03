@@ -72,7 +72,7 @@ class CreateAction
             file_get_contents($template)
         );
 
-        $code = strtr($code, ['{DOMAIN}' => $domain]);
+        $code = strtr($code, ['{DOMAIN}' => $this->domain]);
 
         return $this->write('action', $file, $code);
     }
