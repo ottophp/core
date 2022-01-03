@@ -86,7 +86,7 @@ class CreateAction
         $pos = strpos($file, $mid);
         $len = strlen($mid) + $pos;
 
-        $file = $container->get('otto.directory')
+        $file = $this->directory
             . '/resources/responder/html/action/'
             . substr($file, $len);
 
