@@ -1,7 +1,7 @@
 <?php
 namespace Otto\Domain\App\Action;
 
-use AutoRoute\AutoRoute;
+use AutoRoute\Creator;
 use Capsule\Di\Container;
 
 class CreateAction
@@ -15,7 +15,7 @@ class CreateAction
     protected array $created = [];
 
     public function __construct(
-        protected AutoRoute $autoRoute,
+        protected Creator $creator,
         protected string $directory,
         protected string $namespace,
     ) {
@@ -66,9 +66,7 @@ class CreateAction
     {
         $template = $this->directory . '/resources/action.tpl';
 
-        $creator = $this->autoRoute->getCreator();
-
-        [$file, $code] = $creator->create(
+        [$file, $code] = $this->creator->create(
             $verb,
             $path,
             file_get_contents($template)
