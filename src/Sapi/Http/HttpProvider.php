@@ -25,6 +25,9 @@ class HttpProvider implements Provider
 
     public function provide(Definitions $def) : void
     {
+        $def->directory = $this->directory;
+        $def->namespace = $this->namespace;
+
         $this->provideSapien($def);
         $this->provideAutoRoute($def);
         $this->provideStrategy($def);
