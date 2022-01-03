@@ -14,9 +14,11 @@ use Sapien\Request;
 
 class HttpProvider implements Provider
 {
+    protected string $directory;
+
+    protected string $namespace;
+
     public function __construct(
-        public readonly string $directory,
-        public readonly string $namespace,
         public readonly string $format = 'html',
         public readonly ?string $layout = 'layout:main',
         public readonly array $helpers = [],
@@ -25,8 +27,8 @@ class HttpProvider implements Provider
 
     public function provide(Definitions $def) : void
     {
-        $def->directory = $this->directory;
-        $def->namespace = $this->namespace;
+        $this->directory = $def->{'otto.directory'};
+        $this->namespace = $def->{'otto.namespace'};
 
         $this->provideSapien($def);
         $this->provideAutoRoute($def);

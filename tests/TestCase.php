@@ -3,6 +3,7 @@ namespace Otto;
 
 use Capsule\Di\Container;
 use Capsule\Di\Definitions;
+use Otto\OttoProvider;
 use Otto\Sapi\Http\HttpProvider;
 use Otto\Sapi\Http\Responder\Helper\Rot13;
 
@@ -13,9 +14,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected function setUp() : void
     {
         $this->container = new Container(new Definitions(), [
-            new HttpProvider(
+            new OttoProvider(
                 directory: __DIR__ . DIRECTORY_SEPARATOR . 'fake-project',
                 namespace: 'FakeProject',
+            ),
+            new HttpProvider(
                 format: $this->format,
                 helpers: [
                     'rot13' => Rot13::CLASS,
