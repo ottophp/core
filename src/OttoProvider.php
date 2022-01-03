@@ -11,6 +11,7 @@ use Otto\Sapi\Http\Responder\Strategy;
 use Otto\Sapi\Http\Responder\Template;
 use Qiq;
 use Sapien\Request;
+use Otto\Domain\App\Action\CreateAction;
 
 class OttoProvider implements Provider
 {
@@ -24,5 +25,9 @@ class OttoProvider implements Provider
     {
         $def->{'otto.directory'} = $this->directory;
         $def->{'otto.namespace'} = $this->namespace;
+
+        $def->{CreateAction::CLASS}
+            ->argument('directory', $this->directory)
+            ->argument('namespace', $this->namespace);
     }
 }

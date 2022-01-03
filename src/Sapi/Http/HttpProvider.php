@@ -31,7 +31,6 @@ class HttpProvider implements Provider
         $this->namespace = $def->{'otto.namespace'};
 
         $this->provideSapien($def);
-        $this->provideAutoRoute($def);
         $this->provideStrategy($def);
         $this->provideTemplate($def);
         $this->provideProjectClasses($def);
@@ -63,18 +62,6 @@ class HttpProvider implements Provider
             ->argument('method', $def->call(function () {
                 return $_POST['_method'] ?? null;
             }));
-    }
-
-    protected function provideAutoRoute(Definitions $def) : void
-    {
-        $def->{AutoRoute\Config::CLASS}
-            ->arguments([
-                'namespace' => $this->namespace . '\\Sapi\Http\\Action',
-                'directory' => $this->directory . '/src/Sapi/Http/Action',
-            ]);
-
-        $def->{AutoRoute\Router::CLASS}
-            ->argument('logger', $def->get(\AutoRoute\Logger::CLASS));
     }
 
     protected function provideStrategy(Definitions $def) : void
