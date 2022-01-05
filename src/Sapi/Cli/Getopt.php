@@ -77,10 +77,9 @@ class Getopt
      * errors.
      *
      */
-    public function parseInput(array $input = array())
+    public function parseInput(array $input)
     {
         $this->input = $input;
-        $this->errors = array();
         $this->values = array();
 
         // flag to say when we've reached the end of options
