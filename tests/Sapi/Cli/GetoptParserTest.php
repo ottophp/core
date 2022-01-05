@@ -13,23 +13,13 @@ class GetoptParserTest extends \PHPUnit\Framework\TestCase
     public function testSetOptions()
     {
         $options = array(
-            '#foo',
             'foo-bar,f*:',
-            '#bar' => 'Argument bar required.',
             'baz-dib,b::' => 'Description for baz-dib option.',
-            '#baz?' => 'Argument baz optional.',
             'z,zim-gir',
         );
 
         $this->getopt_parser->setOptions($options);
         $expect = array(
-            0 => new Option(
-                name: null,
-                alias: 'foo',
-                multi: false,
-                param: 'argument-required',
-                descr: null,
-            ),
             '--foo-bar' => new Option(
                 name: '--foo-bar',
                 alias: '-f',
@@ -37,26 +27,12 @@ class GetoptParserTest extends \PHPUnit\Framework\TestCase
                 param: 'required',
                 descr: null,
             ),
-            1 => new Option(
-                name: null,
-                alias: 'bar',
-                multi: false,
-                param: 'argument-required',
-                descr: 'Argument bar required.',
-            ),
             '--baz-dib' => new Option(
                 name: '--baz-dib',
                 alias: '-b',
                 multi: false,
                 param: 'optional',
                 descr: 'Description for baz-dib option.',
-            ),
-            2 => new Option(
-                name: null,
-                alias: 'baz',
-                multi: false,
-                param: 'argument-optional',
-                descr: 'Argument baz optional.',
             ),
             '-z' => new Option(
                 name: '-z',
