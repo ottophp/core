@@ -13,38 +13,38 @@ class Option
 
     public ?string $descr = null;
 
-    public function __construct(string $string)
+    public function __construct(string $spec)
     {
-        $this->setMulti($string);
-        $this->setParam($string);
-        $this->setMulti($string);
-        $this->setNameAlias($string);
+        $this->setMulti($spec);
+        $this->setParam($spec);
+        $this->setMulti($spec);
+        $this->setNameAlias($spec);
     }
 
-    protected function setParam(&$string)
+    protected function setParam(&$spec)
     {
-        if (substr($string, -2) == '::') {
+        if (substr($spec, -2) == '::') {
             $this->param = 'optional';
-            $string = substr($string, 0, -2);
-        } elseif (substr($string, -1) == ':') {
+            $spec = substr($spec, 0, -2);
+        } elseif (substr($spec, -1) == ':') {
             $this->param = 'required';
-            $string = substr($string, 0, -1);
+            $spec = substr($spec, 0, -1);
         }
 
-        $string = rtrim($string, ':');
+        $spec = rtrim($spec, ':');
     }
 
-    protected function setMulti(&$string)
+    protected function setMulti(&$spec)
     {
-        if (substr($string, -1) == '*') {
+        if (substr($spec, -1) == '*') {
             $this->multi = true;
-            $string = substr($string, 0, -1);
+            $spec = substr($spec, 0, -1);
         }
     }
 
-    protected function setNameAlias(&$string)
+    protected function setNameAlias(&$spec)
     {
-        $names = explode(',', $string);
+        $names = explode(',', $spec);
         $this->name = $this->fixOptionName($names[0]);
         if (isset($names[1])) {
             $this->alias = $this->fixOptionName($names[1]);
