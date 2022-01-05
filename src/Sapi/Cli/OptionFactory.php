@@ -3,16 +3,11 @@ namespace Otto\Sapi\Cli;
 
 class OptionFactory
 {
-    public function newInstance($string, $descr = null) : Option
+    public function newInstance($string) : Option
     {
-        if (is_int($string)) {
-            $string = $descr;
-            $descr = null;
-        }
-
         $string = trim($string);
 
-        $option = new Option(descr: $descr);
+        $option = new Option();
 
         $this->setNewOptionMulti($option, $string);
         $this->setNewOptionParam($option, $string);

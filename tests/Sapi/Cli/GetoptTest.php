@@ -14,7 +14,7 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
     {
         $options = array(
             'foo-bar,f*:',
-            'baz-dib,b::' => 'Description for baz-dib option.',
+            'baz-dib,b::',
             'z,zim-gir',
         );
 
@@ -32,7 +32,7 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
                 alias: '-b',
                 multi: false,
                 param: 'optional',
-                descr: 'Description for baz-dib option.',
+                descr: null,
             ),
             '-z' => new Option(
                 name: '-z',

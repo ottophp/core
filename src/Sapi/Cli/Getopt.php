@@ -68,8 +68,8 @@ class Getopt
     public function setOptions(array $options)
     {
         $this->options = array();
-        foreach ($options as $string => $descr) {
-            $this->setOption($string, $descr);
+        foreach ($options as $string) {
+            $this->setOption($string);
         }
     }
 
@@ -82,9 +82,9 @@ class Getopt
      * @param string $descr The option help description.
      *
      */
-    protected function setOption($string, $descr)
+    protected function setOption($string)
     {
-        $option = $this->option_factory->newInstance($string, $descr);
+        $option = $this->option_factory->newInstance($string);
         if (! $option->name) {
             $this->options[] = $option;
         } else {
