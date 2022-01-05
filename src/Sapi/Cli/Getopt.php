@@ -116,7 +116,7 @@ class Getopt
         }
 
         // done
-        return $this->errors ? false : true;
+        return $this->values;
     }
 
     public function getOption($name) : Option
@@ -414,41 +414,4 @@ class Getopt
             $this->values[$option->alias] = $value;
         }
     }
-
-    /**
-     *
-     * Returns the defined options.
-     *
-     * @return array
-     *
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
-    /**
-     *
-     * Returns the parsed values of named options and sequential arguments.
-     *
-     * @return array
-     *
-     */
-    public function getValues()
-    {
-        return $this->values;
-    }
-
-    /**
-     *
-     * Returns the parsing errors.
-     *
-     * @return array
-     *
-     */
-    public function getErrors()
-    {
-        return $this->errors;
-    }
-
 }
