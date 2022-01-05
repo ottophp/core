@@ -10,61 +10,12 @@ namespace Otto\Sapi\Cli;
  */
 class Getopt
 {
-    /**
-     *
-     * The command line input to be parsed.
-     *
-     * @var array
-     *
-     */
     protected $input = [];
 
-    /**
-     *
-     * Use these option definitions when parsing input.
-     *
-     * @var array
-     *
-     */
-    protected $options = [];
-
-    /**
-     *
-     * The values parsed from the command line input.
-     *
-     * @var array
-     *
-     */
     protected $values = [];
 
-    /**
-     *
-     * Sets the options to be used when parsing input.
-     *
-     * @param array $options The array of option definitions.
-     *
-     */
-    public function setOptions(array $options)
+    public function __construct(protected array $options = [])
     {
-        $this->options = array();
-        foreach ($options as $string) {
-            $this->setOption($string);
-        }
-    }
-
-    /**
-     *
-     * Sets one option to be used when parsing input.
-     *
-     * @param string $string The option definition string.
-     *
-     * @param string $descr The option help description.
-     *
-     */
-    protected function setOption($string)
-    {
-        $option = new Option($string);
-        $this->options[] = $option;
     }
 
     /**
