@@ -20,16 +20,6 @@ class Getopt
     {
     }
 
-    /**
-     *
-     * Parses the input array according to the defined options.
-     *
-     * @param array $input The input array.
-     *
-     * @return bool False if there were parsing errors, true if there were no
-     * errors.
-     *
-     */
     public function parse(array &$input)
     {
         $this->input = $input;

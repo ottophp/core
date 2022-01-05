@@ -15,10 +15,18 @@ class Option
 
     public function __construct(string $spec)
     {
-        $this->setMulti($spec);
+        $this->setMulti($spec); // allow before param
         $this->setParam($spec);
-        $this->setMulti($spec);
+        $this->setMulti($spec); // allow after param
         $this->setNames($spec);
+    }
+
+    protected function setMulti(&$spec)
+    {
+        if (substr($spec, -1) == '*') {
+            $this->multi = true;
+            $spec = substr($spec, 0, -1);
+        }
     }
 
     protected function setParam(&$spec)
@@ -32,14 +40,6 @@ class Option
         }
 
         $spec = rtrim($spec, ':');
-    }
-
-    protected function setMulti(&$spec)
-    {
-        if (substr($spec, -1) == '*') {
-            $this->multi = true;
-            $spec = substr($spec, 0, -1);
-        }
     }
 
     protected function setNames(&$spec)
