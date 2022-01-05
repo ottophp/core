@@ -39,27 +39,6 @@ class Getopt
 
     /**
      *
-     * A factory to create option objects.
-     *
-     * @var OptionFactory
-     *
-     */
-    protected $option_factory;
-
-    /**
-     *
-     * Constructor.
-     *
-     * @param OptionFactory $option_factory A factory to create option objects.
-     *
-     */
-    public function __construct(OptionFactory $option_factory)
-    {
-        $this->option_factory = $option_factory;
-    }
-
-    /**
-     *
      * Sets the options to be used when parsing input.
      *
      * @param array $options The array of option definitions.
@@ -84,7 +63,7 @@ class Getopt
      */
     protected function setOption($string)
     {
-        $option = $this->option_factory->newInstance($string);
+        $option = new Option($string);
         if (! $option->name) {
             $this->options[] = $option;
         } else {
