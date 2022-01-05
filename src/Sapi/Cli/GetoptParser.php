@@ -158,10 +158,9 @@ class GetoptParser
         }
 
         if (! $option) {
-            $this->errors[] = new Exception\OptionNotDefined(
+            throw new Exception\OptionNotDefined(
                 "The option '$name' is not defined."
             );
-            $option = $this->option_factory->newUndefined($name);
         }
 
         return $option;
@@ -250,7 +249,7 @@ class GetoptParser
     {
         if ($option->param == 'required' && trim((string) $value) === '') {
             if ($name !== null) {
-                $this->errors[] = new Exception\OptionParamRequired(
+                throw new Exception\OptionParamRequired(
                     "The option '$name' requires a parameter."
                 );
             }
@@ -275,7 +274,7 @@ class GetoptParser
     protected function longOptionRejectsValue($option, $value, $name)
     {
         if ($option->param == 'rejected' && trim((string) $value) !== '') {
-            $this->errors[] = new Exception\OptionParamRejected(
+            throw new Exception\OptionParamRejected(
                 "The option '$name' does not accept a parameter."
             );
             return true;
@@ -358,7 +357,7 @@ class GetoptParser
     protected function shortOptionRequiresValue($option, $name)
     {
         if ($option->param == 'required') {
-            $this->errors[] = new Exception\OptionParamRequired(
+            throw new Exception\OptionParamRequired(
                 "The option '$name' requires a parameter."
             );
             return true;

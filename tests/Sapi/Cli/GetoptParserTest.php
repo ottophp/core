@@ -50,27 +50,27 @@ class GetoptParserTest extends \PHPUnit\Framework\TestCase
         $actual = $this->getopt_parser->getOption('--zim-gir');
         $this->assertEquals($expect['-z'], $actual);
 
-        // get an undefined short flag
-        $actual = $this->getopt_parser->getOption('n');
-        $expect = new Option(
-            name: '-n',
-            alias: null,
-            multi: false,
-            param: 'rejected',
-            descr: null,
-        );
-        $this->assertEquals($expect, $actual);
+        // // get an undefined short flag
+        // $actual = $this->getopt_parser->getOption('n');
+        // $expect = new Option(
+        //     name: '-n',
+        //     alias: null,
+        //     multi: false,
+        //     param: 'rejected',
+        //     descr: null,
+        // );
+        // $this->assertEquals($expect, $actual);
 
-        // get an undefined long option
-        $actual = $this->getopt_parser->getOption('--no-long');
-        $expect = new Option(
-            name: '--no-long',
-            alias: null,
-            multi: false,
-            param: 'optional',
-            descr: null,
-        );
-        $this->assertEquals($expect, $actual);
+        // // get an undefined long option
+        // $actual = $this->getopt_parser->getOption('--no-long');
+        // $expect = new Option(
+        //     name: '--no-long',
+        //     alias: null,
+        //     multi: false,
+        //     param: 'optional',
+        //     descr: null,
+        // );
+        // $this->assertEquals($expect, $actual);
     }
 
     public function testParse_noOptions()
@@ -95,15 +95,9 @@ class GetoptParserTest extends \PHPUnit\Framework\TestCase
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
 
-        $result = $this->getopt_parser->parseInput(array('--foo-bar=baz'));
-        $this->assertFalse($result);
-
-        $errors = $this->getopt_parser->getErrors();
-        $actual = $errors[0];
-        $expect = 'Otto\Sapi\Cli\Exception\OptionParamRejected';
-        $this->assertInstanceOf($expect, $actual);
-        $expect = "The option '--foo-bar' does not accept a parameter.";
-        $this->assertSame($expect, $actual->getMessage());
+        $this->expectException(Exception\OptionParamRejected::CLASS);
+        $this->expectExceptionMessage("The option '--foo-bar' does not accept a parameter.");
+        $this->getopt_parser->parseInput(array('--foo-bar=baz'));
     }
 
     public function testParse_longRequired()
@@ -128,15 +122,9 @@ class GetoptParserTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expect, $actual);
 
         // missing required value
-        $result = $this->getopt_parser->parseInput(array('--foo-bar'));
-        $this->assertFalse($result);
-
-        $errors = $this->getopt_parser->getErrors();
-        $actual = $errors[0];
-        $expect = 'Otto\Sapi\Cli\Exception\OptionParamRequired';
-        $this->assertInstanceOf($expect, $actual);
-        $expect = "The option '--foo-bar' requires a parameter.";
-        $this->assertSame($expect, $actual->getMessage());
+        $this->expectException(Exception\OptionParamRequired::CLASS);
+        $this->expectExceptionMessage("The option '--foo-bar' requires a parameter.");
+        $this->getopt_parser->parseInput(array('--foo-bar'));
     }
 
     public function testParse_longOptional()
@@ -210,15 +198,9 @@ class GetoptParserTest extends \PHPUnit\Framework\TestCase
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
 
-        $result = $this->getopt_parser->parseInput(array('-f'));
-        $this->assertFalse($result);
-
-        $errors = $this->getopt_parser->getErrors();
-        $actual = $errors[0];
-        $expect = 'Otto\Sapi\Cli\Exception\OptionParamRequired';
-        $this->assertInstanceOf($expect, $actual);
-        $expect = "The option '-f' requires a parameter.";
-        $this->assertSame($expect, $actual->getMessage());
+        $this->expectException(Exception\OptionParamRequired::CLASS);
+        $this->expectExceptionMessage("The option '-f' requires a parameter.");
+        $this->getopt_parser->parseInput(array('-f'));
     }
 
     public function testParse_shortOptional()
@@ -276,15 +258,9 @@ class GetoptParserTest extends \PHPUnit\Framework\TestCase
         $options = array('f', 'b:', 'z');
         $this->getopt_parser->setOptions($options);
 
-        $result = $this->getopt_parser->parseInput(array('-fbz'));
-        $this->assertFalse($result);
-
-        $errors = $this->getopt_parser->getErrors();
-        $actual = $errors[0];
-        $expect = 'Otto\Sapi\Cli\Exception\OptionParamRequired';
-        $this->assertInstanceOf($expect, $actual);
-        $expect = "The option '-b' requires a parameter.";
-        $this->assertSame($expect, $actual->getMessage());
+        $this->expectException(Exception\OptionParamRequired::CLASS);
+        $this->expectExceptionMessage("The option '-b' requires a parameter.");
+        $this->getopt_parser->parseInput(array('-fbz'));
     }
 
     public function testParseAndGet()
@@ -293,7 +269,6 @@ class GetoptParserTest extends \PHPUnit\Framework\TestCase
         $this->getopt_parser->parseInput(array(
             'abc',
             '--foo-bar=zim',
-            '--undefined=undef',
             'def',
             '-z',
             'qux',
@@ -310,7 +285,6 @@ class GetoptParserTest extends \PHPUnit\Framework\TestCase
         $expect = array(
             'abc',
             '--foo-bar' => 'zim',
-            '--undefined' => 'undef',
             'def',
             '-z' => 'qux',
             '-b' => true,

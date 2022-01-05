@@ -14,15 +14,6 @@ class Getopt
 
     /**
      *
-     * Any getopt parsing errors.
-     *
-     * @var array
-     *
-     */
-    protected $errors = array();
-
-    /**
-     *
      * Constructor.
      *
      * @param array $values The values to be represented by this object.
@@ -32,10 +23,8 @@ class Getopt
      */
     public function __construct(
         array $values = array(),
-        array $errors = array()
     ) {
         $this->values = $values;
-        $this->errors = $errors;
     }
 
     /**
@@ -64,29 +53,5 @@ class Getopt
         }
 
         return $alt;
-    }
-
-    /**
-     *
-     * Are there error messages related to getopt parsing?
-     *
-     * @return bool
-     *
-     */
-    public function hasErrors()
-    {
-        return $this->errors ? true : false;
-    }
-
-    /**
-     *
-     * Returns the error messages related to getopt parsing.
-     *
-     * @return array
-     *
-     */
-    public function getErrors()
-    {
-        return $this->errors;
     }
 }

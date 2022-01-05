@@ -60,7 +60,6 @@ class GetoptFactory
         $this->getopt_parser->parseInput($input);
         return new Getopt(
             $this->getopt_parser->getValues(),
-            $this->getopt_parser->getErrors()
         );
     }
 }
