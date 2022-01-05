@@ -3,7 +3,7 @@ namespace Otto\Sapi\Cli;
 
 class Option
 {
-    public ?string $name = null;
+    public ?array $names = [];
 
     public ?string $alias = null;
 
@@ -18,7 +18,7 @@ class Option
         $this->setMulti($spec);
         $this->setParam($spec);
         $this->setMulti($spec);
-        $this->setNameAlias($spec);
+        $this->setNames($spec);
     }
 
     protected function setParam(&$spec)
@@ -42,16 +42,15 @@ class Option
         }
     }
 
-    protected function setNameAlias(&$spec)
+    protected function setNames(&$spec)
     {
-        $names = explode(',', $spec);
-        $this->name = $this->fixOptionName($names[0]);
-        if (isset($names[1])) {
-            $this->alias = $this->fixOptionName($names[1]);
+        $this->names = explode(',', $spec);
+        foreach ($this->names as &$name) {
+            $name = $this->fixName($name);
         }
     }
 
-    protected function fixOptionName($name)
+    protected function fixName($name)
     {
         $name = trim($name, ' -');
         if (strlen($name) == 1) {

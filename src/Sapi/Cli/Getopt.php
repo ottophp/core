@@ -118,7 +118,7 @@ class Getopt
     public function getOption($name) : Option
     {
         foreach ($this->options as $option) {
-            if ($option->name === $name || $option->alias === $name) {
+            if (in_array($name, $option->names)) {
                 return $option;
             }
         }
@@ -363,9 +363,8 @@ class Getopt
      */
     protected function addMultiValue($option, $value)
     {
-        $this->values[$option->name][] = $value;
-        if ($option->alias) {
-            $this->values[$option->alias][] = $value;
+        foreach ($option->names as $name) {
+            $this->values[$name][] = $value;
         }
     }
 
@@ -382,9 +381,8 @@ class Getopt
      */
     protected function setSingleValue($option, $value)
     {
-        $this->values[$option->name] = $value;
-        if ($option->alias) {
-            $this->values[$option->alias] = $value;
+        foreach ($option->names as $name) {
+            $this->values[$name] = $value;
         }
     }
 }
