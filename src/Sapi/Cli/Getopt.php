@@ -12,7 +12,9 @@ class Getopt
 {
     protected $input = [];
 
-    protected $values = [];
+    protected $optv = [];
+
+    protected $argv = [];
 
     public function __construct(protected array $options = [])
     {
@@ -28,16 +30,16 @@ class Getopt
      * errors.
      *
      */
-    public function parseInput(array $input)
+    public function parse(array &$input)
     {
         $this->input = $input;
-        $this->values = array();
+        $this->optv = array();
 
         // flag to say when we've reached the end of options
         $done = false;
 
         // sequential argument count;
-        $args = 0;
+        $argc = 0;
 
         // loop through a copy of the input values to be parsed
         while ($this->input) {
@@ -45,7 +47,7 @@ class Getopt
             // shift each element from the top of the $this->input source
             $arg = array_shift($this->input);
 
-            // after a plain double-dash, all values are args (not options)
+            // after a plain double-dash, all values are argv (not options)
             if ($arg == '--') {
                 $done = true;
                 continue;
@@ -57,12 +59,13 @@ class Getopt
             } elseif (! $done && substr($arg, 0, 1) == '-') {
                 $this->setShortFlagValue($arg);
             } else {
-                $this->values[$args ++] = $arg;
+                $this->argv[$argc ++] = $arg;
             }
         }
 
         // done
-        return $this->values;
+        $input = $this->argv;
+        return $this->optv;
     }
 
     public function getOption($name) : Option
@@ -314,7 +317,7 @@ class Getopt
     protected function addMultiValue($option, $value)
     {
         foreach ($option->names as $name) {
-            $this->values[$name][] = $value;
+            $this->optv[$name][] = $value;
         }
     }
 
@@ -332,7 +335,7 @@ class Getopt
     protected function setSingleValue($option, $value)
     {
         foreach ($option->names as $name) {
-            $this->values[$name] = $value;
+            $this->optv[$name] = $value;
         }
     }
 }

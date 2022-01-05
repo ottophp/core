@@ -6,9 +6,11 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
     public function testParse_noOptions()
     {
         $getopt = new Getopt();
-        $actual = $getopt->parseInput(array('abc', 'def'));
+        $input = array('abc', 'def');
+        $actual = $getopt->parse($input);
+        $this->assertEmpty($actual);
         $expect = array('abc', 'def');
-        $this->assertSame($expect, $actual);
+        $this->assertSame($expect, $input);
     }
 
     public function testParse_undefinedOption()
@@ -16,7 +18,8 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
         $getopt = new Getopt();
         $this->expectException(Exception\OptionNotDefined::CLASS);
         $this->expectExceptionMessage("The option '-z' is not defined.");
-        $getopt->parseInput(array('-z', 'def'));
+        $input = ['-z', 'def'];
+        $getopt->parse($input);
     }
 
     public function testParse_longRejected()
@@ -25,13 +28,15 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
             new Option('foo-bar'),
         ]);
 
-        $actual = $getopt->parseInput(array('--foo-bar'));
+        $input = array('--foo-bar');
+        $actual = $getopt->parse($input);
         $expect = array('--foo-bar' => true);
         $this->assertSame($expect, $actual);
 
         $this->expectException(Exception\OptionParamRejected::CLASS);
         $this->expectExceptionMessage("The option '--foo-bar' does not accept a parameter.");
-        $getopt->parseInput(array('--foo-bar=baz'));
+        $input = array('--foo-bar=baz');
+        $getopt->parse($input);
     }
 
     public function testParse_longRequired()
@@ -42,19 +47,22 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
 
 
         // '=' as separator
-        $actual = $getopt->parseInput(array('--foo-bar=baz'));
+        $input = array('--foo-bar=baz');
+        $actual = $getopt->parse($input);
         $expect = array('--foo-bar' => 'baz');
         $this->assertSame($expect, $actual);
 
         // ' ' as separator
-        $actual = $getopt->parseInput(array('--foo-bar', 'baz'));
+        $input = array('--foo-bar', 'baz');
+        $actual = $getopt->parse($input);
         $expect = array('--foo-bar' => 'baz');
         $this->assertSame($expect, $actual);
 
         // missing required value
         $this->expectException(Exception\OptionParamRequired::CLASS);
         $this->expectExceptionMessage("The option '--foo-bar' requires a parameter.");
-        $getopt->parseInput(array('--foo-bar'));
+        $input = array('--foo-bar');
+        $getopt->parse($input);
     }
 
     public function testParse_longOptional()
@@ -63,11 +71,13 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
             new Option('foo-bar::')
         ]);
 
-        $actual = $getopt->parseInput(array('--foo-bar'));
+        $input = array('--foo-bar');
+        $actual = $getopt->parse($input);
         $expect = array('--foo-bar' => true);
         $this->assertSame($expect, $actual);
 
-        $actual = $getopt->parseInput(array('--foo-bar=baz'));
+        $input = array('--foo-bar=baz');
+        $actual = $getopt->parse($input);
         $expect = array('--foo-bar' => 'baz');
         $this->assertSame($expect, $actual);
     }
@@ -78,13 +88,14 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
             new Option('foo-bar*::')
         ]);
 
-        $actual = $getopt->parseInput(array(
+        $input = array(
             '--foo-bar',
             '--foo-bar',
             '--foo-bar=baz',
             '--foo-bar=dib',
             '--foo-bar'
-        ));
+        );
+        $actual = $getopt->parse($input);
         $expect = array('--foo-bar' => array(true, true, 'baz', 'dib', true));
         $this->assertSame($expect, $actual);
     }
@@ -95,13 +106,16 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
             new Option('f')
         ]);
 
-        $actual = $getopt->parseInput(array('-f'));
+        $input = array('-f');
+        $actual = $getopt->parse($input);
         $expect = array('-f' => true);
         $this->assertSame($expect, $actual);
 
-        $actual = $getopt->parseInput(array('-f', 'baz'));
-        $expect = array('-f' => true, 'baz');
+        $input = array('-f', 'baz');
+        $actual = $getopt->parse($input);
+        $expect = array('-f' => true);
         $this->assertSame($expect, $actual);
+        $this->assertSame(['baz'], $input);
     }
 
     public function testParse_shortRequired()
@@ -110,13 +124,15 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
             new Option('f:')
         ]);
 
-        $actual = $getopt->parseInput(array('-f', 'baz'));
+        $input = array('-f', 'baz');
+        $actual = $getopt->parse($input);
         $expect = array('-f' => 'baz');
         $this->assertSame($expect, $actual);
 
         $this->expectException(Exception\OptionParamRequired::CLASS);
         $this->expectExceptionMessage("The option '-f' requires a parameter.");
-        $getopt->parseInput(array('-f'));
+        $input = array('-f');
+        $getopt->parse($input);
     }
 
     public function testParse_shortOptional()
@@ -125,11 +141,13 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
             new Option('f::')
         ]);
 
-        $actual = $getopt->parseInput(array('-f'));
+        $input = array('-f');
+        $actual = $getopt->parse($input);
         $expect = array('-f' => true);
         $this->assertSame($expect, $actual);
 
-        $actual = $getopt->parseInput(array('-f', 'baz'));
+        $input = array('-f', 'baz');
+        $actual = $getopt->parse($input);
         $expect = array('-f' => 'baz');
         $this->assertSame($expect, $actual);
     }
@@ -140,7 +158,8 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
             new Option('f*::')
         ]);
 
-        $actual = $getopt->parseInput(array('-f', '-f', '-f', 'baz', '-f', 'dib', '-f'));
+        $input = array('-f', '-f', '-f', 'baz', '-f', 'dib', '-f');
+        $actual = $getopt->parse($input);
         $expect = array('-f' => array(true, true, 'baz', 'dib', true));
         $this->assertSame($expect, $actual);
     }
@@ -153,7 +172,8 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
             new Option('z'),
         ]);
 
-        $actual = $getopt->parseInput(array('-fbz'));
+        $input = array('-fbz');
+        $actual = $getopt->parse($input);
         $expect = array(
             '-f' => true,
             '-b' => true,
@@ -172,7 +192,8 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException(Exception\OptionParamRequired::CLASS);
         $this->expectExceptionMessage("The option '-b' requires a parameter.");
-        $getopt->parseInput(array('-fbz'));
+        $input = array('-fbz');
+        $getopt->parse($input);
     }
 
     public function testParseAndGet()
@@ -183,7 +204,7 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
             new Option('z::'),
         ]);
 
-        $actual = $getopt->parseInput(array(
+        $input = array(
             'abc',
             '--foo-bar=zim',
             'def',
@@ -196,24 +217,28 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
             '-n',
             '456',
             'ghi',
-        ));
+        );
 
-        // all values
-        $expect = array(
-            'abc',
+        $actual = $getopt->parse($input);
+
+        $expectOptv = array(
             '--foo-bar' => 'zim',
-            'def',
             '-z' => 'qux',
             '-b' => true,
+        );
+
+        $expectArgv = [
+            'abc',
+            'def',
             'gir',
             '--after-double-dash=123',
             '-n',
             '456',
             'ghi',
-        );
+        ];
 
-        // get all values
-        $this->assertSame($expect, $actual);
+        $this->assertSame($expectOptv, $actual);
+        $this->assertSame($expectArgv, $input);
     }
 
     public function testMultipleWithAlias()
@@ -222,53 +247,12 @@ class GetoptTest extends \PHPUnit\Framework\TestCase
             new Option('f,foo*::'),
         ]);
 
-        $actual = $getopt->parseInput(array('-f', '-f', '-f', 'baz', '-f', 'dib', '-f'));
+        $input = array('-f', '-f', '-f', 'baz', '-f', 'dib', '-f');
+        $actual = $getopt->parse($input);
         $expect = array(
             '-f' => array(true, true, 'baz', 'dib', true),
             '--foo' => array(true, true, 'baz', 'dib', true),
         );
         $this->assertSame($expect, $actual);
     }
-
-
-    // public function testSetOptions()
-    // {
-    //     $options = array(
-    //         'foo-bar,f*:',
-    //         'baz-dib,b::',
-    //         'z,zim-gir',
-    //     );
-
-    //     $getopt->setOptions($options);
-    //     $expect = array(
-    //         '--foo-bar' => new Option(
-    //             name: '--foo-bar',
-    //             alias: '-f',
-    //             multi: true,
-    //             param: 'required',
-    //             descr: null,
-    //         ),
-    //         '--baz-dib' => new Option(
-    //             name: '--baz-dib',
-    //             alias: '-b',
-    //             multi: false,
-    //             param: 'optional',
-    //             descr: null,
-    //         ),
-    //         '-z' => new Option(
-    //             name: '-z',
-    //             alias: '--zim-gir',
-    //             multi: false,
-    //             param: 'rejected',
-    //             descr: null,
-    //         ),
-    //     );
-
-    //     $actual = $getopt->getOptions();
-    //     $this->assertEquals($expect, $actual);
-
-    //     // get an aliased option
-    //     $actual = $getopt->getOption('--zim-gir');
-    //     $this->assertEquals($expect['-z'], $actual);
-    // }
 }
