@@ -64,11 +64,7 @@ class Getopt
     protected function setOption($string)
     {
         $option = new Option($string);
-        if (! $option->name) {
-            $this->options[] = $option;
-        } else {
-            $this->options[$option->name] = $option;
-        }
+        $this->options[] = $option;
     }
 
     /**
@@ -121,38 +117,15 @@ class Getopt
 
     public function getOption($name) : Option
     {
-        if (isset($this->options[$name])) {
-            $option = $this->options[$name];
-        } else {
-            $option = $this->getOptionByAlias($name);
-        }
-
-        if (! $option) {
-            throw new Exception\OptionNotDefined(
-                "The option '$name' is not defined."
-            );
-        }
-
-        return $option;
-    }
-
-    /**
-     *
-     * Gets an option by its alias.
-     *
-     * @param string $alias The option alias.
-     *
-     * @return StdClass|null Returns the matching option struct, or null if no
-     * option was found with that alias.
-     *
-     */
-    protected function getOptionByAlias($alias)
-    {
         foreach ($this->options as $option) {
-            if ($option->alias == $alias) {
+            if ($option->name === $name || $option->alias === $name) {
                 return $option;
             }
         }
+
+        throw new Exception\OptionNotDefined(
+            "The option '$name' is not defined."
+        );
     }
 
     /**
