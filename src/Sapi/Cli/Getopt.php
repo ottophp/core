@@ -12,21 +12,12 @@ class Getopt
 {
     /**
      *
-     * Any parsing errors.
-     *
-     * @var array
-     *
-     */
-    protected $errors;
-
-    /**
-     *
      * The command line input to be parsed.
      *
      * @var array
      *
      */
-    protected $input;
+    protected $input = [];
 
     /**
      *
@@ -35,7 +26,7 @@ class Getopt
      * @var array
      *
      */
-    protected $options;
+    protected $options = [];
 
     /**
      *
@@ -44,7 +35,7 @@ class Getopt
      * @var array
      *
      */
-    protected $values;
+    protected $values = [];
 
     /**
      *
