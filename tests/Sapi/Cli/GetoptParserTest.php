@@ -23,47 +23,47 @@ class GetoptParserTest extends \PHPUnit\Framework\TestCase
 
         $this->getopt_parser->setOptions($options);
         $expect = array(
-            0 => (object) array(
-                'name'  => null,
-                'alias' => 'foo',
-                'multi' => false,
-                'param' => 'argument-required',
-                'descr' => null,
+            0 => new Option(
+                name: null,
+                alias: 'foo',
+                multi: false,
+                param: 'argument-required',
+                descr: null,
             ),
-            '--foo-bar' => (object) array(
-                'name'  => '--foo-bar',
-                'alias' => '-f',
-                'multi' => true,
-                'param' => 'required',
-                'descr' => null,
+            '--foo-bar' => new Option(
+                name: '--foo-bar',
+                alias: '-f',
+                multi: true,
+                param: 'required',
+                descr: null,
             ),
-            1 => (object) array(
-                'name'  => null,
-                'alias' => 'bar',
-                'multi' => false,
-                'param' => 'argument-required',
-                'descr' => 'Argument bar required.',
+            1 => new Option(
+                name: null,
+                alias: 'bar',
+                multi: false,
+                param: 'argument-required',
+                descr: 'Argument bar required.',
             ),
-            '--baz-dib' => (object) array(
-                'name'  => '--baz-dib',
-                'alias' => '-b',
-                'multi' => false,
-                'param' => 'optional',
-                'descr' => 'Description for baz-dib option.',
+            '--baz-dib' => new Option(
+                name: '--baz-dib',
+                alias: '-b',
+                multi: false,
+                param: 'optional',
+                descr: 'Description for baz-dib option.',
             ),
-            2 => (object) array(
-                'name'  => null,
-                'alias' => 'baz',
-                'multi' => false,
-                'param' => 'argument-optional',
-                'descr' => 'Argument baz optional.',
+            2 => new Option(
+                name: null,
+                alias: 'baz',
+                multi: false,
+                param: 'argument-optional',
+                descr: 'Argument baz optional.',
             ),
-            '-z' => (object) array(
-                'name'  => '-z',
-                'alias' => '--zim-gir',
-                'multi' => false,
-                'param' => 'rejected',
-                'descr' => null,
+            '-z' => new Option(
+                name: '-z',
+                alias: '--zim-gir',
+                multi: false,
+                param: 'rejected',
+                descr: null,
             ),
         );
 
@@ -76,23 +76,23 @@ class GetoptParserTest extends \PHPUnit\Framework\TestCase
 
         // get an undefined short flag
         $actual = $this->getopt_parser->getOption('n');
-        $expect = (object) array(
-            'name'  => '-n',
-            'alias' => null,
-            'multi' => false,
-            'param' => 'rejected',
-            'descr' => null,
+        $expect = new Option(
+            name: '-n',
+            alias: null,
+            multi: false,
+            param: 'rejected',
+            descr: null,
         );
         $this->assertEquals($expect, $actual);
 
         // get an undefined long option
         $actual = $this->getopt_parser->getOption('--no-long');
-        $expect = (object) array(
-            'name'  => '--no-long',
-            'alias' => null,
-            'multi' => false,
-            'param' => 'optional',
-            'descr' => null,
+        $expect = new Option(
+            name: '--no-long',
+            alias: null,
+            multi: false,
+            param: 'optional',
+            descr: null,
         );
         $this->assertEquals($expect, $actual);
     }

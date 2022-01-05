@@ -1,8 +1,6 @@
 <?php
 namespace Otto\Sapi\Cli;
 
-use StdClass;
-
 /**
  *
  * Parses command line input for named option and numeric argument values.
@@ -151,21 +149,7 @@ class GetoptParser
         return $this->errors ? false : true;
     }
 
-    /**
-     *
-     * Gets a single option definition converted to an array.
-     *
-     * Looking for an undefined option will cause an error message, but will
-     * otherwise proceed. Undefined short flags are treated as rejecting a
-     * param, and undefined long options are treated as taking an optional
-     * param.
-     *
-     * @param string $name The definition key to look for.
-     *
-     * @return StdClass An option struct.
-     *
-     */
-    public function getOption($name)
+    public function getOption($name) : Option
     {
         if (isset($this->options[$name])) {
             $option = $this->options[$name];

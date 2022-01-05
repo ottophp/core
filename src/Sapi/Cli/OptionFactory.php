@@ -1,28 +1,9 @@
 <?php
 namespace Otto\Sapi\Cli;
 
-/**
- *
- * A factory for option objects.
- *
- * @package Aura.Cli
- *
- */
 class OptionFactory
 {
-    /**
-     *
-     * Returns a new option struct from an option definition string and
-     * description.
-     *
-     * @param string $string The option definition string.
-     *
-     * @param string $descr The option description.
-     *
-     * @return StdClass
-     *
-     */
-    public function newInstance($string, $descr = null)
+    public function newInstance($string, $descr = null) : Option
     {
         if (is_int($string)) {
             $string = $descr;
@@ -31,13 +12,7 @@ class OptionFactory
 
         $string = trim($string);
 
-        $option = (object) array(
-            'name'  => null,
-            'alias' => null,
-            'multi' => false,
-            'param' => 'rejected',
-            'descr' => $descr,
-        );
+        $option = new Option(descr: $descr);
 
         if (substr($string, 0, 1) == '#') {
             $this->setArgument($option, $string);
