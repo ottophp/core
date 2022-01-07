@@ -1,29 +1,45 @@
 <?php
+declare(strict_types=1);
+
 namespace Otto\Sapi\Cli;
 
-/**
- *
- * Parses command line input for named option and numeric argument values.
- *
- * @package Aura.Cli
- *
- */
+use ReflectionClass;
+
 class Getopt
 {
+    static public function new(string $class, string $method) : static
+    {
+        $options = [];
+        $rc = new ReflectionClass($class);
+        $rm = $rc->getMethod($method);
+        $attrs = $prop->getAttributes();
+
+        foreach ($attrs as $attr) {
+            if ($attr->getName() === Option::CLASS) {
+                $options[] = $attr->newInstance();
+            }
+        }
+
+        return new static($options);
+    }
+
     protected $input = [];
 
     protected $optv = [];
 
     protected $argv = [];
 
+    /**
+     * @param Option[] $options
+     */
     public function __construct(protected array $options = [])
     {
     }
 
-    public function parse(array &$input)
+    public function parse(array &$input) : array
     {
         $this->input = $input;
-        $this->optv = array();
+        $this->optv = []; // initialize with each option name and null value
 
         // flag to say when we've reached the end of options
         $done = false;
@@ -47,7 +63,7 @@ class Getopt
             if (! $done && substr($arg, 0, 2) == '--') {
                 $this->setLongOptionValue($arg);
             } elseif (! $done && substr($arg, 0, 1) == '-') {
-                $this->setShortFlagValue($arg);
+                $this->setShortOptionValue($arg);
             } else {
                 $this->argv[$argc ++] = $arg;
             }
@@ -58,7 +74,7 @@ class Getopt
         return $this->optv;
     }
 
-    public function getOption($name) : Option
+    public function getOption(string $name) : Option
     {
         foreach ($this->options as $option) {
             if (in_array($name, $option->names)) {
@@ -71,17 +87,7 @@ class Getopt
         );
     }
 
-    /**
-     *
-     * Sets the value for a long option.
-     *
-     * @param string $input The current input element, e.g. "--foo" or
-     * "--bar=baz" or "--bar baz".
-     *
-     * @return bool|null
-     *
-     */
-    protected function setLongOptionValue($input)
+    protected function setLongOptionValue(string $input) : void
     {
         list($name, $value) = $this->splitLongOptionInput($input);
         $option = $this->getOption($name);
@@ -90,24 +96,15 @@ class Getopt
             $value = array_shift($this->input);
         }
 
-        return $this->longOptionRequiresValue($option, $value, $name)
-            || $this->longOptionRejectsValue($option, $value, $name)
-            || $this->setValue($option, trim((string) $value) === '' ? true : $value);
+        $this->longOptionRequiresValue($option, $value, $name)
+        || $this->longOptionRejectsValue($option, $value, $name)
+        || $this->setValue($option, trim((string) $value) === '' ? true : $value);
     }
 
-    /**
-     *
-     * Splits the long option input into name and value.
-     *
-     * @param string $input The current input element, e.g. "--foo" or
-     * "--bar=baz".
-     *
-     * @return array An array of the long option name and value.
-     *
-     */
-    protected function splitLongOptionInput($input)
+    protected function splitLongOptionInput(string $input) : array
     {
         $pos = strpos($input, '=');
+
         if ($pos === false) {
             $name = $input;
             $value = null;
@@ -115,23 +112,15 @@ class Getopt
             $name = substr($input, 0, $pos);
             $value = substr($input, $pos + 1);
         }
-        return array($name, $value);
+
+        return [$name, $value];
     }
 
-    /**
-     *
-     * Does the long option require a param value?
-     *
-     * @param StdClass $option An option struct.
-     *
-     * @param mixed $value The option value.
-     *
-     * @param string $name The option name as passed.
-     *
-     * @return bool
-     *
-     */
-    protected function longOptionRequiresValue($option, $value, $name = null)
+    protected function longOptionRequiresValue(
+        Option $option,
+        mixed $value,
+        ?string $name = null
+    ) : bool
     {
         if ($option->param == 'required' && trim((string) $value) === '') {
             if ($name !== null) {
@@ -139,25 +128,18 @@ class Getopt
                     "The option '$name' requires a parameter."
                 );
             }
+
             return true;
         }
+
         return false;
     }
 
-    /**
-     *
-     * Does the long option reject a param value?
-     *
-     * @param StdClass $option An option struct.
-     *
-     * @param mixed $value The option value.
-     *
-     * @param string $name The option name as passed.
-     *
-     * @return bool
-     *
-     */
-    protected function longOptionRejectsValue($option, $value, $name)
+    protected function longOptionRejectsValue(
+        Option $option,
+        mixed $value,
+        ?string $name = null
+    ) : bool
     {
         if ($option->param == 'rejected' && trim((string) $value) !== '') {
             throw new Exception\OptionParamRejected(
@@ -168,104 +150,64 @@ class Getopt
         return false;
     }
 
-    /**
-     *
-     * Parses a short option or cluster of short options.
-     *
-     * @param string $name The current input element, e.g. "-f" or "-fbz".
-     *
-     * @return null
-     *
-     */
-    protected function setShortFlagValue($name)
+    protected function setShortOptionValue(string $name) : void
     {
         if (strlen($name) > 2) {
-            return $this->setShortFlagValues($name);
+            $this->setShortOptionValues($name);
+            return;
         }
 
         $option = $this->getOption($name);
 
-        return $this->shortOptionRejectsValue($option)
-            || $this->shortOptionCapturesValue($option)
-            || $this->shortOptionRequiresValue($option, $name)
-            || $this->setValue($option, true);
+        $this->shortOptionRejectsValue($option)
+        || $this->shortOptionCapturesValue($option)
+        || $this->shortOptionRequiresValue($option, $name)
+        || $this->setValue($option, true);
     }
 
-    /**
-     *
-     * Does the short option reject a value?
-     *
-     * @param StdClass $option An option struct.
-     *
-     * @return bool
-     *
-     */
-    protected function shortOptionRejectsValue($option)
+    protected function shortOptionRejectsValue(Option $option) : bool
     {
         if ($option->param == 'rejected') {
             $this->setValue($option, true);
             return true;
         }
+
         return false;
     }
 
-    /**
-     *
-     * Does the short option capture the next input element as a value?
-     *
-     * @param StdClass $option An option struct.
-     *
-     * @return bool
-     *
-     */
-    protected function shortOptionCapturesValue($option)
+    protected function shortOptionCapturesValue(Option $option) : bool
     {
         $value = reset($this->input);
         $is_value = ! empty($value) && substr($value, 0, 1) != '-';
+
         if ($is_value) {
             $this->setValue($option, array_shift($this->input));
             return true;
         }
+
         return false;
     }
 
-    /**
-     *
-     * Does the short option require the next input element to be a value?
-     *
-     * @param StdClass $option An option struct.
-     *
-     * @param string $name The option name.
-     *
-     * @return bool
-     *
-     */
-    protected function shortOptionRequiresValue($option, $name)
+    protected function shortOptionRequiresValue(
+        Option $option,
+        string $name
+    ) : bool
     {
         if ($option->param == 'required') {
             throw new Exception\OptionParamRequired(
                 "The option '$name' requires a parameter."
             );
-            return true;
         }
+
         return false;
     }
 
-    /**
-     *
-     * Parses a cluster of short options.
-     *
-     * @param string $chars The short-option cluster (e.g. "-abcd").
-     *
-     * @return null
-     *
-     */
-    protected function setShortFlagValues($chars)
+    protected function setShortOptionValues(string $chars) : void
     {
         // drop the leading dash in the cluster and split into single chars
         $chars = str_split(substr($chars, 1));
         while ($char = array_shift($chars)) {
-            $name = "-$char";
+            $name = "-{$char}";
             $option = $this->getOption($name);
             if (! $this->shortOptionRequiresValue($option, $name)) {
                 $this->setValue($option, true);
@@ -273,59 +215,24 @@ class Getopt
         }
     }
 
-    /**
-     *
-     * Sets an option value, adding to a value array for multi-values.
-     *
-     * @param StdClass $option The option struct.
-     *
-     * @param mixed $value The option value.
-     *
-     * @return null
-     *
-     */
-    protected function setValue($option, $value)
+    protected function setValue(Option $option, mixed $value) : void
     {
         if ($option->multi) {
-            $this->addMultiValue($option, $value);
-        } else {
-            $this->setSingleValue($option, $value);
+            $this->addValue($option, $value);
+            return;
         }
-    }
 
-    /**
-     *
-     * Adds to an array of multi-values for the option.
-     *
-     * @param StdClass $option The option struct.
-     *
-     * @param mixed $value The value to add to the array of multi-values.
-     *
-     * @return null
-     *
-     */
-    protected function addMultiValue($option, $value)
-    {
         foreach ($option->names as $name) {
-            $this->optv[$name][] = $value;
-        }
-    }
-
-    /**
-     *
-     * Sets the single value for an option.
-     *
-     * @param StdClass $option The option struct.
-     *
-     * @param mixed $value The value to set.
-     *
-     * @return null
-     *
-     */
-    protected function setSingleValue($option, $value)
-    {
-        foreach ($option->names as $name) {
+            $name = ltrim($name, '-');
             $this->optv[$name] = $value;
+        }
+    }
+
+    protected function addValue(Option $option, mixed $value) : void
+    {
+        foreach ($option->names as $name) {
+            $name = ltrim($name, '-');
+            $this->optv[$name][] = $value;
         }
     }
 }

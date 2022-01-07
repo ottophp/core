@@ -4,6 +4,7 @@ namespace Otto\Domain\App\Action;
 use AutoRoute\Creator;
 use Capsule\Di\Container;
 use Otto\Domain\Payload;
+use Psr\Log\LoggerInterface;
 
 class CreateAction
 {
@@ -19,6 +20,7 @@ class CreateAction
         protected Creator $creator,
         protected string $directory,
         protected string $namespace,
+        protected LoggerInterface $logger
     ) {
     }
 
@@ -31,33 +33,30 @@ class CreateAction
         return $this->validate()
             ?? $this->createAction()
             ?? $this->createTemplate()
-            ?? $this->created();
+            ?? $this->payload('created', $this->created);
     }
 
     protected function validate() : ?Payload
     {
         if ($this->verb === null) {
-            return Payload::invalid([
-                'messages' => [
-                    "Please pass an HTTP verb as the first argument.",
-                ],
-            ]);
+            return $this->payload(
+                'invalid',
+                "Please pass an HTTP verb as the first argument."
+            );
         }
 
         if ($this->path === null) {
-            return Payload::invalid([
-                'messages' => [
-                    "Please pass a URL path as the second argument.",
-                ],
-            ]);
+            return $this->payload(
+                'invalid',
+                "Please pass a URL path as the second argument."
+            );
         }
 
         if ($this->domain === null) {
-            return Payload::invalid([
-                'messages' => [
-                    "Please pass a Domain subclass as the third argument.",
-                ],
-            ]);
+            return $this->payload(
+                'invalid',
+                "Please pass a Domain subclass as the third argument."
+            );
         }
 
         return null;
@@ -98,11 +97,10 @@ class CreateAction
     protected function write(string $type, string $file, string $code) : ?Payload
     {
         if (file_exists($file)) {
-            return Payload::error([
-                'messages' => [
-                    "{$file} already exists; not overwriting.",
-                ],
-            ]);
+            return $this->payload(
+                'error',
+                "{$file} already exists; not overwriting.",
+            );
         }
 
         $dir = dirname($file);
@@ -116,10 +114,14 @@ class CreateAction
         return null;
     }
 
-    protected function created() : Payload
+    protected function payload(string $method, array|string $messages) : Payload
     {
-        return Payload::created([
-            'messages' => $this->created
+        foreach ((array) $messages as $message) {
+            $this->logger->info($message);
+        }
+
+        return Payload::$method([
+            'messages' => $messages
         ]);
     }
 }

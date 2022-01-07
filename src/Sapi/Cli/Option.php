@@ -1,6 +1,11 @@
 <?php
+declare(strict_types=1);
+
 namespace Otto\Sapi\Cli;
 
+use Attribute;
+
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 class Option
 {
     public ?array $names = [];
@@ -13,7 +18,7 @@ class Option
 
     public ?string $descr = null;
 
-    public function __construct(string $spec)
+    public function __construct(string $spec, ?string $descr = null)
     {
         $this->setMulti($spec); // allow before param
         $this->setParam($spec);

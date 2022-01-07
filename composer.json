@@ -16,7 +16,8 @@
         "payload-interop/payload-interop": "^1.0",
         "pmjones/auto-route": "^2.0",
         "qiq/qiq": "^1.0",
-        "sapien/sapien": "^1.0"
+        "sapien/sapien": "^1.0",
+        "psr/log": "^3.0"
     },
     "require-dev": {
         "pds/skeleton": "^1.0",
