@@ -12,6 +12,8 @@ class TemplateTest extends \Otto\TestCase
         $template = $this->container->new(Template::CLASS);
 
         $request = $this->container->get(Request::CLASS);
+        $template->request($request);
+
         $response = new Response();
         $payload = Payload::success();
 
