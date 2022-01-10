@@ -4,7 +4,7 @@ namespace Otto;
 use Capsule\Di\Container;
 use Capsule\Di\Definitions;
 use Otto\OttoProvider;
-use Otto\Infra\InfraProvider;
+use Otto\Sapi\SapiProvider;
 use Otto\Sapi\Http\HttpProvider;
 use Otto\Sapi\Http\Responder\Helper\Rot13;
 
@@ -19,7 +19,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
                 directory: __DIR__ . DIRECTORY_SEPARATOR . 'fake-project',
                 namespace: 'FakeProject',
             ),
-            new InfraProvider(),
+            new SapiProvider(),
             new HttpProvider(
                 format: $this->format,
                 helpers: [

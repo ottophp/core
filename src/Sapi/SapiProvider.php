@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Otto\Infra;
+namespace Otto\Sapi;
 
 use AutoRoute;
 use Capsule\Di\Definitions;
 use Capsule\Di\Provider;
 
-class InfraProvider implements Provider
+class SapiProvider implements Provider
 {
     public function provide(Definitions $def) : void
     {
