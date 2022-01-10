@@ -1,18 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Otto\Sapi\Cli;
+namespace Otto\Domain;
 
-use AutoRoute;
 use Capsule\Di\Definitions;
 use Capsule\Di\Provider;
-use Otto\Domain\App\Action\CreateAction;
 
-class CliProvider implements Provider
+class DomainProvider implements Provider
 {
     public function provide(Definitions $def) : void
     {
-        $def->{CreateAction::CLASS}
+        $def->{App\Action\CreateAction::CLASS}
             ->arguments([
                 'directory' => $def->{'otto.directory'},
                 'namespace' => $def->{'otto.namespace'}
