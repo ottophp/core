@@ -18,6 +18,7 @@ class SapiProvider implements Provider
     public function provide(Definitions $def) : void
     {
         $this->provideAutoRoute($def);
+        $this->provideTemplate($def);
     }
 
     protected function provideAutoRoute(Definitions $def) : void
@@ -88,31 +89,17 @@ class SapiProvider implements Provider
             $helpers[$name] = $def->callableGet($class);
         }
 
-        $def->{Template::CLASS . ':compiler'} = $def
-            ->newDefinition(Qiq\Compiler\QiqCompiler::CLASS)
-            ->inherit(null)
-            ->argument('cachePath', $def->{'otto.directory'} . '/tmp/cache/qiq');
+        $def->{Qiq\Compiler\QiqCompiler::CLASS}
+            ->argument('cachePath', $def->{'otto.directory'} . "/tmp/cache/qiq");
 
-        $def->{Template::CLASS. ':templateLocator'} = $def
-            ->newDefinition(Qiq\TemplateLocator::CLASS)
-            ->inherit(null)
+        $def->{Qiq\TemplateLocator::CLASS}
             ->arguments([
                 'paths' => [],
                 'extension' => '.php',
-                'compiler' => $def->get(Template::CLASS . ':compiler'),
+                'compiler' => $def->get(Qiq\Compiler\QiqCompiler::CLASS),
             ]);
 
-        $def->{Template::CLASS . ':helperLocator'} = $def
-            ->newDefinition(Qiq\HelperLocator::CLASS)
-            ->inherit(null)
+        $def->{Qiq\HelperLocator::CLASS}
             ->argument('factories', $helpers);
-
-        $def->{Template::CLASS}
-            ->inherit(null)
-            ->arguments([
-                $def->get(Template::CLASS . ':templateLocator'),
-                $def->get(Template::CLASS . ':helperLocator'),
-                $def->get(Request::CLASS),
-            ]);
     }
 }

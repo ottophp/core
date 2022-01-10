@@ -5,9 +5,9 @@ namespace Otto\Sapi;
 
 use JsonSerializable;
 use PayloadInterop\DomainPayload;
+use Qiq\Template as QiqTemplate;
 use ReflectionClass;
 use Throwable;
-use Qiq\Template as QiqTemplate;
 
 class Template extends QiqTemplate
 {
