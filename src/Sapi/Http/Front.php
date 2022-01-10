@@ -24,6 +24,8 @@ class Front
     public function __invoke() : Response
     {
         try {
+            $this->template->request($this->request);
+
             $route = $this->router->route(
                 (string) $this->request->method->name,
                 (string) $this->request->url->path
