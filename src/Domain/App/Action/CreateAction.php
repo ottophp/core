@@ -32,7 +32,8 @@ class CreateAction
 
         return $this->validate()
             ?? $this->createAction()
-            ?? $this->createTemplate()
+            ?? $this->createHtmlTemplate()
+            ?? $this->createJsonTemplate()
             ?? $this->payload('created', $this->created);
     }
 
@@ -77,7 +78,7 @@ class CreateAction
         return $this->write('action', $file, $code);
     }
 
-    protected function createTemplate() : ?Payload
+    protected function createHtmlTemplate() : ?Payload
     {
         $file = $this->created['action'];
 
@@ -89,7 +90,24 @@ class CreateAction
             . '/resources/responder/html/action/'
             . substr($file, $len);
 
-        $code = "Template for <code>{$this->verb} {$this->path}</code>";
+        $code = "HTML template for <code>{$this->verb} {$this->path}</code>" . PHP_EOL;
+
+        return $this->write('template', $file, $code);
+    }
+
+    protected function createJsonTemplate() : ?Payload
+    {
+        $file = $this->created['action'];
+
+        $mid = 'src/Sapi/Http/Action/';
+        $pos = strpos($file, $mid);
+        $len = strlen($mid) + $pos;
+
+        $file = $this->directory
+            . '/resources/responder/json/action/'
+            . substr($file, $len);
+
+        $code = "<?php /* JSON template for {$this->verb} {$this->path} */" . PHP_EOL;
 
         return $this->write('template', $file, $code);
     }

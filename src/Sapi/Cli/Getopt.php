@@ -39,7 +39,7 @@ class Getopt
     public function parse(array &$input) : array
     {
         $this->input = $input;
-        $this->optv = []; // initialize with each option name and null value
+        $this->optv = [];
 
         // flag to say when we've reached the end of options
         $done = false;

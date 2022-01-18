@@ -1,5 +1,5 @@
 <?php
-namespace Otto;
+namespace Otto\Sapi\Http;
 
 use Capsule\Di\Container;
 use Capsule\Di\Definitions;
@@ -16,15 +16,16 @@ class TestCase extends \PHPUnit\Framework\TestCase
     {
         $this->container = new Container(new Definitions(), [
             new OttoProvider(
-                directory: __DIR__ . DIRECTORY_SEPARATOR . 'fake-project',
+                directory: dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'fake-project',
                 namespace: 'FakeProject',
             ),
-            new SapiProvider(),
-            new HttpProvider(
-                format: $this->format,
+            new SapiProvider(
                 helpers: [
                     'rot13' => Rot13::CLASS,
                 ],
+            ),
+            new HttpProvider(
+                format: $this->format,
             ),
         ]);
     }

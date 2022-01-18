@@ -10,9 +10,9 @@ use Otto\Sapi\Template as SapiTemplate;
 
 class Template extends SapiTemplate
 {
-    private ?Request $request;
+    private ?Request $request = null;
 
-    private ?Response $response;
+    private ?Response $response = null;
 
     private ?Route $route = null;
 

@@ -20,8 +20,7 @@ class HttpProvider implements Provider
 
     public function __construct(
         public readonly string $format = 'html',
-        public readonly ?string $layout = 'layout:main',
-        public readonly array $helpers = [],
+        public readonly ?string $layout = 'layout:main'
     ) {
     }
 

@@ -8,7 +8,7 @@ use AutoRoute\Exception\MethodNotAllowed;
 use AutoRoute\Route;
 use LogicException;
 
-class FrontJsonTest extends \Otto\TestCase
+class FrontJsonTest extends TestCase
 {
     protected $format = 'json';
 

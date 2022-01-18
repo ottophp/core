@@ -4,12 +4,13 @@ namespace Otto\Sapi\Http\Responder;
 use FakeProject\Domain\Payload;
 
 use Otto\Sapi\Http\ActionFactory;
+use Otto\Sapi\Http\TestCase;
 use FakeProject\Sapi\Http\Action\Get;
 use FakeProject\Sapi\Http\Action\Post;
 use FakeProject\Sapi\Http\Action\Put;
 use Otto\Sapi\Http\Responder\Exception;
 
-class ActionResponderTest extends \Otto\TestCase
+class ActionResponderTest extends TestCase
 {
     /**
      * @dataProvider providePayload

@@ -3,7 +3,7 @@ namespace Otto\Sapi\Http;
 
 use FakeProject\Domain\Payload;
 
-class FrontHtmlTest extends \Otto\TestCase
+class FrontHtmlTest extends TestCase
 {
     public function testRoute404()
     {

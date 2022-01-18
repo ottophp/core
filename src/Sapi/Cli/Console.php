@@ -17,16 +17,21 @@ class Console
     public function __invoke(array $argv) : Result
     {
         try {
-            $script = array_shift($argv);
-            $namespace = $this->inflectNamespace(array_shift($argv));
-            $subclass = $this->inflectSubclass(array_shift($argv));
-            $class = "{$ns}\\Sapi\\Cli\\Command\\{$subclass}";
-            $optv = Getopt::new($class, '__invoke')->parse($argv);
-            $command = $container->new($class);
-            return $command($optv, ...$argv); // does not blow up with too many $argv -- should it?
+            $class = $this->commandClass($argv);
+            $optv = $this->options($class, $argv);
+            $command = $this->newCommand($class);
+            return $command($optv, ...$argv);
         } catch (Throwable $e) {
             return ($this->consoleReporter)($e);
         }
+    }
+
+    protected function commandClass(array &$argv) : string
+    {
+        $script = array_shift($argv);
+        $namespace = $this->inflectNamespace(array_shift($argv));
+        $subclass = $this->inflectSubclass(array_shift($argv));
+        return "{$ns}\\Sapi\\Cli\\Command\\{$subclass}";
     }
 
     protected function inflectNamespace(string $str) : string
@@ -34,9 +39,19 @@ class Console
         return str_replace('-', '', ucfirst(ucwords($name, '-')));
     }
 
-
     protected function inflectSubclass(string $str) : string
     {
         return str_replace(':', '\\', $this->inflectNamespace($str));
+    }
+
+    protected function options(string $class, array &$argv) : array
+    {
+        $getopt = Getopt::new($class, '__invoke');
+        return $getopt->parse($argv);
+    }
+
+    protected function newCommand(string $class) : object
+    {
+        return $container->new($class);
     }
 }

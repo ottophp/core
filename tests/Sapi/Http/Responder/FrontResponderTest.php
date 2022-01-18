@@ -4,8 +4,9 @@ namespace Otto\Sapi\Http\Responder;
 use Exception;
 use Error;
 use LengthException;
+use Otto\Sapi\Http\TestCase;
 
-class FrontResponderTest extends \Otto\TestCase
+class FrontResponderTest extends TestCase
 {
     public function testException()
     {
