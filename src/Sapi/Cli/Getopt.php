@@ -12,7 +12,7 @@ class Getopt
         $options = [];
         $rc = new ReflectionClass($class);
         $rm = $rc->getMethod($method);
-        $attrs = $prop->getAttributes();
+        $attrs = $rm->getAttributes();
 
         foreach ($attrs as $attr) {
             if ($attr->getName() === Option::CLASS) {

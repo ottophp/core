@@ -1,7 +1,7 @@
 <?php
 namespace Otto\Sapi\Cli;
 
-class GetoptTest extends \PHPUnit\Framework\TestCase
+class GetoptTest extends TestCase
 {
     public function testParse_noOptions()
     {

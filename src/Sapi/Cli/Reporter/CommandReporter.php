@@ -5,8 +5,9 @@ namespace Otto\Sapi\Cli\Reporter;
 
 use PayloadInterop\DomainPayload;
 use Otto\Sapi\Cli\Reporter;
+use Otto\Sapi\Cli\Result;
 
-class ActionReporter extends Reporter
+class CommandReporter extends Reporter
 {
     protected object $command;
 
@@ -70,6 +71,8 @@ class ActionReporter extends Reporter
                 return $view;
             }
         }
+
+        return null;
 
         return $this->strategy->viewNotFound(
             $templateLocator->getPaths(),

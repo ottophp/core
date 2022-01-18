@@ -5,6 +5,7 @@ namespace Otto\Sapi\Cli\Reporter;
 
 use Otto\Sapi\Cli\Reporter;
 use Throwable;
+use Otto\Sapi\Cli\Result;
 
 class ConsoleReporter extends Reporter
 {

@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Otto\Sapi\Http\Responder;
+namespace Otto\Sapi\Cli\Reporter;
 
+use Otto\Sapi\Cli\Result;
 use Otto\Sapi\Template as SapiTemplate;
 
 class Template extends SapiTemplate

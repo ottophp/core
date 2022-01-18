@@ -31,12 +31,12 @@ class Console
         $script = array_shift($argv);
         $namespace = $this->inflectNamespace(array_shift($argv));
         $subclass = $this->inflectSubclass(array_shift($argv));
-        return "{$ns}\\Sapi\\Cli\\Command\\{$subclass}";
+        return "{$namespace}\\Sapi\\Cli\\Command\\{$subclass}";
     }
 
     protected function inflectNamespace(string $str) : string
     {
-        return str_replace('-', '', ucfirst(ucwords($name, '-')));
+        return str_replace('-', '', ucfirst(ucwords($str, '-')));
     }
 
     protected function inflectSubclass(string $str) : string
@@ -52,6 +52,6 @@ class Console
 
     protected function newCommand(string $class) : object
     {
-        return $container->new($class);
+        return $this->container->new($class);
     }
 }
