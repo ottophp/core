@@ -14,10 +14,10 @@ class CliProvider implements Provider
 
     public function provide(Definitions $def) : void
     {
-        $directory = $def->{'otto.directory'};
-        $def->{Reporter::CLASS}
+        $def->{Reporter\Strategy::CLASS}
             ->arguments([
                 'directory' => $def->{'otto.directory'},
+                'layout' => 'layout:main',
             ]
         );
     }

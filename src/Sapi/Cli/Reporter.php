@@ -4,26 +4,18 @@ declare(strict_types=1);
 namespace Otto\Sapi\Cli;
 
 use Otto\Sapi\Cli\Reporter\Data;
+use Otto\Sapi\Cli\Reporter\Strategy;
 use Otto\Sapi\Cli\Reporter\Template;
 
 abstract class Reporter
 {
     public function __construct(
-        protected string $directory,
+        protected Strategy $strategy,
         protected Template $template,
         protected Data $data
     ) {
-        $this->template->getTemplateLocator()->setPaths([
-            "{$this->directory}/resources/reporter/view",
-            "command:{$this->directory}/resources/reporter/command",
-            "layout:{$this->directory}/resources/reporter/layout",
-            "layout:{$this->directory}/vendor/ottophp/core/resources/reporter/layout",
-            "status:{$this->directory}/resources/reporter/status",
-            "status:{$this->directory}/vendor/ottophp/core/resources/reporter/status",
-            "console:{$this->directory}/resources/reporter/console",
-            "console:{$this->directory}/vendor/ottophp/core/resources/reporter/console",
-        ]);
-        $this->template->result(new Result());
+        $this->template->getTemplateLocator()->setPaths($this->strategy->getPaths());
+        $this->template->result($this->strategy->newResult());
         $this->template->addData($this->data->get());
     }
 
@@ -73,7 +65,7 @@ abstract class Reporter
         }
 
         if ($layout === null) {
-            // $layout = $this->strategy->getLayout();
+            $layout = $this->strategy->getLayout();
         }
 
         $this->template->setLayout($layout);
