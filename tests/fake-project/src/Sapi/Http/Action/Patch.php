@@ -4,7 +4,7 @@ namespace FakeProject\Sapi\Http\Action;
 use Otto\Sapi\Http\Responder\ActionResponder;
 use Sapien\Request;
 use Sapien\Response;
-use Otto\Domain\Payload;
+use FakeProject\Domain\Payload;
 
 class Patch
 {

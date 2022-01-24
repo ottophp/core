@@ -3,7 +3,7 @@ namespace FakeProject\Sapi\Cli\Command;
 
 use Otto\Sapi\Cli\Result;
 use Otto\Sapi\Cli\Reporter\CommandReporter;
-use Otto\Domain\Payload;
+use FakeProject\Domain\Payload;
 
 class Hello
 {

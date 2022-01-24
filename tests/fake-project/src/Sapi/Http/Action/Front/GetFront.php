@@ -1,7 +1,7 @@
 <?php
 namespace FakeProject\Sapi\Http\Action\Front;
 
-use Otto\Domain\Payload;
+use FakeProject\Domain\Payload;
 use Otto\Sapi\Http\Responder\ActionResponder;
 use Sapien\Request;
 use Sapien\Response;

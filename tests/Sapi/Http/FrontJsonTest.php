@@ -1,7 +1,7 @@
 <?php
 namespace Otto\Sapi\Http;
 
-use Otto\Domain\Payload;
+use FakeProject\Domain\Payload;
 use AutoRoute\Exception\NotFound;
 use AutoRoute\Exception\InvalidArgument;
 use AutoRoute\Exception\MethodNotAllowed;

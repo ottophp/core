@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Otto\Domain\Exception;
+namespace Otto\Domain;
 
 class Exception extends \Otto\Exception
 {

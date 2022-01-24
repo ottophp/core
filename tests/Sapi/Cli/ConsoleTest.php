@@ -1,7 +1,7 @@
 <?php
 namespace Otto\Sapi\Cli;
 
-use Otto\Domain\Payload;
+use FakeProject\Domain\Payload;
 use Otto\Sapi\Cli\Result;
 
 class ConsoleTest extends TestCase
