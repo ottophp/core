@@ -1,7 +1,7 @@
 <?php
 namespace Otto\Sapi\Http\Responder;
 
-use FakeProject\Domain\Payload;
+use Otto\Domain\Payload;
 
 use Otto\Sapi\Http\ActionFactory;
 use Otto\Sapi\Http\TestCase;

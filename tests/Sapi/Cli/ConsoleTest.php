@@ -6,8 +6,9 @@ class ConsoleTest extends TestCase
     public function test()
     {
         $console = $this->container->new(Console::CLASS);
-        $argv = ['./bin/console', 'fake-project', 'fake-cmd'];
+        $argv = ['./bin/console', 'fake-project', 'hello', 'zim'];
         $result = $console($argv);
-        var_dump($result);
+        $this->assertSame(0, $result->getCode());
+        $this->assertSame("Hello, zim!" . PHP_EOL, $result->getOutput());
     }
 }
