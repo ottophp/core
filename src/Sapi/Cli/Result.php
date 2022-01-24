@@ -109,17 +109,17 @@ class Result
      */
     public const CONFIG = 78;
 
-    protected int $code = 0;
+    protected ?int $code = null;
 
     protected mixed $output = null;
 
-    public function setCode(int $code) : static
+    public function setCode(?int $code) : static
     {
         $this->code = $code;
         return $this;
     }
 
-    public function getCode() : int
+    public function getCode() : ?int
     {
         return $this->code;
     }
@@ -135,7 +135,7 @@ class Result
         return $this->output;
     }
 
-    public function print() : int
+    public function print() : ?int
     {
         if (is_resource($this->output)) {
             rewind($this->output);

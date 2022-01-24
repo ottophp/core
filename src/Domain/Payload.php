@@ -19,7 +19,7 @@ class Payload implements DomainPayload, DomainStatus
 
     public function __construct(
         protected string $status,
-        protected array $result
+        protected array $result = []
     ) {
         if (! defined(get_called_class() . "::{$status}")) {
             throw new Exception("No such status: {$status}");

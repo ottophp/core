@@ -1,1 +1,1 @@
-<?= $this->getContent();
+<?= rtrim($this->getContent()) . PHP_EOL;
