@@ -21,6 +21,7 @@ class ConsoleReporter extends Reporter
     protected function getView() : ?string
     {
         $templateLocator = $this->template->getTemplateLocator();
+        $templateLocator->setPaths($this->strategy->getPaths($this->command));
 
         $views = [];
         $class = get_class($this->e);

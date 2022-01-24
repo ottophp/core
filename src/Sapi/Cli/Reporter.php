@@ -14,7 +14,6 @@ abstract class Reporter
         protected Template $template,
         protected Data $data
     ) {
-        $this->template->getTemplateLocator()->setPaths($this->strategy->getPaths());
         $this->template->result($this->strategy->newResult());
         $this->template->addData($this->data->get());
     }

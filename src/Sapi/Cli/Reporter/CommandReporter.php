@@ -65,14 +65,14 @@ class CommandReporter extends Reporter
         ];
 
         $templateLocator = $this->template->getTemplateLocator();
+        $paths = $this->strategy->getPaths($this->command);
+        $templateLocator->setPaths($paths);
 
         foreach ($views as $view) {
             if ($templateLocator->has($view)) {
                 return $view;
             }
         }
-
-        return null;
 
         return $this->strategy->viewNotFound(
             $templateLocator->getPaths(),

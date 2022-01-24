@@ -28,7 +28,7 @@ class Console
 
     protected function commandClass(array &$argv) : string
     {
-        $script = array_shift($argv);
+        $console = array_shift($argv);
         $namespace = $this->inflectNamespace(array_shift($argv));
         $subclass = $this->inflectSubclass(array_shift($argv));
         return "{$namespace}\\Sapi\\Cli\\Command\\{$subclass}";

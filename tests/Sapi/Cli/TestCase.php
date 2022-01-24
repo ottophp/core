@@ -18,6 +18,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
             ),
             new SapiProvider(),
             new CliProvider(),
+            new \FakeProject\Sapi\Cli\CliProvider(),
         ]);
     }
 }
