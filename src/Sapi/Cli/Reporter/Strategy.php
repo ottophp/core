@@ -33,12 +33,16 @@ class Strategy
         );
     }
 
-    public function getPaths(object $command) : array
+    public function getPaths(?object $command) : array
     {
         $paths = [];
-        $class = get_class($command);
-        $namespace = strstr($class, '\\', true);
-        $packageDir = $this->getPackageDir($namespace);
+        $packageDir = null;
+
+        if ($command !== null) {
+            $class = get_class($command);
+            $namespace = strstr($class, '\\', true);
+            $packageDir = $this->getPackageDir($namespace);
+        }
 
         if ($packageDir !== null) {
             $paths[] = "{$packageDir}/resources/reporter/view";

@@ -9,13 +9,16 @@ use Otto\Sapi\Cli\Result;
 
 class ConsoleReporter extends Reporter
 {
+    protected object $command;
+
     protected Throwable $e;
 
-    public function __invoke(Throwable $e) : Result
+    public function __invoke(?object $command, Throwable $e) : Result
     {
+        $this->command = $command;
         $this->e = $e;
         $this->template->addData(['e' => $this->template->decomposeException($e)]);
-        return $this->render(500);
+        return $this->render(Result::FAILURE);
     }
 
     protected function getView() : ?string

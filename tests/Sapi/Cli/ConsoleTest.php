@@ -46,4 +46,40 @@ class ConsoleTest extends TestCase
             [Payload::UPDATED, Result::SUCCESS],
         ];
     }
+
+    public function testThrowable()
+    {
+        $console = $this->container->get(Console::CLASS);
+        $argv = ['./bin/console', 'fake-project', 'pitch'];
+        $result = $console($argv);
+        $this->assertSame(Result::FAILURE, $result->getCode());
+        $this->assertStringContainsString(
+            "LogicException: Fake logic exception thrown.",
+            $result->getOutput()
+        );
+    }
+
+    // public function testCommandNotFound()
+    // {
+    //     $_SERVER['REQUEST_METHOD'] = 'GET';
+    //     $_SERVER['REQUEST_URI'] = '/none-such';
+    //     $console = $this->container->get(Console::CLASS);
+    //     $result = $console();
+    //     $this->assertSame(404, $result->getCode());
+    //     $this->assertStringContainsString('Route not found for URL.', $result->getContent());
+    // }
+
+    // public function testBadCommandArgument()
+    // {
+    //     $_SERVER['REQUEST_METHOD'] = 'GET';
+    //     $_SERVER['REQUEST_URI'] = '/console/route/not-an-int';
+    //     $console = $this->container->get(Console::CLASS);
+    //     $result = $console();
+    //     $this->assertSame(400, $result->getCode());
+    //     $this->assertStringContainsString('The request was bad.', $result->getContent());
+    // }
+
+    // public function testBadCommandOption()
+    // {
+    // }
 }
