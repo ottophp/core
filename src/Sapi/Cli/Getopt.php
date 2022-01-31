@@ -19,33 +19,33 @@ class Getopt
         while ($input) {
 
             // shift each element from the top of the $input source
-            $arg = array_shift($input);
+            $curr = array_shift($input);
 
             // after a plain double-dash, all values are argv (not options)
-            if ($arg == '--') {
+            if ($curr == '--') {
                 $done = true;
                 continue;
             }
 
             if ($done) {
-                $argv[] = $arg;
+                $argv[] = $curr;
                 continue;
             }
 
             // long option?
-            if (substr($arg, 0, 2) == '--') {
-                $this->longOption($input, $options, ltrim($arg, '-'));
+            if (substr($curr, 0, 2) == '--') {
+                $this->longOption($input, $options, ltrim($curr, '-'));
                 continue;
             }
 
             // short option?
-            if (substr($arg, 0, 1) == '-') {
-                $this->shortOption($input, $options, ltrim($arg, '-'));
+            if (substr($curr, 0, 1) == '-') {
+                $this->shortOption($input, $options, ltrim($curr, '-'));
                 continue;
             }
 
             // argument
-            $argv[] = $arg;
+            $argv[] = $curr;
         }
 
         $input = $argv; // by reference!
