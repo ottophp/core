@@ -23,24 +23,13 @@ class Option
         protected string $argument = self::REJECTED,
         protected bool $multiple = false
     ) {
-        $names = explode(',', $names);
+        $names = explode('|', $names);
 
         foreach ($names as &$name) {
-            $name = $this->fixName($name);
+            $name = trim($name, '- ');
         }
 
         $this->names = $names;
-    }
-
-    protected function fixName(string $name) : string
-    {
-        $name = trim($name, '- ');
-
-        if (strlen($name) == 1) {
-            return "-$name";
-        }
-
-        return "--$name";
     }
 
     public function getValue() : mixed
@@ -69,10 +58,18 @@ class Option
             return;
         }
 
-        $names = implode(',', $this->names);
         throw new Exception\OptionParamRequired(
-            "The option '{$names}' requires a parameter."
+            "The option '{$this->dashedNames()}' requires a parameter."
         );
+    }
+
+    protected function dashedNames() : string
+    {
+        $dashed = [];
+        foreach ($this->names as $name) {
+            $dashed[] = strlen($name) === 1 ? "-{$name}" : "--{$name}";
+        }
+        return implode('|', $dashed);
     }
 
     public function equals(string $value) : void
@@ -98,10 +95,8 @@ class Option
             return;
         }
 
-        $names = implode(',', $this->names);
-
         throw new Exception\OptionParamRejected(
-            "The option '{$names}' does not accept a parameter."
+            "The option '{$this->dashedNames()}' does not accept a parameter."
         );
     }
 
@@ -112,10 +107,8 @@ class Option
             return;
         }
 
-        $names = implode(',', $this->names);
-
         throw new Exception\OptionParamRequired(
-            "The option '$names' requires a parameter."
+            "The option '{$this->dashedNames()}' requires a parameter."
         );
     }
 

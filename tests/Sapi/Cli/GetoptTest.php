@@ -248,7 +248,7 @@ class GetoptTest extends TestCase
     public function testMultipleWithAlias()
     {
         $options = new Options([
-            new Option('f,foo', argument: Option::OPTIONAL, multiple: true)
+            new Option('-f|--foo', argument: Option::OPTIONAL, multiple: true)
         ]);
 
         $input = ['-f', '-f', '-f', 'baz', '-f', 'dib', '-f'];

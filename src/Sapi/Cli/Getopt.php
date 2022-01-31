@@ -34,13 +34,13 @@ class Getopt
 
             // long option?
             if (substr($arg, 0, 2) == '--') {
-                $this->longOption($input, $options, $arg);
+                $this->longOption($input, $options, ltrim($arg, '-'));
                 continue;
             }
 
             // short option?
             if (substr($arg, 0, 1) == '-') {
-                $this->shortOption($input, $options, $arg);
+                $this->shortOption($input, $options, ltrim($arg, '-'));
                 continue;
             }
 
@@ -68,18 +68,18 @@ class Getopt
 
     protected function shortOption(array &$input, Options $options, string $name) : void
     {
-        if (strlen($name) == 2) {
+        if (strlen($name) == 1) {
             $options->get($name)->capture($input);
             return;
         }
 
-        $chars = str_split(substr($name, 1));
+        $chars = str_split($name);
         $final = array_pop($chars);
 
         foreach ($chars as $char) {
-            $options->get("-{$char}")->equals('');
+            $options->get($char)->equals('');
         }
 
-        $options->get("-{$final}")->capture($input);
+        $options->get($final)->capture($input);
     }
 }

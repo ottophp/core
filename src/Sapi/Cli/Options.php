@@ -46,6 +46,8 @@ class Options
             return $this->map[$name];
         }
 
+        $name = strlen($name) === 1 ? "-{$name}" : "--{$name}";
+
         throw new Exception\OptionNotDefined(
             "The option '$name' is not defined."
         );
