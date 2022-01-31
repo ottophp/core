@@ -16,13 +16,12 @@ class Option
 
     public readonly array $names;
 
-    public mixed $value = null;
+    protected mixed $value = null;
 
     public function __construct(
         string $names,
-        public readonly string $param = self::REJECTED,
-        public readonly bool $multi = false,
-        public readonly string $descr = '',
+        protected string $argument = self::REJECTED,
+        protected bool $multiple = false
     ) {
         $names = explode(',', $names);
 
@@ -51,7 +50,7 @@ class Option
 
     public function capture(array &$input) : void
     {
-        if ($this->param === Option::REJECTED) {
+        if ($this->argument === Option::REJECTED) {
             $this->setValue(true);
             return;
         }
@@ -65,7 +64,7 @@ class Option
             return;
         }
 
-        if ($this->param !== Option::REQUIRED) {
+        if ($this->argument !== Option::REQUIRED) {
             $this->setValue(true);
             return;
         }
@@ -80,12 +79,12 @@ class Option
     {
         $value = trim($value);
 
-        if ($this->param === self::REJECTED) {
+        if ($this->argument === self::REJECTED) {
             $this->equalsRejected($value);
             return;
         }
 
-        if ($this->param === self::REQUIRED) {
+        if ($this->argument === self::REQUIRED) {
             $this->equalsRequired($value);
         }
 
@@ -122,7 +121,7 @@ class Option
 
     protected function setValue(mixed $value) : void
     {
-        if (! $this->multi) {
+        if (! $this->multiple) {
             $this->value = $value;
             return;
         }

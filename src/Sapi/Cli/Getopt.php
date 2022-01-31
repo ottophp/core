@@ -55,8 +55,8 @@ And, how to read from stdin, a la `php ./bin/console ns foo < /path/to/file` ?
 
 ANd, instead of the :, :: syntax, maybe:
 
-#[Option('-f,--foo', param: Option::REQUIRED, ...)]
-#[Option('-b,--bar', param: Option::OPTIONAL, ...)]
+#[Option('-f,--foo', argument: Option::REQUIRED, ...)]
+#[Option('-b,--bar', argument: Option::OPTIONAL, ...)]
 #[Option('-z,--zim')]  // NONE
 */
 
