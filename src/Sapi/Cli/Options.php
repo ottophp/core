@@ -5,14 +5,30 @@ namespace Otto\Sapi\Cli;
 
 class Options
 {
+    static public function new(string $class, string $method) : static
+    {
+        $list = [];
+        $rc = new ReflectionClass($class);
+        $rm = $rc->getMethod($method);
+        $attrs = $rm->getAttributes();
+
+        foreach ($attrs as $attr) {
+            if ($attr->getName() === Option::CLASS) {
+                $list[] = $attr->newInstance();
+            }
+        }
+
+        return new static($list);
+    }
+
     protected array $map = [];
 
     /**
-     * @param Option[] $options
+     * @param Option[] $list
      */
-    public function __construct(protected array $options = [])
+    public function __construct(protected array $list = [])
     {
-        foreach ($this->options as $option) {
+        foreach ($this->list as $option) {
             foreach ($option->names as $name) {
                 $this->map[$name] = $option;
             }
@@ -45,5 +61,10 @@ class Options
         }
 
         return $values;
+    }
+
+    public function value(string $name) : mixed
+    {
+        return $this->get($name)->getValue();
     }
 }

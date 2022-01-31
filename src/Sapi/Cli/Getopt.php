@@ -7,32 +7,8 @@ use ReflectionClass;
 
 class Getopt
 {
-    static public function new(string $class, string $method) : static
+    public function parse(array &$input, Options $options) : array
     {
-        $options = [];
-        $rc = new ReflectionClass($class);
-        $rm = $rc->getMethod($method);
-        $attrs = $rm->getAttributes();
-
-        foreach ($attrs as $attr) {
-            if ($attr->getName() === Option::CLASS) {
-                $options[] = $attr->newInstance();
-            }
-        }
-
-        return new static($options);
-    }
-
-    protected $input = [];
-
-    public function __construct(protected Options $options = new Options())
-    {
-    }
-
-    public function parse(array &$input) : array
-    {
-        $this->input = $input;
-
         // flag to say when we've reached the end of options
         $done = false;
 
@@ -40,10 +16,10 @@ class Getopt
         $argv = [];
 
         // loop through a copy of the input values to be parsed
-        while ($this->input) {
+        while ($input) {
 
-            // shift each element from the top of the $this->input source
-            $arg = array_shift($this->input);
+            // shift each element from the top of the $input source
+            $arg = array_shift($input);
 
             // after a plain double-dash, all values are argv (not options)
             if ($arg == '--') {
@@ -58,13 +34,13 @@ class Getopt
 
             // long option?
             if (substr($arg, 0, 2) == '--') {
-                $this->longOption($arg);
+                $this->longOption($input, $options, $arg);
                 continue;
             }
 
             // short option?
             if (substr($arg, 0, 1) == '-') {
-                $this->shortOption($arg);
+                $this->shortOption($input, $options, $arg);
                 continue;
             }
 
@@ -73,27 +49,27 @@ class Getopt
         }
 
         $input = $argv; // by reference!
-        return $this->options->values();
+        return $options->values();
     }
 
-    protected function longOption(string $name) : void
+    protected function longOption(array &$input, Options $options, string $name) : void
     {
         $pos = strpos($name, '=');
 
         if ($pos !== false) {
             $value = substr($name, $pos + 1);
             $name = substr($name, 0, $pos);
-            $this->options->get($name)->equals($value);
+            $options->get($name)->equals($value);
             return;
         }
 
-        $this->options->get($name)->capture($this->input);
+        $options->get($name)->capture($input);
     }
 
-    protected function shortOption(string $name) : void
+    protected function shortOption(array &$input, Options $options, string $name) : void
     {
         if (strlen($name) == 2) {
-            $this->options->get($name)->capture($this->input);
+            $options->get($name)->capture($input);
             return;
         }
 
@@ -101,9 +77,9 @@ class Getopt
         $final = array_pop($chars);
 
         foreach ($chars as $char) {
-            $this->options->get("-{$char}")->equals('');
+            $options->get("-{$char}")->equals('');
         }
 
-        $this->options->get("-{$final}")->capture($this->input);
+        $options->get("-{$final}")->capture($input);
     }
 }
