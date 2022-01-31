@@ -21,7 +21,8 @@ class Option
     public function __construct(
         string $names,
         protected string $argument = self::REJECTED,
-        protected bool $multiple = false
+        protected bool $multiple = false,
+        protected ?string $type = null,
     ) {
         $names = explode('|', $names);
 
@@ -59,7 +60,7 @@ class Option
         }
 
         throw new Exception\OptionParamRequired(
-            "The option '{$this->dashedNames()}' requires a parameter."
+            "{$this->dashedNames()} requires an argument."
         );
     }
 
@@ -96,7 +97,7 @@ class Option
         }
 
         throw new Exception\OptionParamRejected(
-            "The option '{$this->dashedNames()}' does not accept a parameter."
+            "{$this->dashedNames()} does not accept an argument."
         );
     }
 
@@ -108,12 +109,14 @@ class Option
         }
 
         throw new Exception\OptionParamRequired(
-            "The option '{$this->dashedNames()}' requires a parameter."
+            "{$this->dashedNames()} requires an argument."
         );
     }
 
     protected function setValue(mixed $value) : void
     {
+        $value = $this->cast($value);
+
         if (! $this->multiple) {
             $this->value = $value;
             return;
@@ -124,5 +127,77 @@ class Option
         }
 
         $this->value[] = $value;
+    }
+
+    protected function cast(mixed $value) : mixed
+    {
+        if ($this->type === null) {
+            return $value;
+        }
+
+        if (class_exists($this->type)) {
+            return $this->toObject($value);
+        }
+
+        $method = 'to' . ucfirst($this->type);
+        return $this->$method($value);
+    }
+
+    protected function toArray(mixed $value) : array
+    {
+        if (is_array($value)) {
+            return $value;
+        }
+
+        return str_getcsv((string) $value);
+    }
+
+    protected function toBool(mixed $value) : bool
+    {
+        if (is_bool($value)) {
+            return $value;
+        }
+
+        if (in_array(strtolower($value), ['1', 't', 'true', 'y', 'yes'])) {
+            return true;
+        }
+
+        if (in_array(strtolower($value), ['0', 'f', 'false', 'n', 'no'])) {
+            return false;
+        }
+
+        throw $this->invalidArgument($rp, 'boolean-equivalent', $value);
+    }
+
+    protected function toInt(mixed $value) : int
+    {
+        if (is_int($value)) {
+            return $value;
+        }
+
+        if (is_numeric($value) && (int) $value == $value) {
+            return (int) $value;
+        }
+
+        throw $this->invalidArgument($rp, 'numeric integer', $value);
+    }
+
+    protected function toFloat(mixed $value) : float
+    {
+        if (is_float($value)) {
+            return $value;
+        }
+
+        if (is_numeric($value)) {
+            return (float) $value;
+        }
+
+        throw $this->invalidArgument($rp, 'numeric float', $value);
+    }
+
+    protected function toObject(mixed $value) : object
+    {
+        $class = $this->type;
+        return new $class($value);
     }
 }

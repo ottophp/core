@@ -52,7 +52,7 @@ class Options
         $name = strlen($name) === 1 ? "-{$name}" : "--{$name}";
 
         throw new Exception\OptionNotDefined(
-            "The option '$name' is not defined."
+            "$name is not defined."
         );
     }
 
@@ -60,6 +60,11 @@ class Options
     public function getOptions() : array
     {
         return $this->options;
+    }
+
+    public function getValue(string $name) : mixed
+    {
+        return $this->get($name)->getValue();
     }
 
     public function getValues() : array
@@ -71,10 +76,5 @@ class Options
         }
 
         return $values;
-    }
-
-    public function getValue(string $name) : mixed
-    {
-        return $this->get($name)->getValue();
     }
 }

@@ -24,7 +24,7 @@ class GetoptTest extends TestCase
         $options = new Options();
         $input = ['-z', 'def'];
         $this->expectException(Exception\OptionNotDefined::CLASS);
-        $this->expectExceptionMessage("The option '-z' is not defined.");
+        $this->expectExceptionMessage("-z is not defined.");
         $this->getopt->parse($input, $options);
     }
 
@@ -43,7 +43,7 @@ class GetoptTest extends TestCase
         ]);
         $input = ['--foo-bar=baz'];
         $this->expectException(Exception\OptionParamRejected::CLASS);
-        $this->expectExceptionMessage("The option '--foo-bar' does not accept a parameter.");
+        $this->expectExceptionMessage("--foo-bar does not accept an argument.");
         $this->getopt->parse($input, $options);
     }
 
@@ -73,7 +73,7 @@ class GetoptTest extends TestCase
         ]);
         $input = ['--foo-bar'];
         $this->expectException(Exception\OptionParamRequired::CLASS);
-        $this->expectExceptionMessage("The option '--foo-bar' requires a parameter.");
+        $this->expectExceptionMessage("--foo-bar requires an argument.");
         $this->getopt->parse($input, $options);
     }
 
@@ -149,7 +149,7 @@ class GetoptTest extends TestCase
         ]);
         $input = ['-f'];
         $this->expectException(Exception\OptionParamRequired::CLASS);
-        $this->expectExceptionMessage("The option '-f' requires a parameter.");
+        $this->expectExceptionMessage("-f requires an argument.");
         $this->getopt->parse($input, $options);
     }
 
@@ -212,7 +212,7 @@ class GetoptTest extends TestCase
 
         $input = ['-fbz'];
         $this->expectException(Exception\OptionParamRequired::CLASS);
-        $this->expectExceptionMessage("The option '-b' requires a parameter.");
+        $this->expectExceptionMessage("-b requires an argument.");
         $this->getopt->parse($input, $options);
     }
 
