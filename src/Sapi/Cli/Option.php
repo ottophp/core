@@ -76,6 +76,44 @@ class Option
         );
     }
 
+    public function long(array &$input)
+    {
+        $this->short($input);
+    }
+
+    public function longEqual(string $value)
+    {
+        $value = trim($value);
+
+        if ($this->param === self::REJECTED) {
+            if ($value === '') {
+                $this->setValue(true);
+                return;
+            }
+
+            $names = implode(',', $this->names);
+
+            throw new Exception\OptionParamRejected(
+                "The option '{$names}' does not accept a parameter."
+            );
+        }
+
+        if ($this->param === self::REQUIRED) {
+            if ($value !== '') {
+                $this->setValue($value);
+                return;
+            }
+
+            $names = implode(',', $this->names);
+
+            throw new Exception\OptionParamRequired(
+                "The option '$names' requires a parameter."
+            );
+        }
+
+        $this->setValue($value === '' ? true : $value);
+    }
+
     public function setValue(mixed $value) : void
     {
         if (! $this->multi) {

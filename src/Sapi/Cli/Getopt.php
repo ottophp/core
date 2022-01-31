@@ -118,61 +118,18 @@ ANd, instead of the :, :: syntax, maybe:
         );
     }
 
-    protected function setLongOptionValue(string $input) : void
+    protected function setLongOptionValue(string $name) : void
     {
-        $pos = strpos($input, '=');
+        $pos = strpos($name, '=');
 
-        if ($pos === false) {
-            $name = $input;
-            $value = null;
-        } else {
-            $name = substr($input, 0, $pos);
-            $value = substr($input, $pos + 1);
+        if ($pos !== false) {
+            $option = $this->getOption(substr($name, 0, $pos));
+            $option->longEqual(substr($name, $pos + 1));
+            return;
         }
 
         $option = $this->getOption($name);
-
-        if ($this->longOptionRequiresValue($option, $value)) {
-            $value = array_shift($this->input);
-        }
-
-        $this->longOptionRequiresValue($option, $value, $name)
-        || $this->longOptionRejectsValue($option, $value, $name)
-        || $option->setValue(trim((string) $value) === '' ? true : $value);
-    }
-
-    protected function longOptionRequiresValue(
-        Option $option,
-        mixed $value,
-        ?string $name = null
-    ) : bool
-    {
-        if ($option->param == Option::REQUIRED && trim((string) $value) === '') {
-            if ($name !== null) {
-                throw new Exception\OptionParamRequired(
-                    "The option '$name' requires a parameter."
-                );
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    protected function longOptionRejectsValue(
-        Option $option,
-        mixed $value,
-        ?string $name = null
-    ) : bool
-    {
-        if ($option->param == Option::REJECTED && trim((string) $value) !== '') {
-            throw new Exception\OptionParamRejected(
-                "The option '$name' does not accept a parameter."
-            );
-            return true;
-        }
-        return false;
+        $option->long($this->input);
     }
 
     protected function setShortOptionValue(string $name) : void
