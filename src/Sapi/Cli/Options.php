@@ -58,7 +58,6 @@ class Options
         $values = [];
 
         foreach ($this->map as $name => $option) {
-            $name = ltrim($name, '-');
             $values[$name] = $option->getValue();
         }
 
