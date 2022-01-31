@@ -65,14 +65,15 @@ class Option
             return;
         }
 
-        if ($this->param === Option::REQUIRED) {
-            $names = implode(',', $this->names);
-            throw new Exception\OptionParamRequired(
-                "The option '{$names}' requires a parameter."
-            );
+        if ($this->param !== Option::REQUIRED) {
+            $this->setValue(true);
+            return;
         }
 
-        $this->setValue(true);
+        $names = implode(',', $this->names);
+        throw new Exception\OptionParamRequired(
+            "The option '{$names}' requires a parameter."
+        );
     }
 
     public function setValue(mixed $value) : void
