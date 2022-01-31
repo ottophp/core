@@ -42,7 +42,7 @@ class GetoptTest extends TestCase
     public function testParse_longRequired()
     {
         $getopt = new Getopt([
-            new Option('foo-bar:')
+            new Option('foo-bar', param: Option::REQUIRED)
         ]);
 
         // '=' as separator
@@ -66,7 +66,7 @@ class GetoptTest extends TestCase
     public function testParse_longOptional()
     {
         $getopt = new Getopt([
-            new Option('foo-bar::')
+            new Option('foo-bar', param: Option::OPTIONAL)
         ]);
 
         $input = ['--foo-bar'];
@@ -83,7 +83,7 @@ class GetoptTest extends TestCase
     public function testParse_longMultiple()
     {
         $getopt = new Getopt([
-            new Option('foo-bar*::')
+            new Option('foo-bar', param: Option::OPTIONAL, multi: true)
         ]);
 
         $input = [
@@ -119,7 +119,7 @@ class GetoptTest extends TestCase
     public function testParse_shortRequired()
     {
         $getopt = new Getopt([
-            new Option('f:')
+            new Option('f', param: Option::REQUIRED)
         ]);
 
         $input = ['-f', 'baz'];
@@ -136,7 +136,7 @@ class GetoptTest extends TestCase
     public function testParse_shortOptional()
     {
         $getopt = new Getopt([
-            new Option('f::')
+            new Option('f', param: Option::OPTIONAL)
         ]);
 
         $input = ['-f'];
@@ -153,7 +153,7 @@ class GetoptTest extends TestCase
     public function testParse_shortMultiple()
     {
         $getopt = new Getopt([
-            new Option('f*::')
+            new Option('f', param: Option::OPTIONAL, multi: true)
         ]);
 
         $input = ['-f', '-f', '-f', 'baz', '-f', 'dib', '-f'];
@@ -184,7 +184,7 @@ class GetoptTest extends TestCase
     {
         $getopt = new Getopt([
             new Option('f'),
-            new Option('b:'),
+            new Option('b', param: Option::REQUIRED),
             new Option('z'),
         ]);
 
@@ -197,9 +197,9 @@ class GetoptTest extends TestCase
     public function testParseAndGet()
     {
         $getopt = new Getopt([
-            new Option('foo-bar:'),
+            new Option('foo-bar', param: Option::REQUIRED),
             new Option('b'),
-            new Option('z::'),
+            new Option('z', param: Option::OPTIONAL),
         ]);
 
         $input = [
@@ -221,8 +221,8 @@ class GetoptTest extends TestCase
 
         $expectOptv = [
             'foo-bar' => 'zim',
-            'z' => 'qux',
             'b' => true,
+            'z' => 'qux',
         ];
 
         $expectArgv = [
@@ -242,7 +242,7 @@ class GetoptTest extends TestCase
     public function testMultipleWithAlias()
     {
         $getopt = new Getopt([
-            new Option('f,foo*::'),
+            new Option('f,foo', param: Option::OPTIONAL, multi: true),
         ]);
 
         $input = ['-f', '-f', '-f', 'baz', '-f', 'dib', '-f'];

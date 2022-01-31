@@ -65,7 +65,6 @@ ANd, instead of the :, :: syntax, maybe:
     public function parse(array &$input) : array
     {
         $this->input = $input;
-        $this->optv = [];
 
         // flag to say when we've reached the end of options
         $done = false;
@@ -95,9 +94,17 @@ ANd, instead of the :, :: syntax, maybe:
             }
         }
 
-        // done
         $input = $this->argv;
-        return $this->optv;
+        $optv = [];
+
+        foreach ($this->options as $option) {
+            foreach ($option->names as $name) {
+                $name = ltrim($name, '-');
+                $optv[$name] = $option->getValue();
+            }
+        }
+
+        return $optv;
     }
 
     public function getOption(string $name) : Option
@@ -243,22 +250,6 @@ ANd, instead of the :, :: syntax, maybe:
 
     protected function setValue(Option $option, mixed $value) : void
     {
-        if ($option->multi) {
-            $this->addValue($option, $value);
-            return;
-        }
-
-        foreach ($option->names as $name) {
-            $name = ltrim($name, '-');
-            $this->optv[$name] = $value;
-        }
-    }
-
-    protected function addValue(Option $option, mixed $value) : void
-    {
-        foreach ($option->names as $name) {
-            $name = ltrim($name, '-');
-            $this->optv[$name][] = $value;
-        }
+        $option->setValue($value);
     }
 }

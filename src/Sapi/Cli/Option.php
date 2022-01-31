@@ -14,57 +14,52 @@ class Option
 
     public const REJECTED = 'rejected';
 
-    public ?array $names = [];
+    public readonly array $names;
 
-    public bool $multi = false;
+    public mixed $value = null;
 
-    public ?string $param = Option::REJECTED;
+    public function __construct(
+        string $names,
+        public readonly string $param = self::REJECTED,
+        public readonly bool $multi = false,
+        public readonly string $descr = '',
+    ) {
+        $names = explode(',', $names);
 
-    public ?string $descr = null;
-
-    public function __construct(string $spec, ?string $descr = null)
-    {
-        $this->setMulti($spec); // allow before argument
-        $this->setParam($spec);
-        $this->setMulti($spec); // allow after argument
-        $this->setNames($spec);
-    }
-
-    protected function setMulti(&$spec)
-    {
-        if (substr($spec, -1) == '*') {
-            $this->multi = true;
-            $spec = substr($spec, 0, -1);
-        }
-    }
-
-    protected function setParam(&$spec)
-    {
-        if (substr($spec, -2) == '::') {
-            $this->param = Option::OPTIONAL;
-            $spec = substr($spec, 0, -2);
-        } elseif (substr($spec, -1) == ':') {
-            $this->param = Option::REQUIRED;
-            $spec = substr($spec, 0, -1);
-        }
-
-        $spec = rtrim($spec, ':');
-    }
-
-    protected function setNames(&$spec)
-    {
-        $this->names = explode(',', $spec);
-        foreach ($this->names as &$name) {
+        foreach ($names as &$name) {
             $name = $this->fixName($name);
         }
+
+        $this->names = $names;
     }
 
-    protected function fixName($name)
+    protected function fixName(string $name) : string
     {
-        $name = trim($name, ' -');
+        $name = trim($name, '- ');
+
         if (strlen($name) == 1) {
             return "-$name";
         }
+
         return "--$name";
+    }
+
+    public function setValue(mixed $value) : void
+    {
+        if (! $this->multi) {
+            $this->value = $value;
+            return;
+        }
+
+        if ($this->value === null) {
+            $this->value = [];
+        }
+
+        $this->value[] = $value;
+    }
+
+    public function getValue() : mixed
+    {
+        return $this->value;
     }
 }
