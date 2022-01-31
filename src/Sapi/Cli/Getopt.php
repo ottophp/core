@@ -5,15 +5,23 @@ namespace Otto\Sapi\Cli;
 
 use ReflectionClass;
 
+/*
+
+$options = Options::new($class, '__invoke');
+$arguments = $this->getopt->parse($_SERVER['argv'], $options);
+$command = $this->container->new($class);
+return $command($options, ...$arguments);
+
+*/
 class Getopt
 {
-    public function parse(array &$input, Options $options) : array
+    public function parse(array $input, Options $options) : array
     {
         // flag to say when we've reached the end of options
         $done = false;
 
         // arguments
-        $argv = [];
+        $arguments = [];
 
         // loop through a copy of the input values to be parsed
         while ($input) {
@@ -21,14 +29,14 @@ class Getopt
             // shift each element from the top of the $input source
             $curr = array_shift($input);
 
-            // after a plain double-dash, all values are argv (not options)
+            // after a plain double-dash, all values are arguments (not options)
             if ($curr == '--') {
                 $done = true;
                 continue;
             }
 
             if ($done) {
-                $argv[] = $curr;
+                $arguments[] = $curr;
                 continue;
             }
 
@@ -45,11 +53,10 @@ class Getopt
             }
 
             // argument
-            $argv[] = $curr;
+            $arguments[] = $curr;
         }
 
-        $input = $argv; // by reference!
-        return $options->values();
+        return $arguments;
     }
 
     protected function longOption(array &$input, Options $options, string $name) : void
@@ -59,17 +66,17 @@ class Getopt
         if ($pos !== false) {
             $value = substr($name, $pos + 1);
             $name = substr($name, 0, $pos);
-            $options->get($name)->equals($value);
+            $options->getOption($name)->equals($value);
             return;
         }
 
-        $options->get($name)->capture($input);
+        $options->getOption($name)->capture($input);
     }
 
     protected function shortOption(array &$input, Options $options, string $name) : void
     {
         if (strlen($name) == 1) {
-            $options->get($name)->capture($input);
+            $options->getOption($name)->capture($input);
             return;
         }
 
@@ -77,9 +84,9 @@ class Getopt
         $final = array_pop($chars);
 
         foreach ($chars as $char) {
-            $options->get($char)->equals('');
+            $options->getOption($char)->equals('');
         }
 
-        $options->get($final)->capture($input);
+        $options->getOption($final)->capture($input);
     }
 }

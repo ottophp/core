@@ -7,45 +7,45 @@ class Options
 {
     static public function new(string $class, string $method) : static
     {
-        $list = [];
+        $options = [];
         $rc = new ReflectionClass($class);
         $rm = $rc->getMethod($method);
         $attrs = $rm->getAttributes();
 
         foreach ($attrs as $attr) {
             if ($attr->getName() === Option::CLASS) {
-                $list[] = $attr->newInstance();
+                $options[] = $attr->newInstance();
             }
         }
 
-        return new static($list);
+        return new static($options);
     }
 
     protected array $map = [];
 
     /**
-     * @param Option[] $list
+     * @param Option[] $options
      */
-    public function __construct(protected array $list = [])
+    public function __construct(protected array $options = [])
     {
-        foreach ($this->list as $option) {
+        foreach ($this->options as $option) {
             foreach ($option->names as $name) {
                 $this->map[$name] = $option;
             }
         }
     }
 
-    public function has(string $name) : bool
+    public function hasOption(string $name) : bool
     {
         $name = ltrim($name, '-');
         return isset($this->map[$name]);
     }
 
-    public function get(string $name) : Option
+    public function getOption(string $name) : Option
     {
         $name = ltrim($name, '-');
 
-        if ($this->has($name)) {
+        if ($this->hasOption($name)) {
             return $this->map[$name];
         }
 
@@ -56,7 +56,13 @@ class Options
         );
     }
 
-    public function values() : array
+
+    public function getOptions() : array
+    {
+        return $this->options;
+    }
+
+    public function getValues() : array
     {
         $values = [];
 
@@ -67,7 +73,7 @@ class Options
         return $values;
     }
 
-    public function value(string $name) : mixed
+    public function getValue(string $name) : mixed
     {
         return $this->get($name)->getValue();
     }

@@ -13,8 +13,8 @@ class GetoptTest extends TestCase
     {
         $options = new Options();
         $input = ['abc', 'def'];
-        $actual = $this->getopt->parse($input, $options);
-        $this->assertEmpty($actual);
+        $arguments = $this->getopt->parse($input, $options);
+        $this->assertEmpty($options->getValues());
         $expect = ['abc', 'def'];
         $this->assertSame($expect, $input);
     }
@@ -33,12 +33,14 @@ class GetoptTest extends TestCase
         $options = new Options([
             new Option('foo-bar'),
         ]);
-
         $input = ['--foo-bar'];
-        $actual = $this->getopt->parse($input, $options);
+        $arguments = $this->getopt->parse($input, $options);
         $expect = ['foo-bar' => true];
-        $this->assertSame($expect, $actual);
+        $this->assertSame($expect, $options->getValues());
 
+        $options = new Options([
+            new Option('foo-bar'),
+        ]);
         $input = ['--foo-bar=baz'];
         $this->expectException(Exception\OptionParamRejected::CLASS);
         $this->expectExceptionMessage("The option '--foo-bar' does not accept a parameter.");
@@ -47,22 +49,28 @@ class GetoptTest extends TestCase
 
     public function testParse_longRequired()
     {
+
+        // '=' as separator
         $options = new Options([
             new Option('foo-bar', argument: Option::REQUIRED)
         ]);
-
-        // '=' as separator
         $input = ['--foo-bar=baz'];
-        $actual = $this->getopt->parse($input, $options);
+        $arguments = $this->getopt->parse($input, $options);
         $expect = ['foo-bar' => 'baz'];
-        $this->assertSame($expect, $actual);
+        $this->assertSame($expect, $options->getValues());
 
         // ' ' as separator
+        $options = new Options([
+            new Option('foo-bar', argument: Option::REQUIRED)
+        ]);
         $input = ['--foo-bar', 'baz'];
-        $actual = $this->getopt->parse($input, $options);
-        $this->assertSame($expect, $actual);
+        $arguments = $this->getopt->parse($input, $options);
+        $this->assertSame($expect, $options->getValues());
 
         // missing required value
+        $options = new Options([
+            new Option('foo-bar', argument: Option::REQUIRED)
+        ]);
         $input = ['--foo-bar'];
         $this->expectException(Exception\OptionParamRequired::CLASS);
         $this->expectExceptionMessage("The option '--foo-bar' requires a parameter.");
@@ -74,16 +82,18 @@ class GetoptTest extends TestCase
         $options = new Options([
             new Option('foo-bar', argument: Option::OPTIONAL)
         ]);
-
         $input = ['--foo-bar'];
-        $actual = $this->getopt->parse($input, $options);
+        $arguments = $this->getopt->parse($input, $options);
         $expect = ['foo-bar' => true];
-        $this->assertSame($expect, $actual);
+        $this->assertSame($expect, $options->getValues());
 
+        $options = new Options([
+            new Option('foo-bar', argument: Option::OPTIONAL)
+        ]);
         $input = ['--foo-bar=baz'];
-        $actual = $this->getopt->parse($input, $options);
+        $arguments = $this->getopt->parse($input, $options);
         $expect = ['foo-bar' => 'baz'];
-        $this->assertSame($expect, $actual);
+        $this->assertSame($expect, $options->getValues());
     }
 
     public function testParse_longMultiple()
@@ -99,9 +109,9 @@ class GetoptTest extends TestCase
             '--foo-bar=dib',
             '--foo-bar'
         ];
-        $actual = $this->getopt->parse($input, $options);
+        $arguments = $this->getopt->parse($input, $options);
         $expect = ['foo-bar' => [true, true, 'baz', 'dib', true]];
-        $this->assertSame($expect, $actual);
+        $this->assertSame($expect, $options->getValues());
     }
 
     public function testParse_shortRejected()
@@ -109,17 +119,19 @@ class GetoptTest extends TestCase
         $options = new Options([
             new Option('f')
         ]);
-
         $input = ['-f'];
-        $actual = $this->getopt->parse($input, $options);
+        $arguments = $this->getopt->parse($input, $options);
         $expect = ['f' => true];
-        $this->assertSame($expect, $actual);
+        $this->assertSame($expect, $options->getValues());
 
+        $options = new Options([
+            new Option('f')
+        ]);
         $input = ['-f', 'baz'];
-        $actual = $this->getopt->parse($input, $options);
+        $arguments = $this->getopt->parse($input, $options);
         $expect = ['f' => true];
-        $this->assertSame($expect, $actual);
-        $this->assertSame(['baz'], $input);
+        $this->assertSame($expect, $options->getValues());
+        $this->assertSame(['baz'], $arguments);
     }
 
     public function testParse_shortRequired()
@@ -127,12 +139,14 @@ class GetoptTest extends TestCase
         $options = new Options([
             new Option('f', argument: Option::REQUIRED)
         ]);
-
         $input = ['-f', 'baz'];
-        $actual = $this->getopt->parse($input, $options);
+        $arguments = $this->getopt->parse($input, $options);
         $expect = ['f' => 'baz'];
-        $this->assertSame($expect, $actual);
+        $this->assertSame($expect, $options->getValues());
 
+        $options = new Options([
+            new Option('f', argument: Option::REQUIRED)
+        ]);
         $input = ['-f'];
         $this->expectException(Exception\OptionParamRequired::CLASS);
         $this->expectExceptionMessage("The option '-f' requires a parameter.");
@@ -144,16 +158,18 @@ class GetoptTest extends TestCase
         $options = new Options([
             new Option('f', argument: Option::OPTIONAL)
         ]);
-
         $input = ['-f'];
-        $actual = $this->getopt->parse($input, $options);
+        $arguments = $this->getopt->parse($input, $options);
         $expect = ['f' => true];
-        $this->assertSame($expect, $actual);
+        $this->assertSame($expect, $options->getValues());
 
+        $options = new Options([
+            new Option('f', argument: Option::OPTIONAL)
+        ]);
         $input = ['-f', 'baz'];
-        $actual = $this->getopt->parse($input, $options);
+        $arguments = $this->getopt->parse($input, $options);
         $expect = ['f' => 'baz'];
-        $this->assertSame($expect, $actual);
+        $this->assertSame($expect, $options->getValues());
     }
 
     public function testParse_shortMultiple()
@@ -163,9 +179,9 @@ class GetoptTest extends TestCase
         ]);
 
         $input = ['-f', '-f', '-f', 'baz', '-f', 'dib', '-f'];
-        $actual = $this->getopt->parse($input, $options);
+        $arguments = $this->getopt->parse($input, $options);
         $expect = ['f' => [true, true, 'baz', 'dib', true]];
-        $this->assertSame($expect, $actual);
+        $this->assertSame($expect, $options->getValues());
     }
 
     public function testParse_shortCluster()
@@ -177,13 +193,13 @@ class GetoptTest extends TestCase
         ]);
 
         $input = ['-fbz'];
-        $actual = $this->getopt->parse($input, $options);
+        $arguments = $this->getopt->parse($input, $options);
         $expect = [
             'f' => true,
             'b' => true,
             'z' => true,
         ];
-        $this->assertSame($expect, $actual);
+        $this->assertSame($expect, $options->getValues());
     }
 
     public function testParse_shortClusterRequired()
@@ -223,7 +239,7 @@ class GetoptTest extends TestCase
             'ghi',
         ];
 
-        $actual = $this->getopt->parse($input, $options);
+        $arguments = $this->getopt->parse($input, $options);
 
         $expectOptv = [
             'foo-bar' => 'zim',
@@ -241,8 +257,8 @@ class GetoptTest extends TestCase
             'ghi',
         ];
 
-        $this->assertSame($expectOptv, $actual);
-        $this->assertSame($expectArgv, $input);
+        $this->assertSame($expectOptv, $options->getValues());
+        $this->assertSame($expectArgv, $arguments);
     }
 
     public function testMultipleWithAlias()
@@ -252,11 +268,11 @@ class GetoptTest extends TestCase
         ]);
 
         $input = ['-f', '-f', '-f', 'baz', '-f', 'dib', '-f'];
-        $actual = $this->getopt->parse($input, $options);
+        $arguments = $this->getopt->parse($input, $options);
         $expect = [
             'f' => [true, true, 'baz', 'dib', true],
             'foo' => [true, true, 'baz', 'dib', true],
         ];
-        $this->assertSame($expect, $actual);
+        $this->assertSame($expect, $options->getValues());
     }
 }
