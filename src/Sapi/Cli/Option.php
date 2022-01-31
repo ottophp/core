@@ -49,7 +49,7 @@ class Option
         return $this->value;
     }
 
-    public function short(array &$input)
+    public function capture(array &$input)
     {
         if ($this->param === Option::REJECTED) {
             $this->setValue(true);
@@ -76,12 +76,7 @@ class Option
         );
     }
 
-    public function long(array &$input)
-    {
-        $this->short($input);
-    }
-
-    public function longEqual(string $value)
+    public function equals(string $value)
     {
         $value = trim($value);
 
@@ -114,7 +109,7 @@ class Option
         $this->setValue($value === '' ? true : $value);
     }
 
-    public function setValue(mixed $value) : void
+    protected function setValue(mixed $value) : void
     {
         if (! $this->multi) {
             $this->value = $value;

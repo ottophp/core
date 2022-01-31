@@ -84,9 +84,9 @@ ANd, instead of the :, :: syntax, maybe:
 
             // long option, short option, or numeric argument?
             if (! $done && substr($arg, 0, 2) == '--') {
-                $this->setLongOptionValue($arg);
+                $this->longOption($arg);
             } elseif (! $done && substr($arg, 0, 1) == '-') {
-                $this->setShortOptionValue($arg);
+                $this->shortOption($arg);
             } else {
                 $this->argv[$argc ++] = $arg;
             }
@@ -105,7 +105,7 @@ ANd, instead of the :, :: syntax, maybe:
         return $optv;
     }
 
-    public function getOption(string $name) : Option
+    protected function getOption(string $name) : Option
     {
         foreach ($this->options as $option) {
             if (in_array($name, $option->names)) {
@@ -118,34 +118,37 @@ ANd, instead of the :, :: syntax, maybe:
         );
     }
 
-    protected function setLongOptionValue(string $name) : void
+    protected function longOption(string $name) : void
     {
         $pos = strpos($name, '=');
 
         if ($pos !== false) {
             $option = $this->getOption(substr($name, 0, $pos));
-            $option->longEqual(substr($name, $pos + 1));
+            $option->equals(substr($name, $pos + 1));
             return;
         }
 
         $option = $this->getOption($name);
-        $option->long($this->input);
+        $option->capture($this->input);
     }
 
-    protected function setShortOptionValue(string $name) : void
+    protected function shortOption(string $name) : void
     {
         if (strlen($name) == 2) {
             $option = $this->getOption($name);
-            $option->short($this->input);
+            $option->capture($this->input);
             return;
         }
 
-        // drop the leading dash in the cluster and split into single chars
         $chars = str_split(substr($name, 1));
-        while ($char = array_shift($chars)) {
-            $name = "-{$char}";
-            $option = $this->getOption($name);
-            $option->short($this->input);
+        $final = array_pop($chars);
+
+        foreach ($chars as $char) {
+            $option = $this->getOption("-{$char}");
+            $option->equals('');
         }
+
+        $option = $this->getOption("-{$final}");
+        $option->capture($this->input);
     }
 }
