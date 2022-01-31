@@ -122,20 +122,6 @@ ANd, instead of the :, :: syntax, maybe:
 
     protected function setLongOptionValue(string $input) : void
     {
-        list($name, $value) = $this->splitLongOptionInput($input);
-        $option = $this->getOption($name);
-
-        if ($this->longOptionRequiresValue($option, $value)) {
-            $value = array_shift($this->input);
-        }
-
-        $this->longOptionRequiresValue($option, $value, $name)
-        || $this->longOptionRejectsValue($option, $value, $name)
-        || $this->setValue($option, trim((string) $value) === '' ? true : $value);
-    }
-
-    protected function splitLongOptionInput(string $input) : array
-    {
         $pos = strpos($input, '=');
 
         if ($pos === false) {
@@ -146,7 +132,15 @@ ANd, instead of the :, :: syntax, maybe:
             $value = substr($input, $pos + 1);
         }
 
-        return [$name, $value];
+        $option = $this->getOption($name);
+
+        if ($this->longOptionRequiresValue($option, $value)) {
+            $value = array_shift($this->input);
+        }
+
+        $this->longOptionRequiresValue($option, $value, $name)
+        || $this->longOptionRejectsValue($option, $value, $name)
+        || $option->setValue(trim((string) $value) === '' ? true : $value);
     }
 
     protected function longOptionRequiresValue(
@@ -195,13 +189,13 @@ ANd, instead of the :, :: syntax, maybe:
         $this->shortOptionRejectsValue($option)
         || $this->shortOptionCapturesValue($option)
         || $this->shortOptionRequiresValue($option, $name)
-        || $this->setValue($option, true);
+        || $option->setValue(true);
     }
 
     protected function shortOptionRejectsValue(Option $option) : bool
     {
         if ($option->param == Option::REJECTED) {
-            $this->setValue($option, true);
+            $option->setValue(true);
             return true;
         }
 
@@ -214,7 +208,7 @@ ANd, instead of the :, :: syntax, maybe:
         $is_value = ! empty($value) && substr($value, 0, 1) != '-';
 
         if ($is_value) {
-            $this->setValue($option, array_shift($this->input));
+            $option->setValue(array_shift($this->input));
             return true;
         }
 
@@ -243,13 +237,8 @@ ANd, instead of the :, :: syntax, maybe:
             $name = "-{$char}";
             $option = $this->getOption($name);
             if (! $this->shortOptionRequiresValue($option, $name)) {
-                $this->setValue($option, true);
+                $option->setValue(true);
             }
         }
-    }
-
-    protected function setValue(Option $option, mixed $value) : void
-    {
-        $option->setValue($value);
     }
 }
