@@ -37,11 +37,14 @@ class Options
 
     public function has(string $name) : bool
     {
+        $name = ltrim($name, '-');
         return isset($this->map[$name]);
     }
 
     public function get(string $name) : Option
     {
+        $name = ltrim($name, '-');
+
         if ($this->has($name)) {
             return $this->map[$name];
         }
