@@ -44,6 +44,37 @@ class Option
         return "--$name";
     }
 
+    public function getValue() : mixed
+    {
+        return $this->value;
+    }
+
+    public function short(array &$input)
+    {
+        if ($this->param === Option::REJECTED) {
+            $this->setValue(true);
+            return;
+        }
+
+        $value = reset($input);
+        $capture = ! empty($value) && substr($value, 0, 1) !== '-';
+
+        if ($capture) {
+            $this->setValue($value);
+            array_shift($input);
+            return;
+        }
+
+        if ($this->param === Option::REQUIRED) {
+            $names = implode(',', $this->names);
+            throw new Exception\OptionParamRequired(
+                "The option '{$names}' requires a parameter."
+            );
+        }
+
+        $this->setValue(true);
+    }
+
     public function setValue(mixed $value) : void
     {
         if (! $this->multi) {
@@ -56,10 +87,5 @@ class Option
         }
 
         $this->value[] = $value;
-    }
-
-    public function getValue() : mixed
-    {
-        return $this->value;
     }
 }

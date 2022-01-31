@@ -25,8 +25,6 @@ class Getopt
 
     protected $input = [];
 
-    protected $optv = [];
-
     protected $argv = [];
 
     /**
@@ -179,66 +177,18 @@ ANd, instead of the :, :: syntax, maybe:
 
     protected function setShortOptionValue(string $name) : void
     {
-        if (strlen($name) > 2) {
-            $this->setShortOptionValues($name);
+        if (strlen($name) == 2) {
+            $option = $this->getOption($name);
+            $option->short($this->input);
             return;
         }
 
-        $option = $this->getOption($name);
-
-        $this->shortOptionRejectsValue($option)
-        || $this->shortOptionCapturesValue($option)
-        || $this->shortOptionRequiresValue($option, $name)
-        || $option->setValue(true);
-    }
-
-    protected function shortOptionRejectsValue(Option $option) : bool
-    {
-        if ($option->param == Option::REJECTED) {
-            $option->setValue(true);
-            return true;
-        }
-
-        return false;
-    }
-
-    protected function shortOptionCapturesValue(Option $option) : bool
-    {
-        $value = reset($this->input);
-        $is_value = ! empty($value) && substr($value, 0, 1) != '-';
-
-        if ($is_value) {
-            $option->setValue(array_shift($this->input));
-            return true;
-        }
-
-        return false;
-    }
-
-    protected function shortOptionRequiresValue(
-        Option $option,
-        string $name
-    ) : bool
-    {
-        if ($option->param == Option::REQUIRED) {
-            throw new Exception\OptionParamRequired(
-                "The option '$name' requires a parameter."
-            );
-        }
-
-        return false;
-    }
-
-    protected function setShortOptionValues(string $chars) : void
-    {
         // drop the leading dash in the cluster and split into single chars
-        $chars = str_split(substr($chars, 1));
+        $chars = str_split(substr($name, 1));
         while ($char = array_shift($chars)) {
             $name = "-{$char}";
             $option = $this->getOption($name);
-            if (! $this->shortOptionRequiresValue($option, $name)) {
-                $option->setValue(true);
-            }
+            $option->short($this->input);
         }
     }
 }
