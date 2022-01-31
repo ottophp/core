@@ -36,6 +36,32 @@ class Getopt
     {
     }
 
+/*
+
+How can we make an Options class the place to keep the $optv values? Then at
+least you can typehint it. $options->{'a'}, $options->{'foo-bar'}, etc. Or,
+$options['a'], $options['foo-bar'], etc. Want it to be readonly, which means
+you have to "reach in" to the Option to set the value. Perhaps Getopt() parses
+values into the Option array, then returns an Options collection?
+
+And how to return the argument values? Maybe have an Input object, that returns
+Options and has an arguments array.
+
+$class = ...;
+$optarg = Optarg::parse($argv);
+// ...
+$command = $container->new($class);
+return $command($optarg->options, ...$optarg->arguments);
+
+And, how to read from stdin, a la `php ./bin/console ns foo < /path/to/file` ?
+
+ANd, instead of the :, :: syntax, maybe:
+
+#[Option('-f,--foo', param: Option::REQUIRED, ...)]
+#[Option('-b,--bar', param: Option::OPTIONAL, ...)]
+#[Option('-z,--zim')]  // NONE
+*/
+
     public function parse(array &$input) : array
     {
         $this->input = $input;
@@ -122,7 +148,7 @@ class Getopt
         ?string $name = null
     ) : bool
     {
-        if ($option->param == 'required' && trim((string) $value) === '') {
+        if ($option->param == Option::REQUIRED && trim((string) $value) === '') {
             if ($name !== null) {
                 throw new Exception\OptionParamRequired(
                     "The option '$name' requires a parameter."
@@ -141,7 +167,7 @@ class Getopt
         ?string $name = null
     ) : bool
     {
-        if ($option->param == 'rejected' && trim((string) $value) !== '') {
+        if ($option->param == Option::REJECTED && trim((string) $value) !== '') {
             throw new Exception\OptionParamRejected(
                 "The option '$name' does not accept a parameter."
             );
@@ -167,7 +193,7 @@ class Getopt
 
     protected function shortOptionRejectsValue(Option $option) : bool
     {
-        if ($option->param == 'rejected') {
+        if ($option->param == Option::REJECTED) {
             $this->setValue($option, true);
             return true;
         }
@@ -193,7 +219,7 @@ class Getopt
         string $name
     ) : bool
     {
-        if ($option->param == 'required') {
+        if ($option->param == Option::REQUIRED) {
             throw new Exception\OptionParamRequired(
                 "The option '$name' requires a parameter."
             );

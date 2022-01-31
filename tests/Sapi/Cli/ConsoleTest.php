@@ -59,15 +59,16 @@ class ConsoleTest extends TestCase
         );
     }
 
-    // public function testCommandNotFound()
-    // {
-    //     $_SERVER['REQUEST_METHOD'] = 'GET';
-    //     $_SERVER['REQUEST_URI'] = '/none-such';
-    //     $console = $this->container->get(Console::CLASS);
-    //     $result = $console();
-    //     $this->assertSame(404, $result->getCode());
-    //     $this->assertStringContainsString('Route not found for URL.', $result->getContent());
-    // }
+    // if the NAMESPACE is found, the strategy should use its resources.
+    // maybe this means the NAMESPACE and COMMAND not-found logic should be
+    // separate?
+    public function testCommandNotFound()
+    {
+        $console = $this->container->get(Console::CLASS);
+        $argv = ['./bin/console', 'fake-project', 'nonesuch'];
+        $result = $console($argv);
+        var_dump($result);
+    }
 
     // public function testBadCommandArgument()
     // {

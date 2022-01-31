@@ -9,7 +9,7 @@ use Otto\Sapi\Cli\Result;
 
 class ConsoleReporter extends Reporter
 {
-    protected object $command;
+    protected ?object $command;
 
     protected Throwable $e;
 
