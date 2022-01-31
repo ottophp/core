@@ -25,40 +25,9 @@ class Getopt
 
     protected $input = [];
 
-    protected $argv = [];
-
-    /**
-     * @param Option[] $options
-     */
-    public function __construct(protected array $options = [])
+    public function __construct(protected Options $options = new Options())
     {
     }
-
-/*
-
-How can we make an Options class the place to keep the $optv values? Then at
-least you can typehint it. $options->{'a'}, $options->{'foo-bar'}, etc. Or,
-$options['a'], $options['foo-bar'], etc. Want it to be readonly, which means
-you have to "reach in" to the Option to set the value. Perhaps Getopt() parses
-values into the Option array, then returns an Options collection?
-
-And how to return the argument values? Maybe have an Input object, that returns
-Options and has an arguments array.
-
-$class = ...;
-$optarg = Optarg::parse($argv);
-// ...
-$command = $container->new($class);
-return $command($optarg->options, ...$optarg->arguments);
-
-And, how to read from stdin, a la `php ./bin/console ns foo < /path/to/file` ?
-
-ANd, instead of the :, :: syntax, maybe:
-
-#[Option('-f,--foo', argument: Option::REQUIRED, ...)]
-#[Option('-b,--bar', argument: Option::OPTIONAL, ...)]
-#[Option('-z,--zim')]  // NONE
-*/
 
     public function parse(array &$input) : array
     {
@@ -67,8 +36,8 @@ ANd, instead of the :, :: syntax, maybe:
         // flag to say when we've reached the end of options
         $done = false;
 
-        // sequential argument count;
-        $argc = 0;
+        // arguments
+        $argv = [];
 
         // loop through a copy of the input values to be parsed
         while ($this->input) {
@@ -82,40 +51,29 @@ ANd, instead of the :, :: syntax, maybe:
                 continue;
             }
 
-            // long option, short option, or numeric argument?
-            if (! $done && substr($arg, 0, 2) == '--') {
+            if ($done) {
+                $argv[] = $arg;
+                continue;
+            }
+
+            // long option?
+            if (substr($arg, 0, 2) == '--') {
                 $this->longOption($arg);
-            } elseif (! $done && substr($arg, 0, 1) == '-') {
+                continue;
+            }
+
+            // short option?
+            if (substr($arg, 0, 1) == '-') {
                 $this->shortOption($arg);
-            } else {
-                $this->argv[$argc ++] = $arg;
+                continue;
             }
+
+            // argument
+            $argv[] = $arg;
         }
 
-        $input = $this->argv;
-        $optv = [];
-
-        foreach ($this->options as $option) {
-            foreach ($option->names as $name) {
-                $name = ltrim($name, '-');
-                $optv[$name] = $option->getValue();
-            }
-        }
-
-        return $optv;
-    }
-
-    protected function getOption(string $name) : Option
-    {
-        foreach ($this->options as $option) {
-            if (in_array($name, $option->names)) {
-                return $option;
-            }
-        }
-
-        throw new Exception\OptionNotDefined(
-            "The option '$name' is not defined."
-        );
+        $input = $argv; // by reference!
+        return $this->options->values();
     }
 
     protected function longOption(string $name) : void
@@ -123,20 +81,19 @@ ANd, instead of the :, :: syntax, maybe:
         $pos = strpos($name, '=');
 
         if ($pos !== false) {
-            $option = $this->getOption(substr($name, 0, $pos));
-            $option->equals(substr($name, $pos + 1));
+            $value = substr($name, $pos + 1);
+            $name = substr($name, 0, $pos);
+            $this->options->get($name)->equals($value);
             return;
         }
 
-        $option = $this->getOption($name);
-        $option->capture($this->input);
+        $this->options->get($name)->capture($this->input);
     }
 
     protected function shortOption(string $name) : void
     {
         if (strlen($name) == 2) {
-            $option = $this->getOption($name);
-            $option->capture($this->input);
+            $this->options->get($name)->capture($this->input);
             return;
         }
 
@@ -144,11 +101,9 @@ ANd, instead of the :, :: syntax, maybe:
         $final = array_pop($chars);
 
         foreach ($chars as $char) {
-            $option = $this->getOption("-{$char}");
-            $option->equals('');
+            $this->options->get("-{$char}")->equals('');
         }
 
-        $option = $this->getOption("-{$final}");
-        $option->capture($this->input);
+        $this->options->get("-{$final}")->capture($this->input);
     }
 }

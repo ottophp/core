@@ -24,9 +24,9 @@ class GetoptTest extends TestCase
 
     public function testParse_longRejected()
     {
-        $getopt = new Getopt([
+        $getopt = new Getopt(new Options([
             new Option('foo-bar'),
-        ]);
+        ]));
 
         $input = ['--foo-bar'];
         $actual = $getopt->parse($input);
@@ -41,9 +41,9 @@ class GetoptTest extends TestCase
 
     public function testParse_longRequired()
     {
-        $getopt = new Getopt([
+        $getopt = new Getopt(new Options([
             new Option('foo-bar', argument: Option::REQUIRED)
-        ]);
+        ]));
 
         // '=' as separator
         $input = ['--foo-bar=baz'];
@@ -65,9 +65,9 @@ class GetoptTest extends TestCase
 
     public function testParse_longOptional()
     {
-        $getopt = new Getopt([
+        $getopt = new Getopt(new Options([
             new Option('foo-bar', argument: Option::OPTIONAL)
-        ]);
+        ]));
 
         $input = ['--foo-bar'];
         $actual = $getopt->parse($input);
@@ -82,9 +82,9 @@ class GetoptTest extends TestCase
 
     public function testParse_longMultiple()
     {
-        $getopt = new Getopt([
+        $getopt = new Getopt(new Options([
             new Option('foo-bar', argument: Option::OPTIONAL, multiple: true)
-        ]);
+        ]));
 
         $input = [
             '--foo-bar',
@@ -100,9 +100,9 @@ class GetoptTest extends TestCase
 
     public function testParse_shortRejected()
     {
-        $getopt = new Getopt([
+        $getopt = new Getopt(new Options([
             new Option('f')
-        ]);
+        ]));
 
         $input = ['-f'];
         $actual = $getopt->parse($input);
@@ -118,9 +118,9 @@ class GetoptTest extends TestCase
 
     public function testParse_shortRequired()
     {
-        $getopt = new Getopt([
+        $getopt = new Getopt(new Options([
             new Option('f', argument: Option::REQUIRED)
-        ]);
+        ]));
 
         $input = ['-f', 'baz'];
         $actual = $getopt->parse($input);
@@ -135,9 +135,9 @@ class GetoptTest extends TestCase
 
     public function testParse_shortOptional()
     {
-        $getopt = new Getopt([
+        $getopt = new Getopt(new Options([
             new Option('f', argument: Option::OPTIONAL)
-        ]);
+        ]));
 
         $input = ['-f'];
         $actual = $getopt->parse($input);
@@ -152,9 +152,9 @@ class GetoptTest extends TestCase
 
     public function testParse_shortMultiple()
     {
-        $getopt = new Getopt([
+        $getopt = new Getopt(new Options([
             new Option('f', argument: Option::OPTIONAL, multiple: true)
-        ]);
+        ]));
 
         $input = ['-f', '-f', '-f', 'baz', '-f', 'dib', '-f'];
         $actual = $getopt->parse($input);
@@ -164,11 +164,11 @@ class GetoptTest extends TestCase
 
     public function testParse_shortCluster()
     {
-        $getopt = new Getopt([
+        $getopt = new Getopt(new Options([
             new Option('f'),
             new Option('b'),
             new Option('z'),
-        ]);
+        ]));
 
         $input = ['-fbz'];
         $actual = $getopt->parse($input);
@@ -182,11 +182,11 @@ class GetoptTest extends TestCase
 
     public function testParse_shortClusterRequired()
     {
-        $getopt = new Getopt([
+        $getopt = new Getopt(new Options([
             new Option('f'),
             new Option('b', argument: Option::REQUIRED),
             new Option('z'),
-        ]);
+        ]));
 
         $input = ['-fbz'];
         $this->expectException(Exception\OptionParamRequired::CLASS);
@@ -196,11 +196,11 @@ class GetoptTest extends TestCase
 
     public function testParseAndGet()
     {
-        $getopt = new Getopt([
+        $getopt = new Getopt(new Options([
             new Option('foo-bar', argument: Option::REQUIRED),
             new Option('b'),
             new Option('z', argument: Option::OPTIONAL),
-        ]);
+        ]));
 
         $input = [
             'abc',
@@ -241,9 +241,9 @@ class GetoptTest extends TestCase
 
     public function testMultipleWithAlias()
     {
-        $getopt = new Getopt([
-            new Option('f,foo', argument: Option::OPTIONAL, multiple: true),
-        ]);
+        $getopt = new Getopt(new Options([
+            new Option('f,foo', argument: Option::OPTIONAL, multiple: true)
+        ]));
 
         $input = ['-f', '-f', '-f', 'baz', '-f', 'dib', '-f'];
         $actual = $getopt->parse($input);
