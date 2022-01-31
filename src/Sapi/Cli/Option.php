@@ -49,7 +49,7 @@ class Option
         return $this->value;
     }
 
-    public function capture(array &$input)
+    public function capture(array &$input) : void
     {
         if ($this->param === Option::REJECTED) {
             $this->setValue(true);
@@ -76,37 +76,48 @@ class Option
         );
     }
 
-    public function equals(string $value)
+    public function equals(string $value) : void
     {
         $value = trim($value);
 
         if ($this->param === self::REJECTED) {
-            if ($value === '') {
-                $this->setValue(true);
-                return;
-            }
-
-            $names = implode(',', $this->names);
-
-            throw new Exception\OptionParamRejected(
-                "The option '{$names}' does not accept a parameter."
-            );
+            $this->equalsRejected($value);
+            return;
         }
 
         if ($this->param === self::REQUIRED) {
-            if ($value !== '') {
-                $this->setValue($value);
-                return;
-            }
-
-            $names = implode(',', $this->names);
-
-            throw new Exception\OptionParamRequired(
-                "The option '$names' requires a parameter."
-            );
+            $this->equalsRequired($value);
         }
 
         $this->setValue($value === '' ? true : $value);
+    }
+
+    protected function equalsRejected(string $value) : void
+    {
+        if ($value === '') {
+            $this->setValue(true);
+            return;
+        }
+
+        $names = implode(',', $this->names);
+
+        throw new Exception\OptionParamRejected(
+            "The option '{$names}' does not accept a parameter."
+        );
+    }
+
+    protected function equalsRequired(string $value) : void
+    {
+        if ($value !== '') {
+            $this->setValue($value);
+            return;
+        }
+
+        $names = implode(',', $this->names);
+
+        throw new Exception\OptionParamRequired(
+            "The option '$names' requires a parameter."
+        );
     }
 
     protected function setValue(mixed $value) : void
