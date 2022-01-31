@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Otto\Sapi\Cli;
 
+use ReflectionClass;
+
 class Options
 {
     static public function new(string $class, string $method) : static

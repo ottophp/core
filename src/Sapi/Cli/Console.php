@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Otto\Sapi\Cli;
 
 use Capsule\Di\Container;
+use Otto\Sapi\Cli\Getopt;
+use Otto\Sapi\Cli\Options;
 use Otto\Sapi\Cli\Reporter\ConsoleReporter;
 use Throwable;
 
@@ -11,6 +13,7 @@ class Console
 {
     public function __construct(
         protected Container $container,
+        protected Getopt $getopt,
         protected ConsoleReporter $consoleReporter
     ) {
     }
@@ -20,14 +23,14 @@ class Console
         try {
             $console = array_shift($argv);
             $class = $this->commandClass($argv);
-            $optv = $this->options($class, $argv);
-            // $argv should now get fixed as per __invoke() params.
+            $options = Options::new($class, '__invoke');
+            $arguments = $this->getopt->parse($argv, $options);
+
+            // $arguments should now get fixed/typed as per __invoke() params.
             // cf. AutoRoute and its parsing system for param/args.
-            //
-            // this is starting to look extractable, a la AutoGetopt
-            // or something like that.
+
             $command = $this->newCommand($class);
-            return $command($optv, ...$argv);
+            return $command($options, ...$arguments);
         } catch (Throwable $e) {
             return ($this->consoleReporter)($command ?? null, $e);
         }
@@ -58,12 +61,6 @@ class Console
             '\\',
             $this->inflectNamespace($str)
         );
-    }
-
-    protected function options(string $class, array &$argv) : array
-    {
-        $getopt = Getopt::new($class, '__invoke');
-        return $getopt->parse($argv);
     }
 
     protected function newCommand(string $class) : object

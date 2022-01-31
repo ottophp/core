@@ -2,6 +2,7 @@
 namespace FakeProject\Sapi\Cli\Command;
 
 use Otto\Sapi\Cli\Result;
+use Otto\Sapi\Cli\Options;
 use Otto\Sapi\Cli\Reporter\CommandReporter;
 use FakeProject\Domain\Payload;
 
@@ -12,7 +13,7 @@ class Hello
     ) {
     }
 
-    public function __invoke(array $options, string $name = 'World') : Result
+    public function __invoke(Options $options, string $name = 'World') : Result
     {
         $payload = Payload::success(['name' => $name]);
         return ($this->reporter)($this, $payload);

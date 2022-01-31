@@ -1,6 +1,7 @@
 <?php
 namespace FakeProject\Sapi\Cli\Command;
 
+use Otto\Sapi\Cli\Options;
 use Otto\Sapi\Cli\Result;
 use Otto\Sapi\Cli\Reporter\CommandReporter;
 use FakeProject\Domain\Payload;
@@ -12,7 +13,7 @@ class HelloStatus
     ) {
     }
 
-    public function __invoke(array $options, string $status) : Result
+    public function __invoke(Options $options, string $status) : Result
     {
         $payload = new Payload(status: $status);
         return ($this->reporter)($this, $payload);
