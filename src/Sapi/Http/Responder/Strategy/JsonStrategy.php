@@ -13,12 +13,12 @@ class JsonStrategy extends Strategy
         return [
             "{$this->directory}/resources/responder/json/view",
             "action:{$this->directory}/resources/responder/json/action",
-            "front:{$this->directory}/resources/responder/json/front",
             "layout:{$this->directory}/resources/responder/json/layout",
             "status:{$this->directory}/resources/responder/json/status",
-            "front:{$this->directory}/vendor/ottophp/core/resources/responder/json/front",
+            "throwable:{$this->directory}/resources/responder/json/throwable",
             "layout:{$this->directory}/vendor/ottophp/core/resources/responder/json/layout",
             "status:{$this->directory}/vendor/ottophp/core/resources/responder/json/status",
+            "throwable:{$this->directory}/vendor/ottophp/core/resources/responder/json/throwable",
         ];
     }
 

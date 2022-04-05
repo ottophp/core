@@ -17,7 +17,7 @@ class Front
         protected Request $request,
         protected Router $router,
         protected Template $template,
-        protected FrontResponder $frontResponder
+        protected Responder $responder
     ) {
     }
 
@@ -35,7 +35,7 @@ class Front
 
             return $this->error($route) ?? $this->action($route);
         } catch (Throwable $e) {
-            return ($this->frontResponder)($e);
+            return ($this->responder)($this, $e);
         }
     }
 
@@ -45,7 +45,7 @@ class Front
             return null;
         }
 
-        return ($this->frontResponder)($route->exception);
+        return ($this->responder)($this, $route->exception);
     }
 
     protected function action(Route $route) : Response

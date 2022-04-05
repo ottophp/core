@@ -2,7 +2,7 @@
 namespace FakeProject\Sapi\Http\Action\Front\Throw;
 
 use LogicException;
-use Otto\Sapi\Http\Responder\ActionResponder;
+use Otto\Sapi\Http\Responder;
 use Sapien\Request;
 use Sapien\Response;
 
@@ -10,7 +10,7 @@ class GetFrontThrow
 {
     public function __construct(
         protected Request $request,
-        protected ActionResponder $responder
+        protected Responder $responder
     ) {
     }
 

@@ -1,7 +1,7 @@
 <?php
 namespace FakeProject\Sapi\Http\Action;
 
-use Otto\Sapi\Http\Responder\ActionResponder;
+use Otto\Sapi\Http\Responder;
 use Sapien\Request;
 use Sapien\Response;
 use FakeProject\Domain\Payload;
@@ -10,7 +10,7 @@ class Patch
 {
     public function __construct(
         protected Request $request,
-        protected ActionResponder $responder
+        protected Responder $responder
     ) {
     }
 

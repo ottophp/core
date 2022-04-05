@@ -1,5 +1,5 @@
 <?php
-namespace Otto\Sapi\Http\Responder;
+namespace Otto\Sapi\Http;
 
 use FakeProject\Domain\Payload;
 
@@ -9,8 +9,12 @@ use FakeProject\Sapi\Http\Action\Get;
 use FakeProject\Sapi\Http\Action\Post;
 use FakeProject\Sapi\Http\Action\Put;
 use Otto\Sapi\Http\Responder\Exception;
+use stdClass;
+use LengthException;
+use LogicException;
+use Error;
 
-class ActionResponderTest extends TestCase
+class ResponderTest extends TestCase
 {
     /**
      * @dataProvider providePayload
@@ -22,7 +26,7 @@ class ActionResponderTest extends TestCase
     ) : void
     {
         $action = $this->container->new(Get::CLASS);
-        $responder = $this->container->new(ActionResponder::CLASS);
+        $responder = $this->container->new(Responder::CLASS);
         $response = $responder($action, $payload);
         $this->assertSame($expectCode, $response->getCode());
         $this->assertStringContainsString(
@@ -35,7 +39,7 @@ class ActionResponderTest extends TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'HEAD';
         $action = $this->container->new(Get::CLASS);
-        $responder = $this->container->new(ActionResponder::CLASS);
+        $responder = $this->container->new(Responder::CLASS);
         $response = $responder($action, Payload::found());
         $this->assertSame(200, $response->getCode());
         $this->assertNull($response->getContent());
@@ -45,14 +49,14 @@ class ActionResponderTest extends TestCase
     {
         $action = $this->container->new(Get::CLASS);
         $payload = Payload::nonesuch();
-        $responder = $this->container->new(ActionResponder::CLASS);
+        $responder = $this->container->new(Responder::CLASS);
 
         try {
             $response = $responder($action, $payload);
             $this->assertTrue(false, 'should have thrown an exception');
         } catch (Exception\MethodNotFound $actual) {
             $expect = [
-                'class' => ActionResponder::CLASS,
+                'class' => Responder::CLASS,
                 'method' => 'respondNonesuch',
             ];
             $this->assertEquals($expect, $actual->getInfo());
@@ -68,7 +72,7 @@ class ActionResponderTest extends TestCase
         string $expectText
     ) {
         $action = $this->container->new(Post::CLASS);
-        $responder = $this->container->new(ActionResponder::CLASS);
+        $responder = $this->container->new(Responder::CLASS);
         $response = $responder($action, $payload);
         $this->assertSame($expectCode, $response->getCode());
         $this->assertStringContainsString(
@@ -87,7 +91,7 @@ class ActionResponderTest extends TestCase
     ) {
         $action = $this->container->new(Post::CLASS);
 
-        $responder = $this->container->new(ActionResponder::CLASS);
+        $responder = $this->container->new(Responder::CLASS);
         $response = $responder($action, $payload);
         $this->assertSame($expectCode, $response->getCode());
 
@@ -107,7 +111,7 @@ class ActionResponderTest extends TestCase
     {
         $action = $this->container->new(Post::CLASS);
 
-        $responder = $this->container->new(ActionResponder::CLASS);
+        $responder = $this->container->new(Responder::CLASS);
         $payload = Payload::nonesuch();
 
         try {
@@ -115,7 +119,7 @@ class ActionResponderTest extends TestCase
             $this->assertTrue(false, 'should have thrown an exception');
         } catch (Exception\MethodNotFound $actual) {
             $expect = [
-                'class' => ActionResponder::CLASS,
+                'class' => Responder::CLASS,
                 'method' => 'respondNonesuch',
             ];
             $this->assertEquals($expect, $actual->getInfo());
@@ -126,7 +130,7 @@ class ActionResponderTest extends TestCase
     {
         $action = $this->container->new(Post::CLASS);
 
-        $responder = $this->container->new(ActionResponder::CLASS);
+        $responder = $this->container->new(Responder::CLASS);
         $response = $responder($action);
         $this->assertStringContainsString(
             "<p>POST template regardless of payload status.</p>",
@@ -137,7 +141,7 @@ class ActionResponderTest extends TestCase
     public function testActionWithoutPayload_viewNotFound()
     {
         $action = $this->container->new(Put::CLASS);
-        $responder = $this->container->new(ActionResponder::CLASS);
+        $responder = $this->container->new(Responder::CLASS);
 
         try {
             $response = $responder($action);
@@ -167,5 +171,41 @@ class ActionResponderTest extends TestCase
             [Payload::unauthorized(), 400, 'UNAUTHORIZED'],
             [Payload::updated(), 303, 'UPDATED'],
         ];
+    }
+
+    public function testThrowableException()
+    {
+        $responder = $this->container->new(Responder::CLASS);
+
+        $e = new Exception('fake exception', previous: new Exception('previous exception'));
+        $response = $responder(new stdClass(), $e);
+
+        $this->assertSame(500, $response->getCode());
+        $this->assertStringContainsString("<p>Exception</p>", $response->getContent());
+        $this->assertStringContainsString("Exception: fake exception", $response->getContent());
+    }
+
+    public function testThrowableError()
+    {
+        $responder = $this->container->new(Responder::CLASS);
+
+        $e = new Error('fake error');
+        $response = $responder(new stdClass(), $e);
+
+        $this->assertSame(500, $response->getCode());
+        $this->assertStringContainsString("<p>Error</p>", $response->getContent());
+        $this->assertStringContainsString("Error: fake error", $response->getContent());
+    }
+
+    public function testThrowableHierarchy()
+    {
+        $responder = $this->container->new(Responder::CLASS);
+
+        $e = new LengthException('fake length');
+        $response = $responder(new stdClass(), $e);
+
+        $this->assertSame(500, $response->getCode());
+        $this->assertStringContainsString("<p>Logic Exception</p>", $response->getContent());
+        $this->assertStringContainsString("LengthException: fake length", $response->getContent());
     }
 }

@@ -57,7 +57,7 @@ class Console
     protected function inflectSubclass(string $str) : string
     {
         return str_replace(
-            DIRECTORY_SEPARATOR,
+            ':',
             '\\',
             $this->inflectNamespace($str)
         );

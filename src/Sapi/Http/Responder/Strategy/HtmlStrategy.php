@@ -15,12 +15,12 @@ class HtmlStrategy extends Strategy
         return [
             "{$this->directory}/resources/responder/html/view",
             "action:{$this->directory}/resources/responder/html/action",
-            "front:{$this->directory}/resources/responder/html/front",
             "layout:{$this->directory}/resources/responder/html/layout",
             "status:{$this->directory}/resources/responder/html/status",
-            "front:{$this->directory}/vendor/ottophp/core/resources/responder/html/front",
+            "throwable:{$this->directory}/resources/responder/html/throwable",
             "layout:{$this->directory}/vendor/ottophp/core/resources/responder/html/layout",
             "status:{$this->directory}/vendor/ottophp/core/resources/responder/html/status",
+            "throwable:{$this->directory}/vendor/ottophp/core/resources/responder/html/throwable",
         ];
     }
 

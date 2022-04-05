@@ -39,7 +39,6 @@ class HttpProvider implements Provider
         $suffixes = [
             'Sapi\\Http\\Front',
             'Sapi\\Http\\Responder\\Data',
-            'Sapi\\Http\\Responder\\FrontResponder',
             'Sapi\\Http\\Responder\\Strategy\\HtmlStrategy',
             'Sapi\\Http\\Responder\\Strategy\\JsonStrategy',
             'Sapi\\Http\\Responder\\Template',
