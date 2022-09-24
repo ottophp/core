@@ -73,7 +73,7 @@ class FrontHtmlTest extends \Otto\TestCase
             [Payload::NOT_FOUND, 404],
             [Payload::PROCESSING, 102],
             [Payload::SUCCESS, 200],
-            [Payload::UNAUTHORIZED, 400],
+            [Payload::UNAUTHORIZED, 403],
             [Payload::UPDATED, 303],
         ];
     }

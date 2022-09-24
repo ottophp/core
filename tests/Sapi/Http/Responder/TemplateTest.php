@@ -9,20 +9,10 @@ class TemplateTest extends \Otto\TestCase
 {
     public function test()
     {
-        $template = $this->container->new(Template::CLASS);
-
-        $request = $this->container->get(Request::CLASS);
-        $response = new Response();
+        $templateFactory = $this->container->get(Template\ResponderTemplateFactory::CLASS);
+        $template = $templateFactory($this->container);
         $payload = Payload::success();
-
-        $template->response($response);
-        $template->payload($payload);
-
-        $this->assertSame($request, $template->request());
-        $this->assertSame($response, $template->response());
-        $this->assertSame($payload, $template->payload());
-
-        $template->fileResponse(__DIR__ . DIRECTORY_SEPARATOR . 'fake.txt');
-        $this->assertInstanceOf(Response\FileResponse::CLASS, $template->response());
+        $template->payload()->set($payload);
+        $this->assertSame($payload, $template->payload()->get());
     }
 }

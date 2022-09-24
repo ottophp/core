@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Otto\Sapi\Http;
 
-use Otto\Sapi\Http\Responder\Data;
-use Otto\Sapi\Http\Responder\Strategy;
-use Otto\Sapi\Http\Responder\Template;
+use Otto\Sapi\Http\Responder\Exception\ViewNotFound;
+use Otto\Sapi\Http\Responder\ResponderData;
+use Otto\Sapi\Http\Responder\Template\ResponderTemplate;
+use Qiq\Template;
 use Sapien\Request;
 use Sapien\Response;
 
@@ -13,16 +14,11 @@ abstract class Responder
 {
     public function __construct(
         protected Request $request,
-        protected Template $template,
-        protected Strategy $strategy,
-        protected Data $data
+        protected ResponderTemplate $template,
+        protected ResponderData $responderData
     ) {
-        $this->template->getTemplateLocator()->setPaths($this->strategy->getPaths());
-        $this->template->response($this->strategy->newResponse());
-        $this->template->addData($this->data->get());
+        $this->template->addData($responderData->get());
     }
-
-    abstract protected function getView() : ?string;
 
     protected function render(
         int $code = null,
@@ -32,12 +28,7 @@ abstract class Responder
     {
         $this->setView($view);
         $this->setLayout($layout);
-        $content = ($this->template)();
-        $response = $this->template->response();
-
-        if ($response->getContent() === null) {
-            $response->setContent($content);
-        }
+        $response = $this->template->response()->render($this->template);
 
         if ($this->request->method->is('HEAD')) {
             $response->setContent(null);
@@ -64,6 +55,24 @@ abstract class Responder
         $this->template->setView($view);
     }
 
+    protected function getView() : ?string
+    {
+        $templateLocator = $this->template->getTemplateLocator();
+
+        $views = $this->getViews();
+
+        foreach ($views as $view) {
+            if ($templateLocator->has($view)) {
+                return $view;
+            }
+        }
+
+        throw ViewNotFound::new(
+            $templateLocator->getPaths(),
+            $views
+        );
+    }
+
     protected function setLayout(string|false $layout = null) : void
     {
         if ($layout === false) {
@@ -71,10 +80,10 @@ abstract class Responder
             return;
         }
 
-        if ($layout === null) {
-            $layout = $this->strategy->getLayout();
+        if ($layout !== null) {
+            $this->template->setLayout($layout);
         }
-
-        $this->template->setLayout($layout);
     }
+
+    abstract protected function getViews() : array;
 }

@@ -5,7 +5,8 @@ use AutoRoute\Route;
 use AutoRoute\Router;
 use Capsule\Di\Container;
 use Otto\Sapi\Http\Responder\FrontResponder;
-use Otto\Sapi\Http\Responder\Template;
+use Otto\Sapi\Http\Responder\Template\ResponderTemplate;
+use Qiq\Template;
 use Sapien\Request;
 use Sapien\Response;
 use Throwable;
@@ -16,7 +17,7 @@ class Front
         protected Container $container,
         protected Request $request,
         protected Router $router,
-        protected Template $template,
+        protected ResponderTemplate $template,
         protected FrontResponder $frontResponder
     ) {
     }
@@ -29,7 +30,7 @@ class Front
                 (string) $this->request->url->path
             );
 
-            $this->template->route($route);
+            $this->template->route()->set($route);
 
             return $this->error($route) ?? $this->action($route);
         } catch (Throwable $e) {

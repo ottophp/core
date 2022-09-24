@@ -1,3 +1,3 @@
-{{ $this->route = $this->route() }}
-{{ $this->e = $this->decomposeException($this->route->exception) }}
+{{ $this->route = $this->route()->get() }}
+{{ $this->e = $this->decomposeException($this->route()->exception) }}
 {{ response()->setCode(404) }}

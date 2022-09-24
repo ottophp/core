@@ -24,8 +24,4 @@ abstract class Strategy
         array $paths,
         array $views
     ) : ?string;
-
-    abstract public function getPaths() : array;
-
-    abstract public function newResponse() : Response;
 }

@@ -5,12 +5,6 @@ namespace Otto;
 
 use Capsule\Di\Definitions;
 use Capsule\Di\Provider;
-use Otto\Sapi\Http\Responder;
-use Otto\Sapi\Http\Responder\Strategy;
-use Otto\Sapi\Http\Responder\Template;
-use Qiq;
-use Sapien\Request;
-use Otto\Domain\App\Action\CreateAction;
 
 class OttoProvider implements Provider
 {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Otto\Sapi\Http\Responder;
 
 use Otto\Sapi\Http\Responder;
+use Otto\Sapi\Http\Responder\Exception\ViewNotFound;
 use Sapien\Response;
 use Throwable;
 
@@ -18,10 +19,8 @@ class FrontResponder extends Responder
         return $this->render(500);
     }
 
-    protected function getView() : ?string
+    protected function getViews() : array
     {
-        $templateLocator = $this->template->getTemplateLocator();
-
         $views = [];
         $class = get_class($this->e);
 
@@ -30,15 +29,6 @@ class FrontResponder extends Responder
             $class = get_parent_class($class);
         }
 
-        foreach ($views as $view) {
-            if ($templateLocator->has($view)) {
-                return $view;
-            }
-        }
-
-        return $this->strategy->viewNotFound(
-            $templateLocator->getPaths(),
-            $views
-        );
+        return $views;
     }
 }

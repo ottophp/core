@@ -15,7 +15,8 @@
         "capsule/di": "^3.0",
         "payload-interop/payload-interop": "^1.0",
         "pmjones/auto-route": "^2.0",
-        "qiq/qiq": "^1.0",
+        "qiq/qiq": "^1.0@dev",
+        "qiq/helper-sapien": "^1.0",
         "sapien/sapien": "^1.0"
     },
     "require-dev": {

@@ -40,24 +40,6 @@ class ActionResponderTest extends \Otto\TestCase
         $this->assertNull($response->getContent());
     }
 
-    public function testStatus_methodNotFound()
-    {
-        $action = $this->container->new(Get::CLASS);
-        $payload = Payload::nonesuch();
-        $responder = $this->container->new(ActionResponder::CLASS);
-
-        try {
-            $response = $responder($action, $payload);
-            $this->assertTrue(false, 'should have thrown an exception');
-        } catch (Exception\MethodNotFound $actual) {
-            $expect = [
-                'class' => ActionResponder::CLASS,
-                'method' => 'respondNonesuch',
-            ];
-            $this->assertEquals($expect, $actual->getInfo());
-        }
-    }
-
     /**
      * @dataProvider providePayload
      */
@@ -102,25 +84,6 @@ class ActionResponderTest extends \Otto\TestCase
         );
     }
 
-    public function testActionAndStatus_methodNotFound()
-    {
-        $action = $this->container->new(Post::CLASS);
-
-        $responder = $this->container->new(ActionResponder::CLASS);
-        $payload = Payload::nonesuch();
-
-        try {
-            $response = $responder($action, $payload);
-            $this->assertTrue(false, 'should have thrown an exception');
-        } catch (Exception\MethodNotFound $actual) {
-            $expect = [
-                'class' => ActionResponder::CLASS,
-                'method' => 'respondNonesuch',
-            ];
-            $this->assertEquals($expect, $actual->getInfo());
-        }
-    }
-
     public function testActionWithoutPayload()
     {
         $action = $this->container->new(Post::CLASS);
@@ -163,7 +126,7 @@ class ActionResponderTest extends \Otto\TestCase
             [Payload::notFound(), 404, 'NOT_FOUND'],
             [Payload::processing(), 102, 'PROCESSING'],
             [Payload::success(), 200, 'SUCCESS'],
-            [Payload::unauthorized(), 400, 'UNAUTHORIZED'],
+            [Payload::unauthorized(), 403, 'UNAUTHORIZED'],
             [Payload::updated(), 303, 'UPDATED'],
         ];
     }

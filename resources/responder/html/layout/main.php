@@ -1,3 +1,4 @@
+{{ response()->setHeader('content-type', 'text/html') }}
 <html>
 <head>
     <title>Welcome To Otto</title>

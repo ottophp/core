@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Otto\Sapi\Http\Responder;
 
+use Otto\Sapi\Http\Responder;
+use Otto\Sapi\Http\Responder\Exception\ViewNotFound;
 use PayloadInterop\DomainPayload;
+use PayloadInterop\DomainStatus;
 use Sapien\Request;
 use Sapien\Response;
-use Otto\Sapi\Http\Responder;
 
 class ActionResponder extends Responder
 {
@@ -14,23 +16,18 @@ class ActionResponder extends Responder
 
     protected ?DomainPayload $payload = null;
 
-    protected ?string $status = null;
+    protected ?string $payloadStatus = null;
+
+    protected ?int $responseCode = null;
 
     public function __invoke(
         object $action,
-        DomainPayload $payload = null,
+        ?DomainPayload $payload = null,
     ) : Response
     {
         $this->action = $action;
         $this->setPayload($payload);
-        $this->setStatus();
-        $method = "respond{$this->status}";
-
-        if (! method_exists($this, $method)) {
-            throw Exception\MethodNotFound::new(get_class($this), $method);
-        }
-
-        return $this->$method();
+        return $this->render($this->responseCode);
     }
 
     protected function setPayload(?DomainPayload $payload) : void
@@ -41,102 +38,46 @@ class ActionResponder extends Responder
 
         $this->payload = $payload;
         $this->template->addData($this->payload->getResult());
-        $this->template->payload($this->payload);
+        $this->template->payload()->set($this->payload);
 
+        $this->payloadStatus = $this->getPayloadStatus($payload);
+        $this->responseCode = $this->getResponseCode($payload);
     }
 
-    protected function setStatus() : void
+    protected function getPayloadStatus(DomainPayload $payload) : string
     {
-        if ($this->payload === null) {
-            return;
-        }
-
-        $status = $this->payload->getStatus();
+        $status = $payload->getStatus();
         $status = ucwords(str_replace('_', ' ', strtolower($status)));
-        $this->status = str_replace(' ', '', $status);
+        return str_replace(' ', '', $status);
     }
 
-    protected function getView() : ?string
+    protected function getResponseCode(DomainPayload $payload) : ?int
     {
+        return match ($payload->getStatus()) {
+            DomainStatus::ACCEPTED => 202,
+            DomainStatus::CREATED => 201,
+            DomainStatus::DELETED => 200,
+            DomainStatus::ERROR => 500,
+            DomainStatus::FOUND => 200,
+            DomainStatus::INVALID => 422,
+            DomainStatus::NOT_FOUND => 404,
+            DomainStatus::PROCESSING => 102,
+            DomainStatus::SUCCESS => 200,
+            DomainStatus::UNAUTHORIZED => 403,
+            DomainStatus::UPDATED => 303,
+            default => null,
+        };
+    }
+
+    protected function getViews() : array
+    {
+        // Project\Sapi\Http\Action\Foo\Bar\Baz => Foo\Bar\GetBar
         $parts = array_slice(explode('\\', get_class($this->action)), 4);
         $name = implode(DIRECTORY_SEPARATOR, $parts);
-        $views = [
-            "action:{$name}-{$this->status}",
+        return [
+            "action:{$name}-{$this->payloadStatus}",
             "action:{$name}",
-            "status:{$this->status}",
+            "status:{$this->payloadStatus}",
         ];
-
-        $templateLocator = $this->template->getTemplateLocator();
-
-        foreach ($views as $view) {
-            if ($templateLocator->has($view)) {
-                return $view;
-            }
-        }
-
-        return $this->strategy->viewNotFound(
-            $templateLocator->getPaths(),
-            $views
-        );
-    }
-
-    protected function respond() : Response
-    {
-        return $this->render();
-    }
-
-    protected function respondAccepted() : Response
-    {
-        return $this->render(202);
-    }
-
-    protected function respondCreated() : Response
-    {
-        return $this->render(201);
-    }
-
-    protected function respondDeleted() : Response
-    {
-        return $this->render(200);
-    }
-
-    protected function respondError() : Response
-    {
-        return $this->render(500);
-    }
-
-    protected function respondFound() : Response
-    {
-        return $this->render(200);
-    }
-
-    protected function respondInvalid() : Response
-    {
-        return $this->render(422);
-    }
-
-    protected function respondNotFound() : Response
-    {
-        return $this->render(404);
-    }
-
-    protected function respondProcessing() : Response
-    {
-        return $this->render(102);
-    }
-
-    protected function respondSuccess() : Response
-    {
-        return $this->render(200);
-    }
-
-    protected function respondUnauthorized() : Response
-    {
-        return $this->render(400);
-    }
-
-    protected function respondUpdated() : Response
-    {
-        return $this->render(303);
     }
 }
