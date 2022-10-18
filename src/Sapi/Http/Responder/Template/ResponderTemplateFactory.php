@@ -14,7 +14,7 @@ class ResponderTemplateFactory
     public function __construct(
         protected string $directory,
         protected string $format = 'html',
-        protected string $layout = 'layout:main',
+        protected ?string $layout = 'layout:main',
         protected array $helpers = [],
     ) {
     }

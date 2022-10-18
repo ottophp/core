@@ -1,9 +1,9 @@
 <?php
-namespace Otto\Domain\App\Action;
+namespace Otto\App\Action;
 
 use AutoRoute\Creator;
 use Capsule\Di\Container;
-use Otto\Domain\Payload;
+use Otto\App\Payload;
 
 class CreateAction
 {

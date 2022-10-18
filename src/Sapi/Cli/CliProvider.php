@@ -6,7 +6,7 @@ namespace Otto\Sapi\Cli;
 use AutoRoute;
 use Capsule\Di\Definitions;
 use Capsule\Di\Provider;
-use Otto\Domain\App\Action\CreateAction;
+use Otto\App\Action\CreateAction;
 
 class CliProvider implements Provider
 {

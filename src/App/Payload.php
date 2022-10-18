@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace FakeProject\Domain;
+namespace Otto\App;
 
 use PayloadInterop\DomainPayload;
 use PayloadInterop\DomainStatus;
@@ -19,8 +19,11 @@ class Payload implements DomainPayload, DomainStatus
 
     public function __construct(
         protected string $status,
-        protected array $result = []
+        protected array $result
     ) {
+        if (! defined(get_called_class() . "::{$status}")) {
+            throw new Exception("No such status: {$status}");
+        }
     }
 
     public function getStatus() : string

@@ -1,7 +1,7 @@
 <?php
 namespace Otto\Sapi\Http;
 
-use FakeProject\Domain\Payload;
+use FakeProject\App\Payload;
 
 class FrontHtmlTest extends \Otto\TestCase
 {
