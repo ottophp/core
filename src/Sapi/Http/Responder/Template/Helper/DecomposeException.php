@@ -5,53 +5,37 @@ namespace Otto\Sapi\Http\Responder\Template\Helper;
 
 use JsonSerializable;
 use ReflectionClass;
+use stdClass;
 use Throwable;
 
-class DecomposeException
+/*
+$this->e = $this->anonymousThrowable($this->e);
+$this->e = $this->jsonableThrowable($this->e);
+$this->e = $this->decomposedThrowable($this->e);
+$this->e = $this->serializableThrowable($this->e);
+
+*/
+class DecomposeException extends stdClass
 {
-    public function __invoke(?Throwable $e) : object
+    public function __invoke(Throwable $e) : static
     {
-        $vars = [];
+        $self = new static();
+        $self->__CLASS__ = get_class($e);
+        $self->__STRING__ = (string) $e;
+        $self->__TRACE__ = $e->getTraceAsString();
 
-        if ($e) {
-            $vars['__CLASS__'] = get_class($e);
-            $vars['__STRING__'] = (string) $e;
+        $rc = new ReflectionClass($e);
 
-            $rc = new ReflectionClass($e);
-
-            foreach ($rc->getProperties() as $rp) {
-                $rp->setAccessible(true);
-                $vars[$rp->getName()] = $rp->getValue($e);
-            }
-
-            $vars['trace'] = $e->getTraceAsString();
-            $vars['previous'] ??= null;
-
-            if ($vars['previous'] instanceof Throwable) {
-                $vars['previous'] = $this($vars['previous']);
-            }
+        foreach ($rc->getProperties() as $rp) {
+            $rp->setAccessible(true);
+            $name = $rp->getName();
+            $self->$name = $rp->getValue($e);
         }
 
-        return new class($vars) implements JsonSerializable
-        {
-            public function __construct(protected readonly array $vars)
-            {
-            }
+        $self->__PREVIOUS__ = $e->getPrevious() === null
+            ? null
+            : $this($e->getPrevious());
 
-            public function __get(string $key) : mixed
-            {
-                return $this->vars[$key];
-            }
-
-            public function __toString() : string
-            {
-                return $this->vars['__STRING__'];
-            }
-
-            public function jsonSerialize() : mixed
-            {
-                return $this->vars;
-            }
-        };
+        return $self;
     }
 }

@@ -1,12 +1,13 @@
 <?php
 namespace Otto\Sapi\Http;
 
-use FakeProject\App\Payload;
-use AutoRoute\Exception\NotFound;
 use AutoRoute\Exception\InvalidArgument;
 use AutoRoute\Exception\MethodNotAllowed;
+use AutoRoute\Exception\NotFound;
 use AutoRoute\Route;
+use FakeProject\App\Payload;
 use LogicException;
+use Otto\Sapi\Http\Responder\Template\Helper\DecomposeException;
 
 class FrontJsonTest extends \Otto\TestCase
 {
@@ -20,7 +21,7 @@ class FrontJsonTest extends \Otto\TestCase
         $response = $front();
         $this->assertSame(404, $response->getCode());
         $actual = $response->getContent();
-        $this->assertSame(NotFound::CLASS, $actual->e->__CLASS__);
+        $this->assertInstanceof(NotFound::CLASS, $actual->e);
         $this->assertInstanceOf(Route::CLASS, $actual->route);
     }
 
@@ -32,7 +33,7 @@ class FrontJsonTest extends \Otto\TestCase
         $response = $front();
         $this->assertSame(400, $response->getCode());
         $actual = $response->getContent();
-        $this->assertSame(InvalidArgument::CLASS, $actual->e->__CLASS__);
+        $this->assertInstanceOf(InvalidArgument::CLASS, $actual->e);
         $this->assertInstanceOf(Route::CLASS, $actual->route);
     }
 
@@ -44,7 +45,7 @@ class FrontJsonTest extends \Otto\TestCase
         $response = $front();
         $this->assertSame(405, $response->getCode());
         $actual = $response->getContent();
-        $this->assertSame(MethodNotAllowed::CLASS, $actual->e->__CLASS__);
+        $this->assertInstanceOf(MethodNotAllowed::CLASS, $actual->e);
         $this->assertInstanceOf(Route::CLASS, $actual->route);
     }
 
@@ -99,6 +100,7 @@ class FrontJsonTest extends \Otto\TestCase
         $response = $front();
         $this->assertSame(500, $response->getCode());
         $actual = $response->getContent();
+        $this->assertInstanceOf(DecomposeException::CLASS, $actual->e);
         $this->assertSame(LogicException::CLASS, $actual->e->__CLASS__);
         $this->assertSame("Fake logic exception thrown.", $actual->e->message);
     }

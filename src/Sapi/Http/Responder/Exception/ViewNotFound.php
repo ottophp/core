@@ -7,6 +7,10 @@ use Otto\Sapi\Http\Responder\Exception as ResponderException;
 
 class ViewNotFound extends ResponderException
 {
+    public readonly array $paths;
+
+    public readonly array $views;
+
     static public function new(
         array $paths,
         array $views
@@ -17,10 +21,8 @@ class ViewNotFound extends ResponderException
             . "... among these paths: "
             . print_r($paths, true);
         $e = new self($message);
-        $e->info = [
-            'paths' => $paths,
-            'views' => $views,
-        ];
+        $e->paths = $paths;
+        $e->views = $views;
         return $e;
     }
 }

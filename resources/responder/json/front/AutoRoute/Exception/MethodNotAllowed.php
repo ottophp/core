@@ -11,7 +11,6 @@ if ($this->request()->method->is('OPTIONS')) {
 }
 
 $this->route = $this->route()->get();
-$this->e = $this->decomposeException($this->route->exception);
 $this->response()
     ->setCode(405)
     ->setHeader('allowed', $this->route()->headers['allowed'] ?? '-');

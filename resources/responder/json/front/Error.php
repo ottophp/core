@@ -1,1 +1,2 @@
-<?php // do nothing
+<?php
+$this->e = $this->decomposeException($this->e);

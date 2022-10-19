@@ -3,12 +3,18 @@ declare(strict_types=1);
 
 namespace Otto;
 
-class Exception extends \Exception
-{
-    protected array $info = [];
+use JsonSerializable;
 
-    public function getInfo() : array
+class Exception extends \Exception implements JsonSerializable
+{
+    public function jsonSerialize() : mixed
     {
-        return $this->info;
+        return array_merge(
+            [
+                '__CLASS__' => get_class($this),
+                '__STRING__' => (string) $this,
+            ],
+            get_object_vars($this)
+        );
     }
 }

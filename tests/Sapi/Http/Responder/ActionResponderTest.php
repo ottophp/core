@@ -105,12 +105,7 @@ class ActionResponderTest extends \Otto\TestCase
             $response = $responder($action);
             $this->assertTrue(false, 'should have thrown an exception');
         } catch (Exception\ViewNotFound $e) {
-            $this->assertTrue(true);
-            $actual = $e->getInfo();
-            $this->assertSame(
-                ['action:Put-', 'action:Put', 'status:'],
-                $actual['views']
-            );
+            $this->assertSame(['action:Put-', 'action:Put', 'status:'], $e->views);
         }
     }
 

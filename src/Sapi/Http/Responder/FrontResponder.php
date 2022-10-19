@@ -15,7 +15,7 @@ class FrontResponder extends Responder
     public function __invoke(Throwable $e) : Response
     {
         $this->e = $e;
-        $this->template->addData(['e' => $this->template->decomposeException($e)]);
+        $this->template->addData(['e' => $this->e]);
         return $this->render(500);
     }
 
