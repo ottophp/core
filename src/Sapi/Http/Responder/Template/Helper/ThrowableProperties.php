@@ -8,14 +8,7 @@ use ReflectionClass;
 use stdClass;
 use Throwable;
 
-/*
-$this->e = $this->anonymousThrowable($this->e);
-$this->e = $this->jsonableThrowable($this->e);
-$this->e = $this->decomposedThrowable($this->e);
-$this->e = $this->serializableThrowable($this->e);
-
-*/
-class DecomposeException extends stdClass
+class ThrowableProperties extends stdClass
 {
     public function __invoke(Throwable $e) : static
     {

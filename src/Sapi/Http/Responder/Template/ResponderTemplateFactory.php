@@ -41,7 +41,7 @@ class ResponderTemplateFactory
                 'response' => Qiq\Helper\Sapien\Response::CLASS,
                 'route' => Helper\Route::CLASS,
                 'payload' => Helper\Payload::CLASS,
-                'decomposeException' => Helper\DecomposeException::CLASS,
+                'throwableProperties' => Helper\ThrowableProperties::CLASS,
             ],
             $this->helpers
         );

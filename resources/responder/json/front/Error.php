@@ -1,2 +1,2 @@
 <?php
-$this->e = $this->decomposeException($this->e);
+$this->e = $this->throwableProperties($this->e);

@@ -7,7 +7,7 @@ use AutoRoute\Exception\NotFound;
 use AutoRoute\Route;
 use FakeProject\App\Payload;
 use LogicException;
-use Otto\Sapi\Http\Responder\Template\Helper\DecomposeException;
+use Otto\Sapi\Http\Responder\Template\Helper\ThrowableProperties;
 
 class FrontJsonTest extends \Otto\TestCase
 {
@@ -100,7 +100,7 @@ class FrontJsonTest extends \Otto\TestCase
         $response = $front();
         $this->assertSame(500, $response->getCode());
         $actual = $response->getContent();
-        $this->assertInstanceOf(DecomposeException::CLASS, $actual->e);
+        $this->assertInstanceOf(ThrowableProperties::CLASS, $actual->e);
         $this->assertSame(LogicException::CLASS, $actual->e->__CLASS__);
         $this->assertSame("Fake logic exception thrown.", $actual->e->message);
     }
