@@ -1,2 +1,2 @@
 <?php
-$this->e = $this->throwableProperties($this->e);
+$this->e = $this->jsonizeThrowable($this->e);

@@ -37,11 +37,11 @@ class ResponderTemplateFactory
         $helpers = array_merge(
             [
                 'action' => AutoRoute\Helper::CLASS,
+                'jsonizeThrowable' => Helper\jsonizeThrowable::CLASS,
+                'payload' => Helper\Payload::CLASS,
                 'request' => Qiq\Helper\Sapien\Request::CLASS,
                 'response' => Qiq\Helper\Sapien\Response::CLASS,
                 'route' => Helper\Route::CLASS,
-                'payload' => Helper\Payload::CLASS,
-                'throwableProperties' => Helper\ThrowableProperties::CLASS,
             ],
             $this->helpers
         );
