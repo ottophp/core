@@ -1,13 +1,10 @@
-{{ extract ($this->e->info) }}
+<p>Could not find any of these requested views ...</p>
 
-<p>The <code>{{h $class}}</code> method <code>{{h $method}}()</code> could not
-find any of these requested views ...</p>
-
-<pre>{{h print_r ($views, true) }}</pre>
+<pre>{{h print_r ($this->e->views, true) }}</pre>
 
 <p>... in these search paths:</p>
 
-<pre>{{h print_r ($paths, true) }}</pre>
+<pre>{{h print_r ($this->e->paths, true) }}</pre>
 
 <p>Exception:</p>
 

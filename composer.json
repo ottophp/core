@@ -14,8 +14,8 @@
     "require": {
         "capsule/di": "^3.0",
         "payload-interop/payload-interop": "^1.0",
-        "pmjones/auto-route": "^2.0",
-        "pmjones/throwable-properties": "1.x@dev",
+        "pmjones/auto-route": "2.x@dev",
+        "pmjones/throwable-properties": "^1.0",
         "qiq/qiq": "^1.0@dev",
         "qiq/helper-sapien": "^1.0",
         "sapien/sapien": "^1.0"

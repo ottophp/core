@@ -1,2 +1,1 @@
-<?php
-$this->e = $this->jsonizeThrowable($this->e);
+{{ $this->e = $this->jsonizeThrowable($this->e) }}
