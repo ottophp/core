@@ -37,7 +37,7 @@ class ResponderTemplateFactory
         $helpers = array_merge(
             [
                 'action' => AutoRoute\Helper::CLASS,
-                'jsonizeThrowable' => Helper\jsonizeThrowable::CLASS,
+                'jsonizeThrowable' => Helper\JsonizeThrowable::CLASS,
                 'payload' => Helper\Payload::CLASS,
                 'request' => Qiq\Helper\Sapien\Request::CLASS,
                 'response' => Qiq\Helper\Sapien\Response::CLASS,
@@ -52,7 +52,7 @@ class ResponderTemplateFactory
 
         $template = ResponderTemplate::new(
             paths: $paths,
-            extension: '.php',
+            extension: '.qiq.php',
             encoding: 'utf-8',
             cachePath: "{$this->directory}/tmp/cache/qiq",
             helperLocator: $helperLocator,
