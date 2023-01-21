@@ -1,5 +1,5 @@
 <?php
-namespace FakeProject\Sapi\Http\Responder\Helper;
+namespace FakeProject\Sapi\Http\Template\Helper;
 
 use Qiq\Escape;
 

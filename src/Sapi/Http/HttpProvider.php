@@ -7,7 +7,6 @@ use AutoRoute;
 use Capsule\Di\Container;
 use Capsule\Di\Definitions;
 use Capsule\Di\Provider;
-use Otto\Sapi\Http\Responder\Template;
 use Sapien\Request;
 
 class HttpProvider implements Provider
@@ -39,8 +38,8 @@ class HttpProvider implements Provider
             'Sapi\\Http\\Front',
             'Sapi\\Http\\Responder\\FrontResponder',
             'Sapi\\Http\\Responder\\ResponderData',
-            'Sapi\\Http\\Responder\\Template\\ResponderTemplate',
-            'Sapi\\Http\\Responder\\Template\\ResponderHelpers',
+            'Sapi\\Http\\Template\\ResponderTemplate',
+            'Sapi\\Http\\Template\\ResponderHelpers',
         ];
 
         foreach ($suffixes as $suffix) {

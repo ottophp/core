@@ -1,5 +1,5 @@
 <?php
-namespace Otto\Sapi\Http\Responder\Template;
+namespace Otto\Sapi\Http\Template;
 
 use Qiq\Compiler\QiqCompiler;
 use Qiq\Template;

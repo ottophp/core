@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Otto\Sapi\Http\Responder\Template\Helper;
+namespace Otto\Sapi\Http\Template\Helper;
 
 use AutoRoute\Route as CurrentRoute;
 

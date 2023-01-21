@@ -27,6 +27,7 @@
     },
     "scripts": {
         "test": "./vendor/bin/phpunit",
-        "stan": "./vendor/bin/phpstan analyze -c phpstan.neon src"
+        "cs-fix": "./vendor/bin/phpstan analyze -c phpstan.neon src",
+        "check": "composer test && composer cs-fix"
     }
 }

@@ -5,7 +5,7 @@ namespace Otto\Sapi\Http;
 
 use Otto\Sapi\Http\Responder\Exception\ViewNotFound;
 use Otto\Sapi\Http\Responder\ResponderData;
-use Otto\Sapi\Http\Responder\Template\ResponderTemplate;
+use Otto\Sapi\Http\Template\ResponderTemplate;
 use Qiq\Template;
 use Sapien\Request;
 use Sapien\Response;

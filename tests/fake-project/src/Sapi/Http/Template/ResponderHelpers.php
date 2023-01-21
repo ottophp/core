@@ -1,7 +1,7 @@
 <?php
-namespace FakeProject\Sapi\Http\Responder;
+namespace FakeProject\Sapi\Http\Template;
 
-use Otto\Sapi\Http\Responder\ResponderHelpers as OttoResponderHelpers;
+use Otto\Sapi\Http\Template\ResponderHelpers as OttoResponderHelpers;
 
 class ResponderHelpers extends OttoResponderHelpers
 {
