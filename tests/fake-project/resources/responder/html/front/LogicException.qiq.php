@@ -1,3 +1,3 @@
 <p>Logic Exception</p>
 
-{{h $this->e }}
+{{h (string) $e }}

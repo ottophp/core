@@ -1,3 +1,4 @@
+{{ /** @var \Qiq\Rendering&\Otto\Sapi\Http\Responder\ResponderHelpers */ }}
 {{ response()->setJson(
     value: $this->getData(),
     type: 'application/json',

@@ -20,9 +20,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
             ),
             new HttpProvider(
                 format: $this->format,
-                helpers: [
-                    'rot13' => Rot13::CLASS,
-                ],
             ),
         ]);
     }

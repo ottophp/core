@@ -20,8 +20,8 @@ class ActionResponderTest extends \Otto\TestCase
         string $expectText
     ) : void
     {
-        $action = $this->container->new(Get::CLASS);
-        $responder = $this->container->new(ActionResponder::CLASS);
+        $action = $this->container->new(Get::class);
+        $responder = $this->container->new(ActionResponder::class);
         $response = $responder($action, $payload);
         $this->assertSame($expectCode, $response->getCode());
         $this->assertStringContainsString(
@@ -33,8 +33,8 @@ class ActionResponderTest extends \Otto\TestCase
     public function testHeadContentIsNull()
     {
         $_SERVER['REQUEST_METHOD'] = 'HEAD';
-        $action = $this->container->new(Get::CLASS);
-        $responder = $this->container->new(ActionResponder::CLASS);
+        $action = $this->container->new(Get::class);
+        $responder = $this->container->new(ActionResponder::class);
         $response = $responder($action, Payload::found());
         $this->assertSame(200, $response->getCode());
         $this->assertNull($response->getContent());
@@ -48,8 +48,8 @@ class ActionResponderTest extends \Otto\TestCase
         int $expectCode,
         string $expectText
     ) {
-        $action = $this->container->new(Post::CLASS);
-        $responder = $this->container->new(ActionResponder::CLASS);
+        $action = $this->container->new(Post::class);
+        $responder = $this->container->new(ActionResponder::class);
         $response = $responder($action, $payload);
         $this->assertSame($expectCode, $response->getCode());
         $this->assertStringContainsString(
@@ -66,9 +66,9 @@ class ActionResponderTest extends \Otto\TestCase
         int $expectCode,
         string $expectText
     ) {
-        $action = $this->container->new(Post::CLASS);
+        $action = $this->container->new(Post::class);
 
-        $responder = $this->container->new(ActionResponder::CLASS);
+        $responder = $this->container->new(ActionResponder::class);
         $response = $responder($action, $payload);
         $this->assertSame($expectCode, $response->getCode());
 
@@ -86,9 +86,9 @@ class ActionResponderTest extends \Otto\TestCase
 
     public function testActionWithoutPayload()
     {
-        $action = $this->container->new(Post::CLASS);
+        $action = $this->container->new(Post::class);
 
-        $responder = $this->container->new(ActionResponder::CLASS);
+        $responder = $this->container->new(ActionResponder::class);
         $response = $responder($action);
         $this->assertStringContainsString(
             "<p>POST template regardless of payload status.</p>",
@@ -98,8 +98,8 @@ class ActionResponderTest extends \Otto\TestCase
 
     public function testActionWithoutPayload_viewNotFound()
     {
-        $action = $this->container->new(Put::CLASS);
-        $responder = $this->container->new(ActionResponder::CLASS);
+        $action = $this->container->new(Put::class);
+        $responder = $this->container->new(ActionResponder::class);
 
         try {
             $response = $responder($action);

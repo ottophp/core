@@ -17,48 +17,48 @@ class FrontJsonTest extends \Otto\TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/none-such';
-        $front = $this->container->get(Front::CLASS);
+        $front = $this->container->get(Front::class);
         $response = $front();
         $this->assertSame(404, $response->getCode());
         $actual = $response->getContent();
-        $this->assertInstanceof(NotFound::CLASS, $actual->e);
-        $this->assertInstanceOf(Route::CLASS, $actual->route);
+        $this->assertInstanceof(NotFound::class, $actual['e']);
+        $this->assertInstanceOf(Route::class, $actual['route']);
     }
 
     public function testRouteBadRequest()
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/front/route/not-an-int';
-        $front = $this->container->get(Front::CLASS);
+        $front = $this->container->get(Front::class);
         $response = $front();
         $this->assertSame(400, $response->getCode());
         $actual = $response->getContent();
-        $this->assertInstanceOf(InvalidArgument::CLASS, $actual->e);
-        $this->assertInstanceOf(Route::CLASS, $actual->route);
+        $this->assertInstanceOf(InvalidArgument::class, $actual['e']);
+        $this->assertInstanceOf(Route::class, $actual['route']);
     }
 
     public function testRouteMethodNotAllowed()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_SERVER['REQUEST_URI'] = '/front/route';
-        $front = $this->container->get(Front::CLASS);
+        $front = $this->container->get(Front::class);
         $response = $front();
         $this->assertSame(405, $response->getCode());
         $actual = $response->getContent();
-        $this->assertInstanceOf(MethodNotAllowed::CLASS, $actual->e);
-        $this->assertInstanceOf(Route::CLASS, $actual->route);
+        $this->assertInstanceOf(MethodNotAllowed::class, $actual['e']);
+        $this->assertInstanceOf(Route::class, $actual['route']);
     }
 
     public function testRouteCors()
     {
         $_SERVER['REQUEST_METHOD'] = 'OPTIONS';
         $_SERVER['REQUEST_URI'] = '/front/route/';
-        $front = $this->container->get(Front::CLASS);
+        $front = $this->container->get(Front::class);
         $response = $front();
         $this->assertSame(204, $response->getCode());
         $actual = $response->getContent();
-        $this->assertFalse(isset($actual->e));
-        $this->assertFalse(isset($actual->route));
+        $this->assertFalse(isset($actual['e']));
+        $this->assertFalse(isset($actual['route']));
     }
 
     /**
@@ -68,11 +68,11 @@ class FrontJsonTest extends \Otto\TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = "/front/status/{$status}";
-        $front = $this->container->get(Front::CLASS);
+        $front = $this->container->get(Front::class);
         $response = $front();
         $this->assertSame($code, $response->getCode());
         $actual = $response->getContent();
-        $this->assertSame($status, $actual->_status);
+        $this->assertSame($status, $actual['_status']);
     }
 
     public function provideStatus() : array
@@ -96,13 +96,13 @@ class FrontJsonTest extends \Otto\TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = "/front/throw";
-        $front = $this->container->get(Front::CLASS);
+        $front = $this->container->get(Front::class);
         $response = $front();
         $this->assertSame(500, $response->getCode());
         $actual = $response->getContent();
-        $this->assertInstanceOf(ThrowableProperties::CLASS, $actual->e);
-        $this->assertSame(LogicException::CLASS, $actual->e->class);
-        $this->assertSame("Fake logic exception thrown.", $actual->e->message);
+        $this->assertInstanceOf(ThrowableProperties::class, $actual['e']);
+        $this->assertSame(LogicException::class, $actual['e']->class);
+        $this->assertSame("Fake logic exception thrown.", $actual['e']->message);
     }
 
     public function testAction()
@@ -110,10 +110,10 @@ class FrontJsonTest extends \Otto\TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_SERVER['REQUEST_URI'] = "/";
         $_POST['_method'] = 'PATCH';
-        $front = $this->container->get(Front::CLASS);
+        $front = $this->container->get(Front::class);
         $response = $front();
         $this->assertSame(200, $response->getCode());
         $actual = $response->getContent();
-        $this->assertSame(Payload::SUCCESS, $actual->_status);
+        $this->assertSame(Payload::SUCCESS, $actual['_status']);
     }
 }

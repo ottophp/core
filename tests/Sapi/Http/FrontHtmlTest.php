@@ -9,7 +9,7 @@ class FrontHtmlTest extends \Otto\TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/none-such';
-        $front = $this->container->get(Front::CLASS);
+        $front = $this->container->get(Front::class);
         $response = $front();
         $this->assertSame(404, $response->getCode());
         $this->assertStringContainsString('Route not found for URL.', $response->getContent());
@@ -19,7 +19,7 @@ class FrontHtmlTest extends \Otto\TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/front/route/not-an-int';
-        $front = $this->container->get(Front::CLASS);
+        $front = $this->container->get(Front::class);
         $response = $front();
         $this->assertSame(400, $response->getCode());
         $this->assertStringContainsString('The request was bad.', $response->getContent());
@@ -29,7 +29,7 @@ class FrontHtmlTest extends \Otto\TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_SERVER['REQUEST_URI'] = '/front/route';
-        $front = $this->container->get(Front::CLASS);
+        $front = $this->container->get(Front::class);
         $response = $front();
         $this->assertSame(405, $response->getCode());
         $this->assertStringContainsString('The HTTP request method <code>POST</code> was not allowed.', $response->getContent());
@@ -39,7 +39,7 @@ class FrontHtmlTest extends \Otto\TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'OPTIONS';
         $_SERVER['REQUEST_URI'] = '/front/route/';
-        $front = $this->container->get(Front::CLASS);
+        $front = $this->container->get(Front::class);
         $response = $front();
         $this->assertSame(204, $response->getCode());
         $this->assertEmpty($response->getContent());
@@ -52,7 +52,7 @@ class FrontHtmlTest extends \Otto\TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = "/front/status/{$status}";
-        $front = $this->container->get(Front::CLASS);
+        $front = $this->container->get(Front::class);
         $response = $front();
         $this->assertSame($code, $response->getCode());
         $this->assertStringContainsString(
@@ -82,7 +82,7 @@ class FrontHtmlTest extends \Otto\TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = "/front/throw";
-        $front = $this->container->get(Front::CLASS);
+        $front = $this->container->get(Front::class);
         $response = $front();
         $this->assertSame(500, $response->getCode());
         $this->assertStringContainsString(
@@ -100,7 +100,7 @@ class FrontHtmlTest extends \Otto\TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_SERVER['REQUEST_URI'] = "/";
         $_POST['_method'] = 'PATCH';
-        $front = $this->container->get(Front::CLASS);
+        $front = $this->container->get(Front::class);
         $response = $front();
         $this->assertSame(200, $response->getCode());
         $this->assertStringContainsString(

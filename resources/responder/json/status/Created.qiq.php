@@ -1,1 +1,2 @@
-<?php // do nothing
+{{ /** @var \Qiq\Rendering&\Otto\Sapi\Http\Responder\ResponderHelpers */ }}
+{{ /** do nothing */ }}

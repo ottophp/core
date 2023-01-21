@@ -1,3 +1,4 @@
+{{ /** @var \Qiq\Rendering&\Otto\Sapi\Http\Responder\ResponderHelpers */ }}
 {{ response()->setHeader('content-type', 'text/html') }}
 <html>
 <head>

@@ -57,18 +57,18 @@ abstract class Responder
 
     protected function getView() : ?string
     {
-        $templateLocator = $this->template->getTemplateLocator();
+        $catalog = $this->template->getCatalog();
 
         $views = $this->getViews();
 
         foreach ($views as $view) {
-            if ($templateLocator->has($view)) {
+            if ($catalog->has($view)) {
                 return $view;
             }
         }
 
-        throw ViewNotFound::new(
-            $templateLocator->getPaths(),
+        throw new ViewNotFound(
+            $catalog->getPaths(),
             $views
         );
     }

@@ -7,10 +7,7 @@ use AutoRoute;
 use Capsule\Di\Container;
 use Capsule\Di\Definitions;
 use Capsule\Di\Provider;
-use Otto\Sapi\Http\Responder;
-use Otto\Sapi\Http\Responder\Template\ResponderTemplate;
-use Otto\Sapi\Http\Responder\Template\ResponderTemplateFactory;
-use Qiq;
+use Otto\Sapi\Http\Responder\Template;
 use Sapien\Request;
 
 class HttpProvider implements Provider
@@ -22,7 +19,6 @@ class HttpProvider implements Provider
     public function __construct(
         public readonly string $format = 'html',
         public readonly ?string $layout = 'layout:main',
-        public readonly array $helpers = [],
     ) {
     }
 
@@ -34,7 +30,7 @@ class HttpProvider implements Provider
         $this->provideProjectClasses($def);
         $this->provideSapien($def);
         $this->provideAutoRoute($def);
-        $this->provideResponderTemplate($def);
+        $this->provideTemplate($def);
     }
 
     protected function provideProjectClasses(Definitions $def) : void
@@ -43,6 +39,8 @@ class HttpProvider implements Provider
             'Sapi\\Http\\Front',
             'Sapi\\Http\\Responder\\FrontResponder',
             'Sapi\\Http\\Responder\\ResponderData',
+            'Sapi\\Http\\Responder\\Template\\ResponderTemplate',
+            'Sapi\\Http\\Responder\\Template\\ResponderHelpers',
         ];
 
         foreach ($suffixes as $suffix) {
@@ -56,7 +54,7 @@ class HttpProvider implements Provider
 
     protected function provideSapien(Definitions $def) : void
     {
-        $def->{Request::CLASS}
+        $def->{Request::class}
             ->argument('method', $def->call(function () {
                 return $_POST['_method'] ?? null;
             }));
@@ -64,25 +62,26 @@ class HttpProvider implements Provider
 
     protected function provideAutoRoute(Definitions $def) : void
     {
-        $def->{AutoRoute\Config::CLASS}
+        $def->{AutoRoute\Config::class}
             ->arguments([
-                'namespace' => $def->{'otto.namespace'} . '\\Sapi\Http\\Action',
-                'directory' => $def->{'otto.directory'} . '/src/Sapi/Http/Action',
+                'namespace' => $this->namespace . '\\Sapi\Http\\Action',
+                'directory' => $this->directory . '/src/Sapi/Http/Action',
             ]);
 
-        $def->{AutoRoute\Router::CLASS}
-            ->argument('logger', $def->get(AutoRoute\Logger::CLASS));
+        $def->{AutoRoute\Router::class}
+            ->argument('logger', $def->get(AutoRoute\Logger::class));
     }
 
-    protected function provideResponderTemplate(Definitions $def) : void
+    protected function provideTemplate(Definitions $def) : void
     {
-        $def->{ResponderTemplateFactory::CLASS}
+        $def->{Template\ResponderCatalog::class}
             ->argument('directory', $this->directory)
-            ->argument('format', $this->format)
-            ->argument('layout', $this->layout)
-            ->argument('helpers', $this->helpers);
+            ->argument('format', $this->format);
 
-        $def->{ResponderTemplate::CLASS}
-            ->factory($def->get(ResponderTemplateFactory::CLASS));
+        $def->{Template\ResponderCompiler::class}
+            ->argument('cachePath', $this->directory . '/tmp/cache/qiq');
+
+        $def->{Template\ResponderTemplate::class}
+            ->method('setLayout', $this->layout);
     }
 }

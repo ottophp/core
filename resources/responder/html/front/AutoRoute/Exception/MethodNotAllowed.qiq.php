@@ -1,3 +1,4 @@
+{{ /** @var \Qiq\Rendering&\Otto\Sapi\Http\Responder\ResponderHelpers */ }}
 <?php if ($this->request()->method->is('OPTIONS')) {
     $this->setLayout(null);
     $this->response()
@@ -20,11 +21,11 @@
 <p>Router log messages:</p>
 
 <pre>
-{{h print_r ($this->route()->messages, true) }}
+{{h \print_r ($this->route()->messages, true) }}
 </pre>
 
 <p>Allowed methods:<p>
 
 <pre>
-{{h print_r ($this->route()->headers['allowed'] ?? '(none)', true) }}
+{{h \print_r ($this->route()->headers['allowed'] ?? '(none)', true) }}
 </pre>

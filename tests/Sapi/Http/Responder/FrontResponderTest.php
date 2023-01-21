@@ -9,7 +9,7 @@ class FrontResponderTest extends \Otto\TestCase
 {
     public function testException()
     {
-        $frontResponder = $this->container->get(FrontResponder::CLASS);
+        $frontResponder = $this->container->get(FrontResponder::class);
 
         $e = new Exception('fake exception', previous: new Exception('previous exception'));
         $response = $frontResponder($e);
@@ -21,7 +21,7 @@ class FrontResponderTest extends \Otto\TestCase
 
     public function testError()
     {
-        $frontResponder = $this->container->get(FrontResponder::CLASS);
+        $frontResponder = $this->container->get(FrontResponder::class);
 
         $e = new Error('fake error');
         $response = $frontResponder($e);
@@ -33,7 +33,7 @@ class FrontResponderTest extends \Otto\TestCase
 
     public function testHierarchy()
     {
-        $frontResponder = $this->container->get(FrontResponder::CLASS);
+        $frontResponder = $this->container->get(FrontResponder::class);
 
         $e = new LengthException('fake length');
         $response = $frontResponder($e);

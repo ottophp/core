@@ -1,3 +1,4 @@
+{{ /** @var \Qiq\Rendering&\Otto\Sapi\Http\Responder\ResponderHelpers */ }}
 <?php
 if ($this->request()->method->is('OPTIONS')) {
     $this->setLayout(null);
@@ -10,7 +11,7 @@ if ($this->request()->method->is('OPTIONS')) {
     return;
 }
 
-$this->route = $this->route()->get();
+$this->addData(['route' => $this->route()->get()]);
 $this->response()
     ->setCode(405)
     ->setHeader('allowed', $this->route()->headers['allowed'] ?? '-');

@@ -1,11 +1,13 @@
+{{ /** @var \Qiq\Rendering&\Otto\Sapi\Http\Responder\ResponderHelpers */ }}
+
 <p>Could not find any of these requested views ...</p>
 
-<pre>{{h print_r ($this->e->views, true) }}</pre>
+<pre>{{h \print_r ($e->views, true) }}</pre>
 
 <p>... in these search paths:</p>
 
-<pre>{{h print_r ($this->e->paths, true) }}</pre>
+<pre>{{h \print_r ($e->paths, true) }}</pre>
 
 <p>Exception:</p>
 
-{{h $this->e }}
+{{h $e }}

@@ -1,5 +1,7 @@
+{{ /** @var \Qiq\Rendering&\Otto\Sapi\Http\Responder\ResponderHelpers */ }}
+
 <p>Exception</p>
 
 <pre>
-{{h $this->e }}
+{{h (string) $e }}
 </pre>

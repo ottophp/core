@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Otto\Sapi\Http\Responder;
 
 use Otto\Sapi\Http\Responder;
-use Otto\Sapi\Http\Responder\Exception\ViewNotFound;
 use Sapien\Response;
 use Throwable;
 
