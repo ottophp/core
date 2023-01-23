@@ -39,13 +39,11 @@ class Front
 
     protected function error(Route $route) : ?Response
     {
-        if ($route->error === null) {
+        if ($route->exception === null) {
             return null;
         }
 
-        /** @var Throwable */
-        $exception = $route->exception;
-        return ($this->frontResponder)($exception);
+        return ($this->frontResponder)($route->exception);
     }
 
     protected function action(Route $route) : Response
