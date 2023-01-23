@@ -5,6 +5,9 @@ namespace Otto\Sapi\Http\Template\Helper;
 
 use AutoRoute\Route as CurrentRoute;
 
+/**
+ * @mixin CurrentRoute
+ */
 class Route
 {
     protected ?CurrentRoute $route = null;

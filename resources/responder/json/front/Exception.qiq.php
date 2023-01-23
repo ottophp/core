@@ -1,2 +1,3 @@
-{{ /** @var \Qiq\Rendering&\Otto\Sapi\Http\Template\ResponderHelpers */ }}
+{{ /** @var \Otto\Sapi\Http\Template\Template $this */ }}
+{{ /** @var \Throwable $e */ }}
 {{ $e = $this->jsonizeThrowable($e) }}

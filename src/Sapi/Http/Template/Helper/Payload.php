@@ -5,6 +5,10 @@ namespace Otto\Sapi\Http\Template\Helper;
 
 use PayloadInterop\DomainPayload;
 
+/**
+ * @mixin DomainPayload
+ * @todo use <T> for mixin
+ */
 class Payload
 {
     protected ?DomainPayload $payload = null;

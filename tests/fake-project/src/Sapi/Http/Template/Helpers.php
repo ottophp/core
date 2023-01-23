@@ -1,9 +1,9 @@
 <?php
 namespace FakeProject\Sapi\Http\Template;
 
-use Otto\Sapi\Http\Template\ResponderHelpers as OttoResponderHelpers;
+use Otto\Sapi\Http\Template\Helpers as OttoHelpers;
 
-class ResponderHelpers extends OttoResponderHelpers
+class Helpers extends OttoHelpers
 {
     public function rot13(string $str) : string
     {

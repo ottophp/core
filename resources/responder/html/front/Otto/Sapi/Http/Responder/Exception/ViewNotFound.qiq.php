@@ -1,4 +1,4 @@
-{{ /** @var \Qiq\Rendering&\Otto\Sapi\Http\Template\ResponderHelpers */ }}
+{{ /** @var \Otto\Sapi\Http\Template\Template $this */ }}
 
 <p>Could not find any of these requested views ...</p>
 

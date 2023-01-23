@@ -2,7 +2,5 @@ parameters:
     level: max
     paths:
         - src
-    ignoreErrors:
-        - "#expects Throwable, Throwable\\|null given#"
     checkGenericClassInNonGenericObjectType: false
     checkMissingIterableValueType: false

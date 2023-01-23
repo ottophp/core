@@ -5,8 +5,7 @@ namespace Otto\Sapi\Http;
 
 use Otto\Sapi\Http\Responder\Exception\ViewNotFound;
 use Otto\Sapi\Http\Responder\ResponderData;
-use Otto\Sapi\Http\Template\ResponderTemplate;
-use Qiq\Template;
+use Otto\Sapi\Http\Template\Template;
 use Sapien\Request;
 use Sapien\Response;
 
@@ -14,7 +13,7 @@ abstract class Responder
 {
     public function __construct(
         protected Request $request,
-        protected ResponderTemplate $template,
+        protected Template $template,
         protected ResponderData $responderData
     ) {
         $this->template->addData($responderData->get());

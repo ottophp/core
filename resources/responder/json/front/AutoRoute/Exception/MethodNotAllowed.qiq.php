@@ -1,4 +1,4 @@
-{{ /** @var \Qiq\Rendering&\Otto\Sapi\Http\Template\ResponderHelpers */ }}
+{{ /** @var \Otto\Sapi\Http\Template\Template $this */ }}
 <?php
 if ($this->request()->method->is('OPTIONS')) {
     $this->setLayout(null);

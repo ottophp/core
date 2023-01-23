@@ -38,8 +38,9 @@ class HttpProvider implements Provider
             'Sapi\\Http\\Front',
             'Sapi\\Http\\Responder\\FrontResponder',
             'Sapi\\Http\\Responder\\ResponderData',
-            'Sapi\\Http\\Template\\ResponderTemplate',
-            'Sapi\\Http\\Template\\ResponderHelpers',
+            'Sapi\\Http\\Template\\Catalog',
+            'Sapi\\Http\\Template\\Helpers',
+            'Sapi\\Http\\Template\\Template',
         ];
 
         foreach ($suffixes as $suffix) {
@@ -73,14 +74,23 @@ class HttpProvider implements Provider
 
     protected function provideTemplate(Definitions $def) : void
     {
-        $def->{Template\ResponderCatalog::class}
-            ->argument('directory', $this->directory)
-            ->argument('format', $this->format);
+        $def->{Template\Catalog::class}
+            ->argument('paths', [
+                "{$this->directory}/resources/responder/{$this->format}/view",
+                "action:{$this->directory}/resources/responder/{$this->format}/action",
+                "layout:{$this->directory}/resources/responder/{$this->format}/layout",
+                "layout:{$this->directory}/vendor/ottophp/core/resources/responder/{$this->format}/layout",
+                "status:{$this->directory}/resources/responder/{$this->format}/status",
+                "status:{$this->directory}/vendor/ottophp/core/resources/responder/{$this->format}/status",
+                "front:{$this->directory}/resources/responder/{$this->format}/front",
+                "front:{$this->directory}/vendor/ottophp/core/resources/responder/{$this->format}/front",
+            ])
+            ->argument('extension', '.qiq.php');
 
-        $def->{Template\ResponderCompiler::class}
+        $def->{Template\Compiler::class}
             ->argument('cachePath', $this->directory . '/tmp/cache/qiq');
 
-        $def->{Template\ResponderTemplate::class}
+        $def->{Template\Template::class}
             ->method('setLayout', $this->layout);
     }
 }

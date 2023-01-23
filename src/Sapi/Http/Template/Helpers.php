@@ -5,10 +5,10 @@ use AutoRoute;
 use JsonSerializable;
 use Qiq\Helper\Html\HtmlHelperMethods;
 use Qiq\Helper\Sapien\SapienHelperMethods;
-use Qiq\Helpers;
+use Qiq\Helpers as QiqHelpers;
 use Throwable;
 
-class ResponderHelpers extends Helpers
+class Helpers extends QiqHelpers
 {
     use HtmlHelperMethods;
     use SapienHelperMethods;

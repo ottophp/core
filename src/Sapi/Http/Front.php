@@ -5,8 +5,7 @@ use AutoRoute\Route;
 use AutoRoute\Router;
 use Capsule\Di\Container;
 use Otto\Sapi\Http\Responder\FrontResponder;
-use Otto\Sapi\Http\Template\ResponderTemplate;
-use Qiq\Template;
+use Otto\Sapi\Http\Template\Template;
 use Sapien\Request;
 use Sapien\Response;
 use Throwable;
@@ -17,7 +16,7 @@ class Front
         protected Container $container,
         protected Request $request,
         protected Router $router,
-        protected ResponderTemplate $template,
+        protected Template $template,
         protected FrontResponder $frontResponder
     ) {
     }
