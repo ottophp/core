@@ -76,14 +76,14 @@ class HttpProvider implements Provider
     {
         $def->{Template\Catalog::class}
             ->argument('paths', [
-                "{$this->directory}/resources/responder/{$this->format}/view",
-                "action:{$this->directory}/resources/responder/{$this->format}/action",
-                "layout:{$this->directory}/resources/responder/{$this->format}/layout",
-                "layout:{$this->directory}/vendor/ottophp/core/resources/responder/{$this->format}/layout",
-                "status:{$this->directory}/resources/responder/{$this->format}/status",
-                "status:{$this->directory}/vendor/ottophp/core/resources/responder/{$this->format}/status",
-                "front:{$this->directory}/resources/responder/{$this->format}/front",
-                "front:{$this->directory}/vendor/ottophp/core/resources/responder/{$this->format}/front",
+                "{$this->directory}/resources/templates/{$this->format}/view",
+                "action:{$this->directory}/resources/templates/{$this->format}/action",
+                "layout:{$this->directory}/resources/templates/{$this->format}/layout",
+                "layout:{$this->directory}/vendor/ottophp/core/resources/templates/{$this->format}/layout",
+                "status:{$this->directory}/resources/templates/{$this->format}/status",
+                "status:{$this->directory}/vendor/ottophp/core/resources/templates/{$this->format}/status",
+                "throwable:{$this->directory}/resources/templates/{$this->format}/throwable",
+                "throwable:{$this->directory}/vendor/ottophp/core/resources/templates/{$this->format}/throwable",
             ])
             ->argument('extension', '.qiq.php');
 

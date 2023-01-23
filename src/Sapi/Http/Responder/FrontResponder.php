@@ -24,7 +24,7 @@ class FrontResponder extends Responder
         $class = get_class($this->e);
 
         while ($class !== false) {
-            $views[] = 'front:' . str_replace('\\', DIRECTORY_SEPARATOR, $class);
+            $views[] = 'throwable:' . str_replace('\\', DIRECTORY_SEPARATOR, $class);
             $class = get_parent_class($class);
         }
 
