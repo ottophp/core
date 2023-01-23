@@ -4,5 +4,5 @@
 <p>Exception</p>
 
 <pre>
-{{h (string) $e }}
+{{h $e }}
 </pre>

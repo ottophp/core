@@ -4,5 +4,5 @@
 <p>Error</p>
 
 <pre>
-{{h (string) $e }}
+{{h $e }}
 </pre>

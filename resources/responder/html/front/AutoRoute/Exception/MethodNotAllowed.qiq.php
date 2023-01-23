@@ -16,7 +16,7 @@
     ->setHeader('allowed', $this->route()->headers['allowed'] ?? '-')
 }}
 
-<p>The HTTP request method <code>{{h (string) $this->request()->method->name }}</code> was not allowed.</p>
+<p>The HTTP request method <code>{{h request()->method->name }}</code> was not allowed.</p>
 
 <p>Router log messages:</p>
 
