@@ -43,7 +43,9 @@ class Front
             return null;
         }
 
-        return ($this->frontResponder)($route->exception);
+        /** @var Throwable */
+        $exception = $route->exception;
+        return ($this->frontResponder)($exception);
     }
 
     protected function action(Route $route) : Response
