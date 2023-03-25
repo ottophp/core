@@ -12,12 +12,13 @@
         }
     },
     "require": {
+        "php": "^8.1",
         "capsule/di": "^3.0",
         "payload-interop/payload-interop": "^1.0",
         "pmjones/auto-route": "2.x@dev",
         "pmjones/throwable-properties": "^1.0",
-        "qiq/qiq": "1.x-stan-poc-dev",
-        "qiq/helper-sapien": "1.x-stan-poc-dev",
+        "qiq/qiq": "2.x@dev",
+        "qiq/helper-sapien": "2.x@dev",
         "sapien/sapien": "^1.0"
     },
     "require-dev": {
@@ -26,8 +27,8 @@
         "phpunit/phpunit": "^9.0"
     },
     "scripts": {
-        "test": "./vendor/bin/phpunit",
+        "check": "composer cs-fix && composer test",
         "cs-fix": "./vendor/bin/phpstan analyze -c phpstan.neon src",
-        "check": "composer test && composer cs-fix"
+        "test": "./vendor/bin/phpunit"
     }
 }

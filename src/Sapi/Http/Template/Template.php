@@ -10,9 +10,8 @@ class Template extends QiqTemplate
 {
     public function __construct(
         Catalog $catalog,
-        Compiler $compiler,
         Helpers $helpers
     ) {
-        parent::__construct($catalog, $compiler, $helpers);
+        parent::__construct($catalog, $helpers);
     }
 }

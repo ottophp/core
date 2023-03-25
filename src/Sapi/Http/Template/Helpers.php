@@ -2,16 +2,24 @@
 namespace Otto\Sapi\Http\Template;
 
 use AutoRoute;
+use Capsule\Di\Container;
 use JsonSerializable;
 use Qiq\Helper\Html\HtmlHelperMethods;
 use Qiq\Helper\Sapien\SapienHelperMethods;
 use Qiq\Helpers as QiqHelpers;
+use Qiq\Helper\Sapien as SapienHelper;
+use Sapien;
 use Throwable;
 
 class Helpers extends QiqHelpers
 {
     use HtmlHelperMethods;
     use SapienHelperMethods;
+
+    public function __construct(Container $container)
+    {
+        parent::__construct($container);
+    }
 
     public function action(string $class, mixed ...$values): string
     {
