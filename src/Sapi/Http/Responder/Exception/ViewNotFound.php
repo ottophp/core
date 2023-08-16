@@ -4,11 +4,15 @@ declare(strict_types=1);
 namespace Otto\Sapi\Http\Responder\Exception;
 
 use Otto\Sapi\Http\Responder\Exception as ResponderException;
+use Otto\Sapi\Http\Template\Template;
 
 class ViewNotFound extends ResponderException
 {
+    /**
+     * @param string[] $views
+     */
     public function __construct(
-        public readonly object $template,
+        public readonly Template $template,
         public readonly array $views,
     ) {
         $catalog = $template->getCatalog();

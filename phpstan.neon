@@ -4,5 +4,3 @@ parameters:
         - resources
         - src
         - tests
-    checkGenericClassInNonGenericObjectType: false
-    checkMissingIterableValueType: false

@@ -1,45 +1,45 @@
 <?php
 namespace Otto\Sapi\Http\Responder;
 
-use Exception;
 use Error;
+use Exception;
 use LengthException;
+use Sapien\Response;
+use Throwable;
 
 class FrontResponderTest extends \Otto\TestCase
 {
+    protected function getResponse(Throwable $e) : Response
+    {
+        /** @var FrontResponder */
+        $frontResponder = $this->container->get(FrontResponder::class);
+        return $frontResponder($e);
+    }
+
     public function testException() : void
     {
-        $frontResponder = $this->container->get(FrontResponder::class);
-
         $e = new Exception('fake exception', previous: new Exception('previous exception'));
-        $response = $frontResponder($e);
+        $response = $this->getResponse($e);
 
-        $this->assertSame(500, $response->getCode());
-        $this->assertStringContainsString("<p>Exception</p>", $response->getContent());
-        $this->assertStringContainsString("Exception: fake exception", $response->getContent());
+        $this->assertResponse($response, 500, "<p>Exception</p>");
+        $this->assertResponse($response, 500, "Exception: fake exception");
     }
 
     public function testError() : void
     {
-        $frontResponder = $this->container->get(FrontResponder::class);
-
         $e = new Error('fake error');
-        $response = $frontResponder($e);
+        $response = $this->getResponse($e);
 
-        $this->assertSame(500, $response->getCode());
-        $this->assertStringContainsString("<p>Error</p>", $response->getContent());
-        $this->assertStringContainsString("Error: fake error", $response->getContent());
+        $this->assertResponse($response, 500, "<p>Error</p>");
+        $this->assertResponse($response, 500, "Error: fake error");
     }
 
     public function testHierarchy() : void
     {
-        $frontResponder = $this->container->get(FrontResponder::class);
-
         $e = new LengthException('fake length');
-        $response = $frontResponder($e);
+        $response = $this->getResponse($e);
 
-        $this->assertSame(500, $response->getCode());
-        $this->assertStringContainsString("<p>Logic Exception</p>", $response->getContent());
-        $this->assertStringContainsString("LengthException: fake length", $response->getContent());
+        $this->assertResponse($response, 500, "<p>Logic Exception</p>");
+        $this->assertResponse($response, 500, "LengthException: fake length");
     }
 }

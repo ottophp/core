@@ -69,6 +69,9 @@ class ActionResponder extends Responder
         };
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function getViews() : array
     {
         // Project\Sapi\Http\Action\Foo\Bar\Baz => Foo\Bar\GetBar

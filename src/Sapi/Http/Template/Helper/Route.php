@@ -19,6 +19,9 @@ class Route
             : null;
     }
 
+    /**
+     * @param mixed[] $args
+     */
     public function __call(string $func, array $args) : mixed
     {
         return $this->route !== null

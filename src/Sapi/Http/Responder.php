@@ -84,5 +84,8 @@ abstract class Responder
         }
     }
 
+    /**
+     * @return string[]
+     */
     abstract protected function getViews() : array;
 }

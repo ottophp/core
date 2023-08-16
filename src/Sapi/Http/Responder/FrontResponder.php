@@ -18,6 +18,9 @@ class FrontResponder extends Responder
         return $this->render(500);
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function getViews() : array
     {
         $views = [];
