@@ -1,5 +1,6 @@
-{{ /** @var \Otto\Sapi\Http\Template\Template $this */ }}
 <?php
+/** @var \Otto\Sapi\Http\Template\Template $this */
+
 if ($this->request()->method->is('OPTIONS')) {
     $this->setLayout(null);
     $this->response()

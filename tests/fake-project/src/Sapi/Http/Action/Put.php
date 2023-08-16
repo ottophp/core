@@ -13,7 +13,7 @@ class Put
     ) {
     }
 
-    public function __invoke()
+    public function __invoke() : Response
     {
         return ($this->responder)($this);
     }

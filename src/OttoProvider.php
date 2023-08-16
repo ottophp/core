@@ -19,10 +19,5 @@ class OttoProvider implements Provider
     {
         $def->{'otto.directory'} = $this->directory;
         $def->{'otto.namespace'} = $this->namespace;
-
-        $def->{Qiq\Catalog::class}
-            ->argument('paths', [])
-            ->argument('extension', '')
-            ->argument('compiler', $def->get(Qiq\Compiler\QiqCompiler::class));
     }
 }

@@ -5,7 +5,7 @@ use FakeProject\App\Payload;
 
 class FrontHtmlTest extends \Otto\TestCase
 {
-    public function testRoute404()
+    public function testRoute404() : void
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/none-such';
@@ -15,7 +15,7 @@ class FrontHtmlTest extends \Otto\TestCase
         $this->assertStringContainsString('Route not found for URL.', $response->getContent());
     }
 
-    public function testRouteBadRequest()
+    public function testRouteBadRequest() : void
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/front/route/not-an-int';
@@ -25,7 +25,7 @@ class FrontHtmlTest extends \Otto\TestCase
         $this->assertStringContainsString('The request was bad.', $response->getContent());
     }
 
-    public function testRouteMethodNotAllowed()
+    public function testRouteMethodNotAllowed() : void
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_SERVER['REQUEST_URI'] = '/front/route';
@@ -35,7 +35,7 @@ class FrontHtmlTest extends \Otto\TestCase
         $this->assertStringContainsString('The HTTP request method <code>POST</code> was not allowed.', $response->getContent());
     }
 
-    public function testRouteCors()
+    public function testRouteCors() : void
     {
         $_SERVER['REQUEST_METHOD'] = 'OPTIONS';
         $_SERVER['REQUEST_URI'] = '/front/route/';
@@ -48,7 +48,7 @@ class FrontHtmlTest extends \Otto\TestCase
     /**
      * @dataProvider provideStatus
      */
-    public function testStatus(string $status, int $code)
+    public function testStatus(string $status, int $code) : void
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = "/front/status/{$status}";
@@ -78,7 +78,7 @@ class FrontHtmlTest extends \Otto\TestCase
         ];
     }
 
-    public function testThrowable()
+    public function testThrowable() : void
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = "/front/throw";
@@ -95,7 +95,7 @@ class FrontHtmlTest extends \Otto\TestCase
         );
     }
 
-    public function testAction()
+    public function testAction() : void
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_SERVER['REQUEST_URI'] = "/";

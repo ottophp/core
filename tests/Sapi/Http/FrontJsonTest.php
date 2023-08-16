@@ -11,9 +11,9 @@ use pmjones\ThrowableProperties;
 
 class FrontJsonTest extends \Otto\TestCase
 {
-    protected $format = 'json';
+    protected string $format = 'json';
 
-    public function testRoute404()
+    public function testRoute404() : void
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/none-such';
@@ -25,7 +25,7 @@ class FrontJsonTest extends \Otto\TestCase
         $this->assertInstanceOf(Route::class, $actual['route']);
     }
 
-    public function testRouteBadRequest()
+    public function testRouteBadRequest() : void
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/front/route/not-an-int';
@@ -37,7 +37,7 @@ class FrontJsonTest extends \Otto\TestCase
         $this->assertInstanceOf(Route::class, $actual['route']);
     }
 
-    public function testRouteMethodNotAllowed()
+    public function testRouteMethodNotAllowed() : void
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_SERVER['REQUEST_URI'] = '/front/route';
@@ -49,7 +49,7 @@ class FrontJsonTest extends \Otto\TestCase
         $this->assertInstanceOf(Route::class, $actual['route']);
     }
 
-    public function testRouteCors()
+    public function testRouteCors() : void
     {
         $_SERVER['REQUEST_METHOD'] = 'OPTIONS';
         $_SERVER['REQUEST_URI'] = '/front/route/';
@@ -64,7 +64,7 @@ class FrontJsonTest extends \Otto\TestCase
     /**
      * @dataProvider provideStatus
      */
-    public function testStatus(string $status, int $code)
+    public function testStatus(string $status, int $code) : void
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = "/front/status/{$status}";
@@ -92,7 +92,7 @@ class FrontJsonTest extends \Otto\TestCase
         ];
     }
 
-    public function testThrowable()
+    public function testThrowable() : void
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = "/front/throw";
@@ -105,7 +105,7 @@ class FrontJsonTest extends \Otto\TestCase
         $this->assertSame("Fake logic exception thrown.", $actual['e']->message);
     }
 
-    public function testAction()
+    public function testAction() : void
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_SERVER['REQUEST_URI'] = "/";

@@ -7,7 +7,7 @@ use LengthException;
 
 class FrontResponderTest extends \Otto\TestCase
 {
-    public function testException()
+    public function testException() : void
     {
         $frontResponder = $this->container->get(FrontResponder::class);
 
@@ -19,7 +19,7 @@ class FrontResponderTest extends \Otto\TestCase
         $this->assertStringContainsString("Exception: fake exception", $response->getContent());
     }
 
-    public function testError()
+    public function testError() : void
     {
         $frontResponder = $this->container->get(FrontResponder::class);
 
@@ -31,7 +31,7 @@ class FrontResponderTest extends \Otto\TestCase
         $this->assertStringContainsString("Error: fake error", $response->getContent());
     }
 
-    public function testHierarchy()
+    public function testHierarchy() : void
     {
         $frontResponder = $this->container->get(FrontResponder::class);
 

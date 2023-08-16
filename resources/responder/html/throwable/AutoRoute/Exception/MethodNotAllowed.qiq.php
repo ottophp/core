@@ -1,5 +1,7 @@
-{{ /** @var \Otto\Sapi\Http\Template\Template $this */ }}
-<?php if ($this->request()->method->is('OPTIONS')) {
+<?php
+/** @var \Otto\Sapi\Http\Template\Template $this */
+
+if ($this->request()->method->is('OPTIONS')) {
     $this->setLayout(null);
     $this->response()
         ->setCode(204)
@@ -21,11 +23,11 @@
 <p>Router log messages:</p>
 
 <pre>
-{{h \print_r ($this->route()->messages, true) }}
+{{h \print_r (route()->messages, true) }}
 </pre>
 
 <p>Allowed methods:<p>
 
 <pre>
-{{h \print_r ($this->route()->headers['allowed'] ?? '(none)', true) }}
+{{h \print_r (route()->headers['allowed'] ?? '(none)', true) }}
 </pre>

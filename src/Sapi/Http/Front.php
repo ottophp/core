@@ -48,7 +48,9 @@ class Front
 
     protected function action(Route $route) : Response
     {
-        $action = $this->container->new($route->class);
+        /** @var class-string */
+        $class = $route->class;
+        $action = $this->container->new($class);
         $method = $route->method;
         $arguments = $route->arguments;
         return $action->$method(...$arguments);

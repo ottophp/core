@@ -9,7 +9,9 @@ use Otto\Sapi\Http\Responder\Helper\Rot13;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
-    protected $format = 'html';
+    protected Container $container;
+
+    protected string $format = 'html';
 
     protected function setUp() : void
     {

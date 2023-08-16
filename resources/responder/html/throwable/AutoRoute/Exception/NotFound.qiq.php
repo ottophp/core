@@ -7,5 +7,5 @@
 <p>Router log messages:</p>
 
 <pre>
-{{h \print_r ($this->route()->messages, true) }}
+{{h \print_r (route()->messages, true) }}
 </pre>

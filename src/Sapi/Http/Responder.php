@@ -67,7 +67,7 @@ abstract class Responder
         }
 
         throw new ViewNotFound(
-            $catalog->getPaths(),
+            $this->template,
             $views
         );
     }

@@ -14,7 +14,7 @@ class GetFrontStatus
     ) {
     }
 
-    public function __invoke(string $status = null) : Response
+    public function __invoke(string $status = 'fake') : Response
     {
         $payload = new Payload($status);
         return ($this->responder)($this, $payload);

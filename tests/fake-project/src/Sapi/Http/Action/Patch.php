@@ -14,7 +14,7 @@ class Patch
     ) {
     }
 
-    public function __invoke(string $status = null)
+    public function __invoke(string $status = null) : Response
     {
         $status ??= Payload::SUCCESS;
         return ($this->responder)($this, new Payload($status));

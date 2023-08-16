@@ -86,9 +86,10 @@ class HttpProvider implements Provider
                 "throwable:{$this->directory}/resources/responder/{$this->format}/throwable",
                 "throwable:{$this->directory}/vendor/ottophp/core/resources/responder/{$this->format}/throwable",
             ])
-            ->argument('extension', '.qiq.php');
+            ->argument('extension', '.qiq.php')
+            ->argument('compiler', $def->get(Qiq\Compiler\QiqCompiler::class));
 
-        $def->{Template\Compiler::class}
+        $def->{Qiq\Compiler\QiqCompiler::class}
             ->argument('cachePath', $this->directory . '/tmp/cache/qiq');
 
         $def->{Template\Template::class}

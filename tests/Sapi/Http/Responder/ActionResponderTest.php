@@ -30,7 +30,7 @@ class ActionResponderTest extends \Otto\TestCase
         );
     }
 
-    public function testHeadContentIsNull()
+    public function testHeadContentIsNull() : void
     {
         $_SERVER['REQUEST_METHOD'] = 'HEAD';
         $action = $this->container->new(Get::class);
@@ -47,7 +47,8 @@ class ActionResponderTest extends \Otto\TestCase
         Payload $payload,
         int $expectCode,
         string $expectText
-    ) {
+    ) : void
+    {
         $action = $this->container->new(Post::class);
         $responder = $this->container->new(ActionResponder::class);
         $response = $responder($action, $payload);
@@ -65,7 +66,8 @@ class ActionResponderTest extends \Otto\TestCase
         Payload $payload,
         int $expectCode,
         string $expectText
-    ) {
+    ) : void
+    {
         $action = $this->container->new(Post::class);
 
         $responder = $this->container->new(ActionResponder::class);
@@ -84,7 +86,7 @@ class ActionResponderTest extends \Otto\TestCase
         );
     }
 
-    public function testActionWithoutPayload()
+    public function testActionWithoutPayload() : void
     {
         $action = $this->container->new(Post::class);
 
@@ -96,7 +98,7 @@ class ActionResponderTest extends \Otto\TestCase
         );
     }
 
-    public function testActionWithoutPayload_viewNotFound()
+    public function testActionWithoutPayload_viewNotFound() : void
     {
         $action = $this->container->new(Put::class);
         $responder = $this->container->new(ActionResponder::class);

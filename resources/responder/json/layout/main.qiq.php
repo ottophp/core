@@ -1,6 +1,6 @@
 {{ /** @var \Otto\Sapi\Http\Template\Template $this */ }}
 {{ response()->setJson(
-    value: $this->getData(),
+    value: getData(),
     type: 'application/json',
     flags: JSON_PRETTY_PRINT
         | JSON_INVALID_UTF8_SUBSTITUTE
